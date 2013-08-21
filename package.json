@@ -1,0 +1,25 @@
+{
+  "name": "MoaJs",
+  "version": "0.0.1",
+  "description": "JavaScript lib OOP",
+  "main": "moa.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Pencroff/MoaJs.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "OOP"
+  ],
+  "author": "Pencroff",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "9993d22ff1af72976ec0668e1aa2696e11389821",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-lmd": "~0.1.12"
+  }
+}
