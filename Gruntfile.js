@@ -6,14 +6,16 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         lmd: {
-            build_name: {
-                //projectRoot: 'test/',
+            test: {
+                //projectRoot: '/',
                 build: 'test',
                 options: {
-                    "root": "../src/",
-                    "output": "moa.lmd.js",
-                    "modules": {
-                        "*": "*.js"
+                    root: '../src/',
+                    output: 'moa.lmd.js',
+                    log: true,
+                    warn: true,
+                    modules: {
+                        '*': '*.js'
                     }
                 }
             }
@@ -24,6 +26,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-lmd');
 
     // Default task(s).
-    grunt.registerTask('default', ['lmd']);
+    grunt.registerTask('default', ['lmd:test']);
 
 };
