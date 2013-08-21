@@ -1,4 +1,4 @@
 MoaJs
 =====
 
-Implementation OOP principlesin JavaScript 
+Implementation OOP principles in JavaScript 
