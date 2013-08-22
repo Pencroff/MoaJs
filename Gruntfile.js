@@ -8,18 +8,17 @@ module.exports = function (grunt) {
         lmd: {
             test: {
                 //projectRoot: '/',
-                build: 'test',
-                options: {
-                    root: '../src/',
-                    output: 'moa.lmd.js',
-                    log: true,
-                    warn: true,
-                    modules: {
-                        '*': '*.js'
-                    }
+                build: 'test'
+//                options: {
+//                    root: '../src/',
+//                    output: 'moa.lmd.js',
+//                    log: true,
+//                    warn: true,
+//                    modules: {
+//                        '*': '*.js'
+//                    }
                 }
             }
-        }
     });
 
     // Load the plugin that provides the "grunt-lmd" task.

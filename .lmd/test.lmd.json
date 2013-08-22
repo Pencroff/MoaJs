@@ -1,0 +1,9 @@
+{
+    "root": "../src/",
+    "output": "../test.lmd.js",
+    "modules": {
+        "*": "*.js"
+    },
+    "main": "math",
+    "pack": false
+}
