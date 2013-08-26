@@ -5,8 +5,11 @@
  * Date: 8/21/13
  * Time: 6:46 PM
  */
+/*global define:true*/
 
-function add(a, b) {
+define([], function () {
     'use strict';
-    return a + b;
-}
+    return function (a, b) {
+        return a + b
+    };
+});

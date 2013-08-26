@@ -1,0 +1,15 @@
+{
+  "name": "MoaJs",
+  "version": "0.0.1",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "requirejs": "2.1.8"
+  }
+}

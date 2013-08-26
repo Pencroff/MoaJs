@@ -19,7 +19,6 @@
   "readmeFilename": "README.md",
   "gitHead": "9993d22ff1af72976ec0668e1aa2696e11389821",
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-lmd": "~0.1.12"
+    "grunt": "~0.4.1"
   }
 }
