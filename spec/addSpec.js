@@ -8,16 +8,16 @@ define(['chai', 'add'], function(chai, add) {
     var expect = chai.expect;
     describe('just checking', function() {
 
-        it('works for add', function() {
+        it('works for add', function(done) {
             var test = add(1, 1);
-
             expect(test).equal(2);
+            done();
         });
 
-        it('works for add', function() {
+        it('works for add', function(done) {
             var test = add(1, 10);
-
             expect(test).equal(11);
+            done();
         });
 
 //        it('works for underscore', function() {
