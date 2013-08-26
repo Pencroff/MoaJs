@@ -10,6 +10,7 @@
     "tests"
   ],
   "devDependencies": {
-    "requirejs": "2.1.8"
+    "requirejs": "2.1.8",
+    "chai": "1.7.2"
   }
 }

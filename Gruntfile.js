@@ -5,26 +5,26 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        lmd: {
-            test: {
-                //projectRoot: '/',
-                build: 'test'
-//                options: {
-//                    root: '../src/',
-//                    output: 'moa.lmd.js',
-//                    log: true,
-//                    warn: true,
-//                    modules: {
-//                        '*': '*.js'
-//                    }
-                }
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                background: true
             }
+        },
+        watch: {
+            //run unit tests with karma (server needs to be already running)
+            karma: {
+                files: ['src/**/*.js', 'spec/**/*.js', 'src/*.js', 'spec/*.js'],
+                tasks: ['karma:unit:run'] //NOTE the :run flag
+            }
+        }
+
+
+
     });
-
-    // Load the plugin that provides the "grunt-lmd" task.
-    grunt.loadNpmTasks('grunt-lmd');
-
     // Default task(s).
-    grunt.registerTask('default', ['lmd:test']);
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.registerTask('default', ['karma:unit:start', 'watch']);
 
 };
