@@ -10,13 +10,13 @@ define(['chai', 'add'], function(chai, add) {
 
         it('works for add 1', function(done) {
             var test = add(1, 1);
-            expect(test).equal(3);
+            expect(test).equal(2);
             done();
         });
 
         it('works for add 10', function(done) {
             var test = add(1, 10);
-            expect(test).equal(14);
+            expect(test).equal(11);
             done();
         });
 

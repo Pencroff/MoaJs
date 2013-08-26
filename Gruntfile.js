@@ -17,6 +17,17 @@ module.exports = function (grunt) {
                 files: ['src/**/*.js', 'spec/**/*.js', 'src/*.js', 'spec/*.js'],
                 tasks: ['karma:unit:run'] //NOTE the :run flag
             }
+        },
+        requirejs: {
+            compile: {
+                options: {
+                    name: 'math',
+                    baseUrl: 'src',
+                    mainConfigFile: 'r.config.js',
+                    optimize: "none",
+                    out: 'math.js'
+                }
+            }
         }
 
 
@@ -25,6 +36,7 @@ module.exports = function (grunt) {
     // Default task(s).
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['karma:unit:start', 'watch']);
+    grunt.loadNpmTasks('grunt-requirejs');
+    grunt.registerTask('default', ['requirejs']); //, 'karma:unit:start', 'watch'
 
 };
