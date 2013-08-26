@@ -8,15 +8,15 @@ define(['chai', 'add'], function(chai, add) {
     var expect = chai.expect;
     describe('just checking', function() {
 
-        it('works for add', function(done) {
+        it('works for add 1', function(done) {
             var test = add(1, 1);
-            expect(test).equal(2);
+            expect(test).equal(3);
             done();
         });
 
-        it('works for add', function(done) {
+        it('works for add 10', function(done) {
             var test = add(1, 10);
-            expect(test).equal(11);
+            expect(test).equal(14);
             done();
         });
 
