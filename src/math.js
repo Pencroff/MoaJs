@@ -6,9 +6,12 @@
 /*global define:true*/
 define('math', ['add', 'mult'], function (add, mult) {
     'use strict';
-    var text = document.getElementsByTagName('body')[0].innerHTML;
-    text += add(8, 7);
-    text += '</br>'
-    text += mult(8, 7);
-    document.getElementsByTagName('body')[0].innerHTML = text;
+//    var text = document.getElementsByTagName('body')[0].innerHTML;
+//    text += add(8, 7);
+//    text += '</br>'
+//    text += mult(8, 7);
+//    document.getElementsByTagName('body')[0].innerHTML = text;
+    return {
+        add: add,
+        mult: mult }
 });
