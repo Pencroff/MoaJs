@@ -13,5 +13,6 @@ define('math', ['add', 'mult'], function (add, mult) {
 //    document.getElementsByTagName('body')[0].innerHTML = text;
     return {
         add: add,
-        mult: mult }
+        mult: mult
+    };
 });

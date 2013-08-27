@@ -138,6 +138,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-requirejs');
-    grunt.registerTask('default', ['requirejs']); //, 'karma:unit:start', 'watch'
+    grunt.registerTask('default', ['requirejs', 'karma:unit:start', 'watch']); //, 'karma:unit:start', 'watch'
 
 };
