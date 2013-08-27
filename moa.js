@@ -1,20 +1,32 @@
-define("add", [], function() {
-    return function(a, b) {
-        return a + b;
-    };
-});
-
-define("mult", [ "add" ], function(add) {
-    return function(a, b) {
-        var i, result = 0;
-        for (i = 0; a > i; i += 1) result = add(result, b);
-        return result;
-    };
-});
-
-define("math", [ "add", "mult" ], function(add, mult) {
+define("tool", [], function() {
+    var typeObject = "object", typeString = "string", typeNumber = "number";
     return {
-        add: add,
-        mult: mult
+        is: function(obj, type) {
+            return typeof obj === type;
+        },
+        isObject: function(obj) {
+            return this.is(obj, typeObject) && null !== obj;
+        },
+        isString: function(obj) {
+            return this.is(obj, typeString);
+        },
+        isNumber: function(obj) {
+            return this.is(obj, typeNumber);
+        }
     };
+});
+
+define("obj", [ "tool" ], function(tool) {
+    var obj = function(objName) {
+        if (!tool.isString(objName)) throw new Error("Object Name is not string!");
+    };
+    return obj;
+});
+
+define("Moa", [ "obj", "tool" ], function(obj, tool) {
+    var _moa = {
+        Obj: obj,
+        Tool: tool
+    };
+    return _moa;
 });

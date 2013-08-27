@@ -21,7 +21,7 @@ module.exports = function (grunt) {
         requirejs: {
             compile: {
                 options: {
-                    name: 'math',
+                    name: 'Moa',
                     baseUrl: 'src',
                     mainConfigFile: 'r.config.js',
                     optimize: "uglify2",
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
-                    name: 'math',
+                    name: 'Moa',
                     baseUrl: 'src',
                     mainConfigFile: 'r.config.js',
                     optimize: "uglify2",

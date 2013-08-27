@@ -6,7 +6,7 @@
 'use strict';
 
 require.config({
-    deps: ['math']
+    deps: ['Moa']
 //    paths: {
 //        jquery: 'vendor/jquery',
 //        jquery_tokeninput: 'vendor/jquery.tokeninput',

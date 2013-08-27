@@ -6,10 +6,11 @@
  * Time: 6:02 PM
  */
 /*global define:true*/
-define('Moa', ['obj'], function (obj) {
+define('Moa', ['obj', 'tool'], function (obj, tool) {
     'use strict';
     var _moa = {
-        Obj: obj
+        Obj: obj,
+        Tool: tool
     };
     return _moa;
 });
