@@ -4,23 +4,17 @@
  * Time: 21:09
  */
 /*global define:true*/
-define('tool', [], function () {
+define('tool', ['str'], function (str) {
     'use strict';
-    var typeObject = 'object',
-        typeString = 'string',
-        typeNumber = 'number';
     return {
         is: function (obj, type) {
             return typeof obj === type;
         },
         isObject: function (obj) {
-            return this.is(obj, typeObject) && obj !== null;
+            return this.is(obj, str._intrnl_.TObject) && obj !== null;
         },
         isString: function (obj) {
-            return this.is(obj, typeString);
-        },
-        isNumber: function (obj) {
-            return this.is(obj, typeNumber);
+            return this.is(obj, str._intrnl_.TString);
         }
     };
 });

@@ -4,11 +4,11 @@
  * Time: 7:32
  */
 /*global define:true*/
-define('obj', ['tool'], function (tool) {
+define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
     var obj = function (objName, objProp) {
         if (!tool.isString(objName)) {
-            throw new Error('Object Name is not string!');
+            throw new Error(str.err.notString);
         }
     };
     return obj;
