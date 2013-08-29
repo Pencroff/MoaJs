@@ -7,7 +7,10 @@
 define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
     var map = {},
+        instance,
         obj = function (objName, objProp) {
+            var me = this,
+                result;
             if (!tool.isStr(objName)) {
                 throw new Error(str.err.notStr);
             }
