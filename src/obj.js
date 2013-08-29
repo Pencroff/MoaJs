@@ -6,10 +6,14 @@
 /*global define:true*/
 define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
-    var obj = function (objName, objProp) {
-        if (!tool.isString(objName)) {
-            throw new Error(str.err.notString);
-        }
-    };
+    var map = {},
+        obj = function (objName, objProp) {
+            if (!tool.isStr(objName)) {
+                throw new Error(str.err.notStr);
+            }
+            if (!tool.isObj(objProp) && !tool.isUndef(objProp)) {
+                throw new Error(str.err.notObj);
+            }
+        };
     return obj;
 });

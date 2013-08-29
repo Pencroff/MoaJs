@@ -7,14 +7,15 @@
 define('str', [], function () {
     'use strict';
     return {
-        _intrnl_: {
-            prefix: '__moa__',
-
-            TObject: 'object',
-            TString: 'string'
+        _serv_: {
+            TObj: 'object',
+            TFunc: 'function',
+            TStr: 'string',
+            TUndef: 'undefined'
         },
         err: {
-            notString: 'Object Name is not string!'
+            notObj: 'Value is not object',
+            notStr: 'Value is not string'
         }
     };
 });

@@ -10,11 +10,17 @@ define('tool', ['str'], function (str) {
         is: function (obj, type) {
             return typeof obj === type;
         },
-        isObject: function (obj) {
-            return this.is(obj, str._intrnl_.TObject) && obj !== null;
+        isObj: function (obj) {
+            return this.is(obj, str._serv_.TObj) && obj !== null;
         },
-        isString: function (obj) {
-            return this.is(obj, str._intrnl_.TString);
+        isFunc: function (obj) {
+            return this.is(obj, str._serv_.TFunc);
+        },
+        isStr: function (obj) {
+            return this.is(obj, str._serv_.TStr);
+        },
+        isUndef: function (obj) {
+            return this.is(obj, str._serv_.TUndef);
         }
     };
 });
