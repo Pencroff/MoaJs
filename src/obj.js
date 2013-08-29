@@ -7,7 +7,6 @@
 define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
     var map = {},
-        instance,
         obj = function (objName, objProp) {
             var me = this,
                 result;
@@ -17,6 +16,11 @@ define('obj', ['tool', 'str'], function (tool, str) {
             if (!tool.isObj(objProp) && !tool.isUndef(objProp)) {
                 throw new Error(str.err.notObj);
             }
+            if (tool.isObj(objProp)) {
+                map[objName] = objProp;
+            }
+
+            return map[objName];
         };
     return obj;
 });

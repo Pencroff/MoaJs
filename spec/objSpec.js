@@ -16,13 +16,19 @@ define(['obj', 'chai'], function (obj, chai) {
 //            expect(function () { obj(testData); }).to.not.throw(str.err.notStr);
             done();
         });
-        it('Store new obj to "map"', function (done) {
-            done();
-        });
-    });
-    describe('New test', function () {
-        it('Some state', function (done) {
-
+        it('Declaration new obj to "map"', function (done) {
+            var object = {foo: 'foo'},
+                newObj = {action: 'action'},
+                o = obj('object', object),
+                o2 = obj('object'),
+                o3 = new obj('object'),
+                newo = new obj('newObject', newObj),
+                newo2 = new obj('newObject'),
+                newo3 = obj('newObject');
+            expect(o).to.equal(o2);
+            expect(o).to.equal(o3);
+            expect(newo).to.equal(newo2);
+            expect(newo).to.equal(newo3);
             done();
         });
     });

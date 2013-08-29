@@ -1,12 +1,14 @@
 define("str", [], function() {
     return {
-        _intrnl_: {
-            prefix: "__moa__",
-            TObject: "object",
-            TString: "string"
+        _serv_: {
+            TObj: "object",
+            TFunc: "function",
+            TStr: "string",
+            TUndef: "undefined"
         },
         err: {
-            notString: "Object Name is not string!"
+            notObj: "Value is not object",
+            notStr: "Value is not string"
         }
     };
 });
@@ -16,18 +18,27 @@ define("tool", [ "str" ], function(str) {
         is: function(obj, type) {
             return typeof obj === type;
         },
-        isObject: function(obj) {
-            return this.is(obj, str._intrnl_.TObject) && null !== obj;
+        isObj: function(obj) {
+            return this.is(obj, str._serv_.TObj) && null !== obj;
         },
-        isString: function(obj) {
-            return this.is(obj, str._intrnl_.TString);
+        isFunc: function(obj) {
+            return this.is(obj, str._serv_.TFunc);
+        },
+        isStr: function(obj) {
+            return this.is(obj, str._serv_.TStr);
+        },
+        isUndef: function(obj) {
+            return this.is(obj, str._serv_.TUndef);
         }
     };
 });
 
 define("obj", [ "tool", "str" ], function(tool, str) {
-    var obj = function(objName) {
-        if (!tool.isString(objName)) throw new Error(str.err.notString);
+    var map = {}, obj = function(objName, objProp) {
+        if (!tool.isStr(objName)) throw new Error(str.err.notStr);
+        if (!tool.isObj(objProp) && !tool.isUndef(objProp)) throw new Error(str.err.notObj);
+        tool.isObj(objProp) && (map[objName] = objProp);
+        return map[objName];
     };
     return obj;
 });
