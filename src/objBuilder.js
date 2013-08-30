@@ -14,13 +14,13 @@ define('objBuilder', ['tool'], function (tool) {
             $mixins: {}
         },
         builder = function (objName, objProp, map) {
-            var element,
+            var prop,
                 instance = {},
                 proto = {},
                 fn;
-            for (element in  objProp) {
-                if (objProp.hasOwnProperty(element)) {
-                    switch (element) {
+            for (prop in  objProp) {
+                if (objProp.hasOwnProperty(prop)) {
+                    switch (prop) {
                     case '$public':
                         break;
                     case '$private':
@@ -32,10 +32,10 @@ define('objBuilder', ['tool'], function (tool) {
                     case '$mixins':
                         break;
                     default:
-                        if (tool.isFunc(objProp[element])) {
-                            proto[element] = objProp[element];
+                        if (tool.isFunc(objProp[prop])) {
+                            proto[prop] = objProp[prop];
                         } else {
-                            instance[element] = objProp[element];
+                            instance[prop] = objProp[prop];
                         }
                     }
                 }
