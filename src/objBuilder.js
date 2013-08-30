@@ -3,7 +3,7 @@
  * Time: 21:10
  */
 /*global define:true*/
-define('objBuilder', [], function () {
+define('objBuilder', ['tool'], function (tool) {
     'use strict';
     var helper = {
             $public: function (fn, retObj, obj) {
@@ -15,10 +15,9 @@ define('objBuilder', [], function () {
         },
         builder = function (objName, objProp, map) {
             var element,
-                retObj = {},
-                fn = function () {
-                    return retObj;
-                };
+                instance = {},
+                proto = {},
+                fn;
             for (element in  objProp) {
                 if (objProp.hasOwnProperty(element)) {
                     switch (element) {
@@ -33,9 +32,19 @@ define('objBuilder', [], function () {
                     case '$mixins':
                         break;
                     default:
+                        if (tool.isFunc(objProp[element])) {
+                            proto[element] = objProp[element];
+                        } else {
+                            instance[element] = objProp[element];
+                        }
                     }
                 }
             }
-    };
+            fn = function () {
+                return instance;
+            };
+            fn.prototype = proto;
+            return fn;
+        };
     return builder;
 });
