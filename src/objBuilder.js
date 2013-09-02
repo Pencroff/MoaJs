@@ -16,7 +16,7 @@ define('objBuilder', ['tool'], function (tool) {
         builder = function (objName, objProp, map) {
             var prop,
                 instance = {},
-                proto = {},
+                superObj = {},
                 fn;
             for (prop in  objProp) {
                 if (objProp.hasOwnProperty(prop)) {
@@ -30,6 +30,8 @@ define('objBuilder', ['tool'], function (tool) {
                     case '$extend':
                         break;
                     case '$mixins':
+                        break;
+                    case '$proto':
                         break;
                     default:
                         if (tool.isFunc(objProp[prop])) {

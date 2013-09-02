@@ -29,6 +29,49 @@ define("tool", [ "str" ], function(str) {
         },
         isUndef: function(obj) {
             return this.is(obj, str._serv_.TUndef);
+        },
+        clone: function() {},
+        isEqual: function(objA, objB, useDeep) {
+            var result = !0;
+            if (useDeep === !0) {
+                var leftChain, rightChain, compareObj = function(x, y) {
+                    var p;
+                    if (isNaN(x) && isNaN(y) && "number" == typeof x && "number" == typeof y) return !0;
+                    if (x === y) return !0;
+                    if ("function" == typeof x && "function" == typeof y || x instanceof Date && y instanceof Date || x instanceof RegExp && y instanceof RegExp || x instanceof String && y instanceof String || x instanceof Number && y instanceof Number) return x.toString() === y.toString();
+                    if (!(x instanceof Object && y instanceof Object)) return !1;
+                    if (x.isPrototypeOf(y) || y.isPrototypeOf(x)) return !1;
+                    if (x.constructor !== y.constructor) return !1;
+                    if (x.prototype !== y.prototype) return !1;
+                    if (leftChain.indexOf(x) > -1 || rightChain.indexOf(y) > -1) return !1;
+                    for (p in y) {
+                        if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) return !1;
+                        if (typeof y[p] != typeof x[p]) return !1;
+                    }
+                    for (p in x) {
+                        if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) return !1;
+                        if (typeof y[p] != typeof x[p]) return !1;
+                        switch (typeof x[p]) {
+                          case "object":
+                          case "function":
+                            leftChain.push(x);
+                            rightChain.push(y);
+                            if (!compareObj(x[p], y[p])) return !1;
+                            leftChain.pop();
+                            rightChain.pop();
+                            break;
+
+                          default:
+                            if (x[p] !== y[p]) return !1;
+                        }
+                    }
+                    return !0;
+                };
+                leftChain = [];
+                rightChain = [];
+                compareObj(objA, objB) || (result = !1);
+            } else result = JSON.stringify(objA) === JSON.stringify(objB);
+            return result;
         }
     };
 });
