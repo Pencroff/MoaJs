@@ -16,6 +16,7 @@ define('objBuilder', ['tool'], function (tool) {
         builder = function (objName, objProp, map) {
             var prop,
                 instance = {},
+                proto = {},
                 superObj = {},
                 fn;
             for (prop in  objProp) {

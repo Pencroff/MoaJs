@@ -11,9 +11,25 @@ define(['obj', 'chai'], function (obj, chai) {
     var expect = chai.expect;
     describe('Test "Obj" instance:', function () {
         it('The same type for using with "new" and without', function (done) {
-//            var instance1 = obj,
-//                instance2 = new obj();
-//            expect(function () { obj(testData); }).to.not.throw(str.err.notStr);
+            var simpleObj = {
+                itemNo: 1,
+                itemName: 'Name',
+                objString: function () {
+                    var me = this,
+                        str = '';
+                    str += me.itemNo;
+                    str += ' :: ';
+                    str += me.itemName;
+                    return str;
+                }
+            },
+                simpleFirst = obj('simple', simpleObj),
+                simple = obj('simple'),
+                simpleNew = new obj('simple');
+            expect(simpleFirst.objString()).to.equal('1 :: Name');
+            expect(simple).to.equal(simpleNew);
+            expect(simple.objString()).to.equal('1 :: Name');
+            expect(simpleNew.objString()).to.equal('1 :: Name');
             done();
         });
         it('Declaration new obj to "map"', function (done) {
