@@ -25,9 +25,11 @@ define(['obj', 'chai'], function (obj, chai) {
             },
                 simpleFirst = obj('simple', simpleObj),
                 simple = obj('simple'),
+                simple2 = obj('simple'),
                 simpleNew = new obj('simple');
             expect(simpleFirst.objString()).to.equal('1 :: Name');
             expect(simple).to.equal(simpleNew);
+            expect(simple === simple2).to.false;
             expect(simple.objString()).to.equal('1 :: Name');
             expect(simpleNew.objString()).to.equal('1 :: Name');
             done();
