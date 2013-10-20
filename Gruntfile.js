@@ -5,6 +5,19 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        yuidoc: {
+            compile: {
+                name: 'MoaJs',
+                description: 'Implementation OOP principles in JavaScript ',
+                version: '0.1',
+                url: 'https://github.com/Pencroff/MoaJs',
+                options: {
+                    paths: 'src/',
+                    //themedir: 'path/to/custom/theme/',
+                    outdir: 'docs/'
+                }
+            }
+        },
         karma: {
             unit: {
                 configFile: 'karma.conf.js',
@@ -135,6 +148,7 @@ module.exports = function (grunt) {
 
     });
     // Default task(s).
+    grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-requirejs');

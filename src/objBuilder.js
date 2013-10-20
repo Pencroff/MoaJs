@@ -22,17 +22,15 @@ define('objBuilder', ['tool'], function (tool) {
             for (prop in  objProp) {
                 if (objProp.hasOwnProperty(prop)) {
                     switch (prop) {
-                    case '$public':
-                        break;
+//                    case '$public':
+//                        break;
                     case '$private':
                         break;
                     case '$static':
                         break;
-                    case '$extend':
-                        break;
                     case '$mixins':
                         break;
-                    case '$proto':
+                    case '$isSingle':
                         break;
                     default:
                         if (tool.isFunc(objProp[prop])) {

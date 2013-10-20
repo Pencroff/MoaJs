@@ -1,0 +1,265 @@
+{
+    "project": {
+        "name": "MoaJs",
+        "description": "Implementation OOP principles in JavaScript ",
+        "version": "0.1",
+        "url": "https://github.com/Pencroff/MoaJs"
+    },
+    "files": {
+        "src\\Objs.js": {
+            "name": "src\\Objs.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\moa.js": {
+            "name": "src\\moa.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\obj.js": {
+            "name": "src\\obj.js",
+            "modules": {},
+            "classes": {
+                "obj": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\objBuilder.js": {
+            "name": "src\\objBuilder.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\str.js": {
+            "name": "src\\str.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\tool.js": {
+            "name": "src\\tool.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "obj": {
+            "name": "obj",
+            "shortname": "obj",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\obj.js",
+            "line": 14,
+            "itemtype": "method",
+            "params": [
+                {
+                    "name": "objName",
+                    "description": "- name of object type"
+                },
+                {
+                    "name": "secondParam",
+                    "description": "- can be two types\n     - parent name of object type\n     - implementation of behavior for current type of object"
+                },
+                {
+                    "name": "thirdParam",
+                    "description": "- if you use inheritance in second params,\n                    implementation of behavior for current type of object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "src\\Objs.js",
+            "line": 1,
+            "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:10",
+            "class": "obj"
+        },
+        {
+            "file": "src\\Objs.js",
+            "line": 7,
+            "classdescription": "A minimalistic library intended to help in using namespaces and class\ninheritance in JavaScript.",
+            "see": [
+                "Sources - https://github.com/tekool/objs",
+                "Documentation - https://github.com/tekool/objs/wiki"
+            ],
+            "author": "Frederic Saunier - www.tekool.net",
+            "version": "2.1",
+            "license": "Copyright (C) 2006-2012 Frederic Saunier, www.tekool.net\nObjs may be freely distributed under the MIT license.\nFor all details and documentation: https://github.com/tekool/objs/",
+            "class": "obj"
+        },
+        {
+            "file": "src\\Objs.js",
+            "line": 25,
+            "description": "Create or retrieve a class constructor using its unique classpath.\n\n<P>\nIf a class is declared twice with the same namespace, the last class\nwill replace the previous one (previous is eligible for garbage\ncollection.",
+            "params": [
+                {
+                    "name": "classpath!~YUIDOC_LINE~!",
+                    "description": "The classpath of the class to create or retrieve.\n\n\t\t<P>Retrieve:\n\t\tIf <code>classpath</code> is the only parameter passed when calling\n\t\tObjs, the class constructor corresponding to the given classpath is\n\t\treturned. A new class constructor is returned if no constructor for\n\t\tthe given classpath first exists.\n\n\t \t<P>Create:\n\t\tIf <code>classpath</code> parameter is followed by one or two valid\n\t\tparameters it will create a class.",
+                    "type": "String"
+                },
+                {
+                    "name": "second!~YUIDOC_LINE~!",
+                    "description": "{String} A superclass path to inherit from typed as a string.\n\t\t{Function} A superclass to inherit from typed as a function.\n\t\t{Object} The object used to declare class properties and methods.\n\t\t{null} A strict null will remove the associated classpath.",
+                    "type": "String|Function|Object"
+                },
+                {
+                    "name": "third!~YUIDOC_LINE~!",
+                    "description": "(optional) The object used to declare class properties and methods\n\t\twhen declaring a class which extends another one.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "\n\t\tThe constructor method of the class corresponding to the given\n\t\tclasspath.",
+                "type": "Function"
+            },
+            "class": "obj"
+        },
+        {
+            "file": "src\\Objs.js",
+            "line": 79,
+            "description": "Each classpath is prefixed before to be added to the map to avoid\nname collisions with any existing Map Object methods.",
+            "class": "obj"
+        },
+        {
+            "file": "src\\Objs.js",
+            "line": 227,
+            "description": "Strings dictionary used to reduce generated file size.",
+            "type": "{String}",
+            "access": "private",
+            "tagname": "",
+            "class": "obj"
+        },
+        {
+            "file": "src\\Objs.js",
+            "line": 243,
+            "type": "{String}",
+            "access": "private",
+            "tagname": "",
+            "class": "obj"
+        },
+        {
+            "file": "src\\Objs.js",
+            "line": 249,
+            "description": "A map of <code>ClassInfo</code> objects used to manage classes\nregistrations.",
+            "type": "{Object}",
+            "access": "private",
+            "tagname": "",
+            "class": "obj"
+        },
+        {
+            "file": "src\\moa.js",
+            "line": 1,
+            "description": "Created with JetBrains WebStorm.\nProject: MoaJs\nUser: Sergii Danilov\nDate: 8/27/13\nTime: 6:02 PM",
+            "class": "obj"
+        },
+        {
+            "file": "src\\obj.js",
+            "line": 1,
+            "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:32",
+            "class": "obj"
+        },
+        {
+            "file": "src\\obj.js",
+            "line": 10,
+            "type": "{{define: Function, create: Function}}",
+            "class": "obj"
+        },
+        {
+            "file": "src\\objBuilder.js",
+            "line": 1,
+            "description": "Date: 29.08.2013\nTime: 21:10",
+            "class": ""
+        },
+        {
+            "file": "src\\str.js",
+            "line": 1,
+            "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 28.08.2013\nTime: 8:20",
+            "class": ""
+        },
+        {
+            "file": "src\\tool.js",
+            "line": 1,
+            "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 21:09",
+            "class": ""
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: classdescription",
+            "line": " src\\Objs.js:7"
+        },
+        {
+            "message": "unknown tag: version",
+            "line": " src\\Objs.js:7"
+        },
+        {
+            "message": "unknown tag: license",
+            "line": " src\\Objs.js:7"
+        },
+        {
+            "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:10",
+            "line": " src\\Objs.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src\\Objs.js:7"
+        },
+        {
+            "message": "Missing item type\nCreate or retrieve a class constructor using its unique classpath.\n\n<P>\nIf a class is declared twice with the same namespace, the last class\nwill replace the previous one (previous is eligible for garbage\ncollection.",
+            "line": " src\\Objs.js:25"
+        },
+        {
+            "message": "Missing item type\nEach classpath is prefixed before to be added to the map to avoid\nname collisions with any existing Map Object methods.",
+            "line": " src\\Objs.js:79"
+        },
+        {
+            "message": "Missing item type\nStrings dictionary used to reduce generated file size.",
+            "line": " src\\Objs.js:227"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src\\Objs.js:243"
+        },
+        {
+            "message": "Missing item type\nA map of <code>ClassInfo</code> objects used to manage classes\nregistrations.",
+            "line": " src\\Objs.js:249"
+        },
+        {
+            "message": "Missing item type\nCreated with JetBrains WebStorm.\nProject: MoaJs\nUser: Sergii Danilov\nDate: 8/27/13\nTime: 6:02 PM",
+            "line": " src\\moa.js:1"
+        },
+        {
+            "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:32",
+            "line": " src\\obj.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src\\obj.js:10"
+        },
+        {
+            "message": "Missing item type\nDate: 29.08.2013\nTime: 21:10",
+            "line": " src\\objBuilder.js:1"
+        },
+        {
+            "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 28.08.2013\nTime: 8:20",
+            "line": " src\\str.js:1"
+        },
+        {
+            "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 21:09",
+            "line": " src\\tool.js:1"
+        }
+    ]
+}
