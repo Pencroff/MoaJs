@@ -28,7 +28,9 @@ define('obj', ['tool', 'str'], function (tool, str) {
                 mapObj = {
                     constructor: function () {},
                     isSingleton: false,
-                    instance: null
+                    instance: null,
+                    $proto: null,
+                    $exemplar: null
                 };
                 switch (paramsLen) {
                 case 1:

@@ -79,7 +79,6 @@ define(['tool', 'chai'], function (tool, chai) {
             done();
         });
     });
-
     describe('Test "isUndef":', function () {
         it('is Undef', function (done) {
             var param;
@@ -171,6 +170,12 @@ define(['tool', 'chai'], function (tool, chai) {
             expect(exec(c, useDeep)).to.be.true;
             expect(exec(d, useDeep)).to.be.true;
             done();
+        });
+    });
+    describe('Test "extend" method', function() {
+        it('Extend without owerride', function (done) {
+
+            //done();
         });
     });
 

@@ -23,7 +23,23 @@ define('tool', ['str'], function (str) {
         isUndef: function (obj) {
             return is(obj, servStr.TUndef);
         },
-        merge: function () {
+        extend: function (target, source, isOverride) {
+            var prop;
+            if (isOverride) {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        target[prop] = source[prop];
+                    }
+                }
+            } else {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        if (!target[prop]) {
+                            target[prop] = source[prop];
+                        }
+                    }
+                }
+            }
         },
         clone: function (obj, useDeep) {
             var me = this,
