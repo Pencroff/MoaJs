@@ -15,7 +15,7 @@ requirejs.config({
     baseUrl: '/base/src/',
 
     paths: {
-        'chai': '../bower_components/chai/chai'
+        'chai': '../extras/chai/chai'
 //        'jquery': '../lib/jquery',
 //        'underscore': '../lib/underscore',
     },

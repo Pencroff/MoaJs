@@ -5,8 +5,8 @@
  */
 /*global define:true*/
 /**
- * Main part of MoaJs
- * @class obj
+ Main part of MoaJs
+ @class obj
  */
 define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
@@ -15,21 +15,20 @@ define('obj', ['tool', 'str'], function (tool, str) {
             /**
              * Define new or inherited type
              * @method define
-             * @param objName - name of object type
-             * @param secondParam - can be two types
-             *      - parent name of object type
-             *      - implementation of behavior for current type of object
-             * @param thirdParam - if you use inheritance in second params,
-             *                     implementation of behavior for current type of object
-             * @return constructor of defined object type
+             * @param objName {string} name of object type
+             * @param secondParam {String / Object} parent name of object type or implementation of behavior for current type of object
+             * @param thirdParam {object} if you use inheritance in second params, implementation of behavior for current type of object
+             * @return {function} constructor of defined object type
              */
             define: function (objName, secondParam, thirdParam) {
                 var me = this;
             },
             /**
+             * Factory for new exemplars
              * @method create
-             * @param objName
-             * @param mergeObj
+             * @param objName {string} name of object type
+             * @param mergeObj {object} object for merging with implementing type
+             * @return {object} new exemplar of selected type in first parameter
              */
             create: function (objName, mergeObj) {
                 var me = this;

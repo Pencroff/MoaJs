@@ -9,7 +9,8 @@ YUI.add("yuidoc-meta", function(Y) {
     "allModules": [
         {
             "displayName": "Moa",
-            "name": "Moa"
+            "name": "Moa",
+            "description": "Implementation OOP principles in JavaScript"
         }
     ]
 } };

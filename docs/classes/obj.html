@@ -16,7 +16,7 @@
 <body class="yui3-skin-sam">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 40px; line-height: 40px; margin-left: 0;">
         
 	    <img alt="MoaJs" src="..\..\extras\moa-logo-web.png" style="max-height: 100%;" title="MoaJs">
         
@@ -25,12 +25,12 @@
 	<div class="nav">
             <li class="divider-vertical"></li>
             <li>
-                <p class="navbar-text">
-                    API Docs for Version: <b>0.1</b>
+                <p class="navbar-text" style="padding: 10px 16px 10px; line-height: 40px; height: 40px;">
+                    API Docs for Version: <b>0.0.1</b>
                 </p>
             </li>
         </div>
-        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+        <form class="navbar-form pull-right" style="padding: 10px 16px 10px; line-height: 40px; height: 40px;">
             <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/obj", "modules/Moa"]'>
         </form>
     </div>
@@ -208,6 +208,10 @@
     
 
     
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
 
     
 
@@ -232,7 +236,7 @@
             
         
         
-        <a href="../files/src_obj.js.html#l29"><code>src\obj.js:29</code></a>
+        <a href="../files/src_obj.js.html#l26"><code>src\obj.js:26</code></a>
         
         </p>
 
@@ -243,7 +247,8 @@
     </div>
 
     <div class="description">
-        
+        <p>Factory for new exemplars</p>
+
     </div>
 
     
@@ -255,13 +260,14 @@
                 <li class="param">
                     
                         <code class="param-name">objName</code>
-                        <span class="type">Object</span>
+                        <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                         
+                        <p>name of object type</p>
+
                     </div>
 
                     
@@ -276,7 +282,8 @@
                     
 
                     <div class="param-description">
-                         
+                        <p>object for merging with implementing type</p>
+
                     </div>
 
                     
@@ -286,6 +293,20 @@
         </div>
     
 
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>new exemplar of selected type in first parameter</p>
+
+                
+            </div>
+        </div>
     
 
     
@@ -323,7 +344,7 @@
 
     
         <span class="returns-inline">
-            <span class="type"></span>
+            <span class="type">Function</span>
         </span>
     
 
@@ -374,15 +395,13 @@
                 <li class="param">
                     
                         <code class="param-name">objName</code>
-                        <span class="type">Object</span>
+                        <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                        <ul>
-<li>name of object type</li>
-</ul>
+                        <p>name of object type</p>
 
                     </div>
 
@@ -392,19 +411,13 @@
                 <li class="param">
                     
                         <code class="param-name">secondParam</code>
-                        <span class="type">Object</span>
+                        <span class="type">String / Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <ul>
-<li>can be two types<ul>
-<li>parent name of object type</li>
-<li>implementation of behavior for current type of object</li>
-</ul>
-</li>
-</ul>
+                        <p>parent name of object type or implementation of behavior for current type of object</p>
 
                     </div>
 
@@ -420,10 +433,7 @@
                     
 
                     <div class="param-description">
-                        <ul>
-<li>if you use inheritance in second params,<pre><code>              implementation of behavior for current type of object</code></pre>
-</li>
-</ul>
+                        <p>if you use inheritance in second params, implementation of behavior for current type of object</p>
 
                     </div>
 
@@ -440,6 +450,8 @@
 
             <div class="returns-description">
                 
+                    
+                        <span class="type">Function</span>:
                     
                     <p>constructor of defined object type</p>
 

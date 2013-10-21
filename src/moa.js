@@ -7,8 +7,8 @@
  */
 /*global define:true*/
 /**
+ Implementation OOP principles in JavaScript
  @module Moa
- @extends Implementation OOP principles in JavaScript
  */
 define('Moa', ['obj', 'tool'], function (obj, tool) {
     'use strict';

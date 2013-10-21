@@ -206,8 +206,8 @@ textarea {
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 16px;
+  line-height: 18px;
   color: #333333;
   background-color: #ffffff;
 }
@@ -811,7 +811,7 @@ code,
 pre {
   padding: 0 3px 2px;
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-  font-size: 10px;
+  font-size: 13px;
   color: #333333;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;

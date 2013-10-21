@@ -6,21 +6,24 @@
 /*global define:true*/
 define('tool', ['str'], function (str) {
     'use strict';
-    return {
-        is: function (obj, type) {
+    var servStr = str._serv_,
+        is = function (obj, type) {
             return typeof obj === type;
-        },
+        };
+    return {
         isObj: function (obj) {
-            return this.is(obj, str._serv_.TObj) && obj !== null;
+            return is(obj, servStr.TObj) && obj !== null;
         },
         isFunc: function (obj) {
-            return this.is(obj, str._serv_.TFunc);
+            return is(obj, servStr.TFunc);
         },
         isStr: function (obj) {
-            return this.is(obj, str._serv_.TStr);
+            return is(obj, servStr.TStr);
         },
         isUndef: function (obj) {
-            return this.is(obj, str._serv_.TUndef);
+            return is(obj, servStr.TUndef);
+        },
+        merge: function () {
         },
         clone: function (obj, useDeep) {
             var me = this,

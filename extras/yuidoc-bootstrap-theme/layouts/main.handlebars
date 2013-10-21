@@ -18,7 +18,7 @@
 <body class="yui3-skin-sam">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 40px; line-height: 40px; margin-left: 0;">
         {{#if projectLogo}}
 	    <img alt="{{projectName}}" src="{{projectLogo}}" style="max-height: 100%;" title="{{projectName}}">
         {{else}}
@@ -29,12 +29,12 @@
 	<div class="nav">
             <li class="divider-vertical"></li>
             <li>
-                <p class="navbar-text">
+                <p class="navbar-text" style="padding: 10px 16px 10px; line-height: 40px; height: 40px;">
                     API Docs for Version: <b>{{projectVersion}}</b>
                 </p>
             </li>
         </div>
-        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+        <form class="navbar-form pull-right" style="padding: 10px 16px 10px; line-height: 40px; height: 40px;">
             <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='[{{#search classes allModules}}{{/search}}]'>
         </form>
     </div>

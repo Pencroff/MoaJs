@@ -7,10 +7,14 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         yuidoc: {
             compile: {
-                name: 'MoaJs',
-                description: 'Implementation OOP principles in JavaScript ',
-                version: '0.1',
-                url: 'https://github.com/Pencroff/MoaJs',
+//                name: 'MoaJs',
+//                description: 'Implementation OOP principles in JavaScript ',
+//                version: '0.1',
+//                url: 'https://github.com/Pencroff/MoaJs',
+                name: '<%= pkg.name %>',
+                description: '<%= pkg.description %>',
+                version: '<%= pkg.version %>',
+                url: '<%= pkg.homepage %>',
                 logo: '../extras/moa-logo-web.png',
                 options: {
                     paths: 'src/',
@@ -28,13 +32,13 @@ module.exports = function (grunt) {
         },
         watch: {
             //run unit tests with karma (server needs to be already running)
-//            karma: {
-//                files: ['src/**/*.js', 'spec/**/*.js', 'src/*.js', 'spec/*.js'],
-//                tasks: ['karma:unit:run'] //NOTE the :run flag
-//            },
-            yuidoc: {
+            spec_watch: {
+                files: ['spec/**/*.js', 'spec/*.js'],
+                tasks: ['karma:unit:run'] //NOTE the :run flag
+            },
+            src_watch: {
                 files: ['src/**/*.js', 'src/*.js'],
-                task: ['yuidoc']
+                tasks: ['karma:unit:run', 'yuidoc']
             }
         },
         requirejs: {

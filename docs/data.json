@@ -1,9 +1,9 @@
 {
     "project": {
         "name": "MoaJs",
-        "description": "Implementation OOP principles in JavaScript ",
-        "version": "0.1",
-        "url": "https://github.com/Pencroff/MoaJs",
+        "description": "JavaScript lib OOP",
+        "version": "0.0.1",
+        "url": "",
         "logo": "../extras/moa-logo-web.png"
     },
     "files": {
@@ -66,7 +66,7 @@
             "tag": "module",
             "file": "src\\obj.js",
             "line": 7,
-            "extends": "Implementation OOP principles in JavaScript"
+            "description": "Implementation OOP principles in JavaScript"
         }
     },
     "classes": {
@@ -186,38 +186,49 @@
             "params": [
                 {
                     "name": "objName",
-                    "description": "- name of object type"
+                    "description": "name of object type",
+                    "type": "String"
                 },
                 {
                     "name": "secondParam",
-                    "description": "- can be two types\n     - parent name of object type\n     - implementation of behavior for current type of object"
+                    "description": "parent name of object type or implementation of behavior for current type of object",
+                    "type": "String / Object"
                 },
                 {
                     "name": "thirdParam",
-                    "description": "- if you use inheritance in second params,\n                    implementation of behavior for current type of object"
+                    "description": "if you use inheritance in second params, implementation of behavior for current type of object",
+                    "type": "Object"
                 }
             ],
             "return": {
-                "description": "constructor of defined object type"
+                "description": "constructor of defined object type",
+                "type": "Function"
             },
             "class": "obj",
             "module": "Moa"
         },
         {
             "file": "src\\obj.js",
-            "line": 29,
+            "line": 26,
+            "description": "Factory for new exemplars",
             "itemtype": "method",
             "name": "create",
             "params": [
                 {
                     "name": "objName",
-                    "description": ""
+                    "description": "name of object type",
+                    "type": "String"
                 },
                 {
                     "name": "mergeObj",
-                    "description": ""
+                    "description": "object for merging with implementing type",
+                    "type": "Object"
                 }
             ],
+            "return": {
+                "description": "new exemplar of selected type in first parameter",
+                "type": "Object"
+            },
             "class": "obj",
             "module": "Moa"
         },

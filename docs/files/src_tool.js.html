@@ -16,7 +16,7 @@
 <body class="yui3-skin-sam">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <h1 class="brand" style="padding: 10px 16px 10px; height: 20px; line-height: 20px; margin-left: 0;">
+        <h1 class="brand" style="padding: 10px 16px 10px; height: 40px; line-height: 40px; margin-left: 0;">
         
 	    <img alt="MoaJs" src="..\..\extras\moa-logo-web.png" style="max-height: 100%;" title="MoaJs">
         
@@ -25,12 +25,12 @@
 	<div class="nav">
             <li class="divider-vertical"></li>
             <li>
-                <p class="navbar-text">
-                    API Docs for Version: <b>0.1</b>
+                <p class="navbar-text" style="padding: 10px 16px 10px; line-height: 40px; height: 40px;">
+                    API Docs for Version: <b>0.0.1</b>
                 </p>
             </li>
         </div>
-        <form class="navbar-form pull-right" style="line-height: 40px; height: 40px;">
+        <form class="navbar-form pull-right" style="padding: 10px 16px 10px; line-height: 40px; height: 40px;">
             <input style="margin-top: 0;" type="text" class="search-query" placeholder="Search for classes/modules..." data-obj='["classes/obj", "modules/Moa"]'>
         </form>
     </div>
@@ -113,21 +113,24 @@
 /*global define:true*/
 define(&#x27;tool&#x27;, [&#x27;str&#x27;], function (str) {
     &#x27;use strict&#x27;;
-    return {
-        is: function (obj, type) {
+    var servStr = str._serv_,
+        is = function (obj, type) {
             return typeof obj === type;
-        },
+        };
+    return {
         isObj: function (obj) {
-            return this.is(obj, str._serv_.TObj) &amp;&amp; obj !== null;
+            return is(obj, servStr.TObj) &amp;&amp; obj !== null;
         },
         isFunc: function (obj) {
-            return this.is(obj, str._serv_.TFunc);
+            return is(obj, servStr.TFunc);
         },
         isStr: function (obj) {
-            return this.is(obj, str._serv_.TStr);
+            return is(obj, servStr.TStr);
         },
         isUndef: function (obj) {
-            return this.is(obj, str._serv_.TUndef);
+            return is(obj, servStr.TUndef);
+        },
+        merge: function () {
         },
         clone: function (obj, useDeep) {
             var me = this,
