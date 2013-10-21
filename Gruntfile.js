@@ -7,10 +7,6 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         yuidoc: {
             compile: {
-//                name: 'MoaJs',
-//                description: 'Implementation OOP principles in JavaScript ',
-//                version: '0.1',
-//                url: 'https://github.com/Pencroff/MoaJs',
                 name: '<%= pkg.name %>',
                 description: '<%= pkg.description %>',
                 version: '<%= pkg.version %>',
