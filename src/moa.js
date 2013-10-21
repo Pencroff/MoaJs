@@ -6,6 +6,10 @@
  * Time: 6:02 PM
  */
 /*global define:true*/
+/**
+ @module Moa
+ @extends Implementation OOP principles in JavaScript
+ */
 define('Moa', ['obj', 'tool'], function (obj, tool) {
     'use strict';
     var _moa = {

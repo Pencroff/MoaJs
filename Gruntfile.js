@@ -11,10 +11,12 @@ module.exports = function (grunt) {
                 description: 'Implementation OOP principles in JavaScript ',
                 version: '0.1',
                 url: 'https://github.com/Pencroff/MoaJs',
+                logo: '../extras/moa-logo-web.png',
                 options: {
                     paths: 'src/',
-                    //themedir: 'path/to/custom/theme/',
-                    outdir: 'docs/'
+                    outdir: 'docs/',
+                    themedir: 'extras/yuidoc-bootstrap-theme/',
+                    helpers: ['extras/yuidoc-bootstrap-theme/helpers/helpers.js']
                 }
             }
         },
@@ -26,9 +28,13 @@ module.exports = function (grunt) {
         },
         watch: {
             //run unit tests with karma (server needs to be already running)
-            karma: {
-                files: ['src/**/*.js', 'spec/**/*.js', 'src/*.js', 'spec/*.js'],
-                tasks: ['karma:unit:run'] //NOTE the :run flag
+//            karma: {
+//                files: ['src/**/*.js', 'spec/**/*.js', 'src/*.js', 'spec/*.js'],
+//                tasks: ['karma:unit:run'] //NOTE the :run flag
+//            },
+            yuidoc: {
+                files: ['src/**/*.js', 'src/*.js'],
+                task: ['yuidoc']
             }
         },
         requirejs: {

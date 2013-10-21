@@ -3,7 +3,14 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "obj"
     ],
-    "modules": [],
-    "allModules": []
+    "modules": [
+        "Moa"
+    ],
+    "allModules": [
+        {
+            "displayName": "Moa",
+            "name": "Moa"
+        }
+    ]
 } };
 });

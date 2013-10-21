@@ -3,7 +3,8 @@
         "name": "MoaJs",
         "description": "Implementation OOP principles in JavaScript ",
         "version": "0.1",
-        "url": "https://github.com/Pencroff/MoaJs"
+        "url": "https://github.com/Pencroff/MoaJs",
+        "logo": "../extras/moa-logo-web.png"
     },
     "files": {
         "src\\Objs.js": {
@@ -15,7 +16,9 @@
         },
         "src\\moa.js": {
             "name": "src\\moa.js",
-            "modules": {},
+            "modules": {
+                "Moa": 1
+            },
             "classes": {},
             "fors": {},
             "namespaces": {}
@@ -51,7 +54,21 @@
             "namespaces": {}
         }
     },
-    "modules": {},
+    "modules": {
+        "Moa": {
+            "name": "Moa",
+            "submodules": {},
+            "classes": {
+                "obj": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src\\obj.js",
+            "line": 7,
+            "extends": "Implementation OOP principles in JavaScript"
+        }
+    },
     "classes": {
         "obj": {
             "name": "obj",
@@ -61,23 +78,11 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "Moa",
+            "namespace": "",
             "file": "src\\obj.js",
-            "line": 14,
-            "itemtype": "method",
-            "params": [
-                {
-                    "name": "objName",
-                    "description": "- name of object type"
-                },
-                {
-                    "name": "secondParam",
-                    "description": "- can be two types\n     - parent name of object type\n     - implementation of behavior for current type of object"
-                },
-                {
-                    "name": "thirdParam",
-                    "description": "- if you use inheritance in second params,\n                    implementation of behavior for current type of object"
-                }
-            ]
+            "line": 7,
+            "description": "Main part of MoaJs"
         }
     },
     "classitems": [
@@ -169,31 +174,73 @@
             "file": "src\\obj.js",
             "line": 1,
             "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:32",
-            "class": "obj"
+            "class": "obj",
+            "module": "Moa"
         },
         {
             "file": "src\\obj.js",
-            "line": 10,
-            "type": "{{define: Function, create: Function}}",
-            "class": "obj"
+            "line": 15,
+            "description": "Define new or inherited type",
+            "itemtype": "method",
+            "name": "define",
+            "params": [
+                {
+                    "name": "objName",
+                    "description": "- name of object type"
+                },
+                {
+                    "name": "secondParam",
+                    "description": "- can be two types\n     - parent name of object type\n     - implementation of behavior for current type of object"
+                },
+                {
+                    "name": "thirdParam",
+                    "description": "- if you use inheritance in second params,\n                    implementation of behavior for current type of object"
+                }
+            ],
+            "return": {
+                "description": "constructor of defined object type"
+            },
+            "class": "obj",
+            "module": "Moa"
+        },
+        {
+            "file": "src\\obj.js",
+            "line": 29,
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "objName",
+                    "description": ""
+                },
+                {
+                    "name": "mergeObj",
+                    "description": ""
+                }
+            ],
+            "class": "obj",
+            "module": "Moa"
         },
         {
             "file": "src\\objBuilder.js",
             "line": 1,
             "description": "Date: 29.08.2013\nTime: 21:10",
-            "class": ""
+            "class": "",
+            "module": "Moa"
         },
         {
             "file": "src\\str.js",
             "line": 1,
             "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 28.08.2013\nTime: 8:20",
-            "class": ""
+            "class": "",
+            "module": "Moa"
         },
         {
             "file": "src\\tool.js",
             "line": 1,
             "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 21:09",
-            "class": ""
+            "class": "",
+            "module": "Moa"
         }
     ],
     "warnings": [
@@ -244,10 +291,6 @@
         {
             "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:32",
             "line": " src\\obj.js:1"
-        },
-        {
-            "message": "Missing item type",
-            "line": " src\\obj.js:10"
         },
         {
             "message": "Missing item type\nDate: 29.08.2013\nTime: 21:10",

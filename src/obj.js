@@ -4,15 +4,16 @@
  * Time: 7:32
  */
 /*global define:true*/
+/**
+ * Main part of MoaJs
+ * @class obj
+ */
 define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
     var map = {},
-        /**
-         * @type {{define: Function, create: Function}}
-         */
         obj = {
             /**
-             * @class obj
+             * Define new or inherited type
              * @method define
              * @param objName - name of object type
              * @param secondParam - can be two types
@@ -20,10 +21,16 @@ define('obj', ['tool', 'str'], function (tool, str) {
              *      - implementation of behavior for current type of object
              * @param thirdParam - if you use inheritance in second params,
              *                     implementation of behavior for current type of object
+             * @return constructor of defined object type
              */
             define: function (objName, secondParam, thirdParam) {
                 var me = this;
             },
+            /**
+             * @method create
+             * @param objName
+             * @param mergeObj
+             */
             create: function (objName, mergeObj) {
                 var me = this;
             }
