@@ -8,28 +8,30 @@ define("str", [], function() {
         },
         err: {
             notObj: "Value is not object",
-            notStr: "Value is not string"
+            notStr: "Value is not string",
+            wrongParams: "Wrong parameters"
         }
     };
 });
 
 define("tool", [ "str" ], function(str) {
+    var servStr = str._serv_, is = function(obj, type) {
+        return typeof obj === type;
+    };
     return {
-        is: function(obj, type) {
-            return typeof obj === type;
-        },
         isObj: function(obj) {
-            return this.is(obj, str._serv_.TObj) && null !== obj;
+            return is(obj, servStr.TObj) && null !== obj;
         },
         isFunc: function(obj) {
-            return this.is(obj, str._serv_.TFunc);
+            return is(obj, servStr.TFunc);
         },
         isStr: function(obj) {
-            return this.is(obj, str._serv_.TStr);
+            return is(obj, servStr.TStr);
         },
         isUndef: function(obj) {
-            return this.is(obj, str._serv_.TUndef);
+            return is(obj, servStr.TUndef);
         },
+        merge: function() {},
         clone: function(obj, useDeep) {
             var prop, i, len, me = this, result = {};
             if (obj instanceof Date) result = new Date(obj); else if (obj instanceof Array) {
@@ -86,9 +88,29 @@ define("tool", [ "str" ], function(str) {
     };
 });
 
-define("obj", [ "tool", "str" ], function() {
-    var obj = {
-        define: function() {},
+define("obj", [ "tool", "str" ], function(tool, str) {
+    var errMsg = str.err, obj = {
+        define: function() {
+            var mapObj, paramsLen = arguments.length;
+            mapObj = {
+                constructor: function() {},
+                isSingleton: !1,
+                instance: null
+            };
+            switch (paramsLen) {
+              case 1:
+                break;
+
+              case 2:
+                break;
+
+              case 3:
+                break;
+
+              default:
+                throw new Error(errMsg.wrongParams + "define", "obj");
+            }
+        },
         create: function() {}
     };
     return obj;

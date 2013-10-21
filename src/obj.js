@@ -11,6 +11,7 @@
 define('obj', ['tool', 'str'], function (tool, str) {
     'use strict';
     var map = {},
+        err = str.err,
         obj = {
             /**
              * Define new or inherited type
@@ -21,7 +22,27 @@ define('obj', ['tool', 'str'], function (tool, str) {
              * @return {function} constructor of defined object type
              */
             define: function (objName, secondParam, thirdParam) {
-                var me = this;
+                var me = this,
+                    paramsLen = arguments.length,
+                    mapObj;
+                mapObj = {
+                    constructor: function () {},
+                    isSingleton: false,
+                    instance: null
+                };
+                switch (paramsLen) {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                default:
+                    throw new Error(err.wrngPrms + 'define', 'obj');
+                }
             },
             /**
              * Factory for new exemplars
@@ -34,20 +55,5 @@ define('obj', ['tool', 'str'], function (tool, str) {
                 var me = this;
             }
         };
-//        obj = function (objName, objProp) {
-//            var me = this,
-//                result;
-//            if (!tool.isStr(objName)) {
-//                throw new Error(str.err.notStr);
-//            }
-//            if (!tool.isObj(objProp) && !tool.isUndef(objProp)) {
-//                throw new Error(str.err.notObj);
-//            }
-//            if (tool.isObj(objProp)) {
-//                map[objName] = objProp;
-//            }
-//
-//            return map[objName];
-//        };
     return obj;
 });

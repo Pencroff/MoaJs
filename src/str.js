@@ -15,7 +15,8 @@ define('str', [], function () {
         },
         err: {
             notObj: 'Value is not object',
-            notStr: 'Value is not string'
+            notStr: 'Value is not string',
+            wrngPrms: 'Wrong parameters in '
         }
     };
 });
