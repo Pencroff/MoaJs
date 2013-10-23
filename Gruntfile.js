@@ -34,7 +34,7 @@ module.exports = function (grunt) {
             },
             src_watch: {
                 files: ['src/**/*.js', 'src/*.js'],
-                tasks: ['karma:unit:run', 'yuidoc']
+                tasks: ['yuidoc', 'karma:unit:run']
             }
         },
         requirejs: {

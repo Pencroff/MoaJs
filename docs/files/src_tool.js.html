@@ -130,7 +130,27 @@ define(&#x27;tool&#x27;, [&#x27;str&#x27;], function (str) {
         isUndef: function (obj) {
             return is(obj, servStr.TUndef);
         },
-        merge: function () {
+        isArray: function (obj) {
+            return Object.prototype.toString.call(obj) === &#x27;[object Array]&#x27;;
+        },
+        extend: function (target, source, isOverride) {
+            var prop;
+            if (isOverride) {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        target[prop] = source[prop];
+                    }
+                }
+            } else {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        if (!target[prop]) {
+                            target[prop] = source[prop];
+                        }
+                    }
+                }
+            }
+            return target;
         },
         clone: function (obj, useDeep) {
             var me = this,
@@ -140,7 +160,7 @@ define(&#x27;tool&#x27;, [&#x27;str&#x27;], function (str) {
                 result = {};
             if (obj instanceof Date) {
                 result = new Date(obj);
-            } else if (obj instanceof Array) {
+            } else if (me.isArray(obj)) {
                 len = obj.length;
                 result = [];
                 for (i = 0; i &lt; len; i += 1) {

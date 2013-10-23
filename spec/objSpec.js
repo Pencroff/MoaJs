@@ -10,6 +10,23 @@ define(['obj', 'chai'], function (obj, chai) {
     'use strict';
     var expect = chai.expect;
     describe('Test "Obj" instance:', function () {
+        it('Define simple object', function (done) {
+            var simpleObj = {
+                    testProp: 'Name',
+                    getTestProp: function () {
+                        return this.testProp;
+                    }
+                },
+                constructorFn;
+            constructorFn = obj.define('simpleClass', simpleObj);
+            expect(constructorFn).to.be.a('function');
+            expect(constructorFn.prototype).to.have.ownProperty('getTestProp');
+            expect(constructorFn).to.not.have.ownProperty('getTestProp');
+            obj = new constructorFn();
+            expect(obj).to.have.ownProperty('testProp');
+            expect(obj.testProp === obj.getTestProp()).to.true;
+            done();
+        });
 //        it('The same type for using with "new" and without', function (done) {
 //            var simpleObj = {
 //                itemNo: 1,

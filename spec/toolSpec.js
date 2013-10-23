@@ -174,8 +174,38 @@ define(['tool', 'chai'], function (tool, chai) {
     });
     describe('Test "extend" method', function() {
         it('Extend without owerride', function (done) {
-
-            //done();
+            var target = {
+                    a: 1,
+                    b: true,
+                    c: 'str'
+                },
+                source = {
+                    a: 5,
+                    d: 'newStr'
+                },
+                result;
+            result = tool.extend(target, source);
+            expect(result === target).to.be.true;
+            expect(result.a).to.be.equal(1);
+            expect(result.d).to.be.equal('newStr');
+            done();
+        });
+        it('Extend with owerride', function (done) {
+            var target = {
+                    a: 1,
+                    b: true,
+                    c: 'str'
+                },
+                source = {
+                    a: 5,
+                    d: 'newStr'
+                },
+                result;
+            result = tool.extend(target, source, true);
+            expect(result === target).to.be.true;
+            expect(result.a).to.be.equal(5);
+            expect(result.d).to.be.equal('newStr');
+            done();
         });
     });
 

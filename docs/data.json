@@ -179,7 +179,7 @@
         },
         {
             "file": "src\\obj.js",
-            "line": 15,
+            "line": 42,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
@@ -191,7 +191,7 @@
                 },
                 {
                     "name": "secondParam",
-                    "description": "parent name of object type or implementation of behavior for current type of object",
+                    "description": "parent name of object type or implementation of behavior for current type of object\n if it is null - delete declared object",
                     "type": "String / Object"
                 },
                 {
@@ -209,7 +209,7 @@
         },
         {
             "file": "src\\obj.js",
-            "line": 26,
+            "line": 83,
             "description": "Factory for new exemplars",
             "itemtype": "method",
             "name": "create",

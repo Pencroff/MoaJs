@@ -23,6 +23,9 @@ define('tool', ['str'], function (str) {
         isUndef: function (obj) {
             return is(obj, servStr.TUndef);
         },
+        isArray: function (obj) {
+            return Object.prototype.toString.call(obj) === '[object Array]';
+        },
         extend: function (target, source, isOverride) {
             var prop;
             if (isOverride) {
@@ -40,6 +43,7 @@ define('tool', ['str'], function (str) {
                     }
                 }
             }
+            return target;
         },
         clone: function (obj, useDeep) {
             var me = this,
@@ -49,7 +53,7 @@ define('tool', ['str'], function (str) {
                 result = {};
             if (obj instanceof Date) {
                 result = new Date(obj);
-            } else if (obj instanceof Array) {
+            } else if (me.isArray(obj)) {
                 len = obj.length;
                 result = [];
                 for (i = 0; i < len; i += 1) {
