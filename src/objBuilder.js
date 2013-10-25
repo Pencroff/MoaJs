@@ -22,8 +22,8 @@ define('objBuilder', ['tool'], function (tool) {
             for (prop in  objProp) {
                 if (objProp.hasOwnProperty(prop)) {
                     switch (prop) {
-//                    case '$public':
-//                        break;
+                    case '$extend':
+                        break;
                     case '$private':
                         break;
                     case '$static':

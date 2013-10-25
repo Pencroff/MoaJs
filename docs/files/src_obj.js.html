@@ -122,43 +122,48 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
         fn = str._serv_.TFunc,
         buildMapObj = function (o) {
             var prop,
-                mapObj = {
-                    $proto: {},
-                    $obj: {}
-                },
-                proto = mapObj.$proto,
-                obj = mapObj.$obj;
+                $constructor,
+                $extend,
+                $private,
+                $static,
+                $isSingle,
+                $instance,
+                $proto = {},
+                $obj = {};
+            $extend = o.$extend;
+            $private = o.$private;
+            $static = o.$static;
+            $isSingle = o.$isSingle;
             for (prop in o) {
                 if (o.hasOwnProperty(prop)) {
                     switch (typeof o[prop]) {
                     case fn:
-                        proto[prop] = o[prop];
+                        $proto[prop] = o[prop];
                         break;
                     default:
-                        obj[prop] = o[prop];
+                        $obj[prop] = o[prop];
                     }
                 }
             }
-            mapObj.$constructor = function () {
-                tool.extend(this, obj, true);
+            $constructor = function () {
+                tool.extend(this, $obj, true);
             };
-            mapObj.$constructor.prototype =  proto;
-            return mapObj;
+            $constructor.prototype =  $proto;
+
+            return $constructor;
         },
         obj = {
             /**
              * Define new or inherited type
              * @method define
              * @param objName {string} name of object type
-             * @param secondParam {String / Object} parent name of object type or implementation of behavior for current type of object
-             *  if it is null - delete declared object
-             * @param thirdParam {object} if you use inheritance in second params, implementation of behavior for current type of object
+             * @param secondParam {Object} implementation of behavior for current type of object. If it is null - delete declared object
              * @return {function} constructor of defined object type
              */
-            define: function (objName, secondParam, thirdParam) {
+            define: function (objName, secondParam) {
                 var me = this,
                     paramsLen = arguments.length,
-                    mapObj;
+                    $fn;
 //                mapObj = {
 //                    constructor: function () {},
 //                    isSingleton: false,
@@ -172,20 +177,17 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
                     break;
                 case 2:
                     if (secondParam !== null) {
-                        mapObj = buildMapObj(secondParam);
-                        map[objName] = mapObj;
+                        $fn = buildMapObj(secondParam);
+                        map[objName] = $fn;
                     } else {
                         delete map[objName];
                         return;
                     }
                     break;
-                case 3:
-
-                    break;
                 default:
                     throw new Error(err.wrngPrms + &#x27;define&#x27;, &#x27;obj&#x27;);
                 }
-                return mapObj.$constructor;
+                return $fn;
             },
             /**
              * Factory for new exemplars
