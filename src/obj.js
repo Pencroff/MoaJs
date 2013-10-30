@@ -13,20 +13,26 @@ define('obj', ['tool', 'str'], function (tool, str) {
     var map = {},
         err = str.err,
         fn = str._serv_.TFunc,
-        buildMapObj = function (o) {
-            var prop,
-                $constructor,
-                $extend,
-                $private,
-                $static,
-                $isSingle,
-                $instance,
+        buildMapObj = function (t, o) {
+            var extend = tool.extend,
+                isSingle = o.$isSingle,
+                extendType = o.$extend,
+                parent,
+                prop,
                 $proto = {},
-                $obj = {};
-            $extend = o.$extend;
-            $private = o.$private;
-            $static = o.$static;
-            $isSingle = o.$isSingle;
+                $obj = {},
+                $mapObj = {
+                    $obj: $obj,
+                    $proto: $proto,
+                    $extend: extendType,
+                    $mixin: o.$mixin,
+                    $static: o.$static,
+                    $isSingle: isSingle
+                };
+            delete o.$isSingle;
+            delete o.$extend;
+            delete o.$mixin;
+            delete o.$static;
             for (prop in o) {
                 if (o.hasOwnProperty(prop)) {
                     switch (typeof o[prop]) {
@@ -38,12 +44,25 @@ define('obj', ['tool', 'str'], function (tool, str) {
                     }
                 }
             }
-            $constructor = function () {
-                tool.extend(this, $obj, true);
+            if (extendType) {
+                parent = map[extendType];
+                if (!parent) {
+                    throw new Error('Base type not found');
+                }
+                extend($obj, parent.$obj, false);
+                $proto = extend(Object.create(parent.$proto), $proto, true);
+                $proto.$base = parent.$constructor;
+                $proto.$baseproto = parent.$proto;
+                $proto.$getType = function () {
+                    return t;
+                };
+                $mapObj.$proto = $proto;
+            }
+            $mapObj.$constructor = function () {
+                extend(this, $obj, true);
             };
-            $constructor.prototype =  $proto;
-
-            return $constructor;
+            $mapObj.$constructor.prototype = $proto;
+            return $mapObj;
         },
         obj = {
             /**
@@ -56,22 +75,15 @@ define('obj', ['tool', 'str'], function (tool, str) {
             define: function (objName, secondParam) {
                 var me = this,
                     paramsLen = arguments.length,
-                    $fn;
-//                mapObj = {
-//                    constructor: function () {},
-//                    isSingleton: false,
-//                    instance: null,
-//                    $proto: null,
-//                    $exemplar: null
-//                };
+                    $mapObj;
                 switch (paramsLen) {
                 case 1:
 
                     break;
                 case 2:
                     if (secondParam !== null) {
-                        $fn = buildMapObj(secondParam);
-                        map[objName] = $fn;
+                        $mapObj = buildMapObj(objName, secondParam);
+                        map[objName] = $mapObj;
                     } else {
                         delete map[objName];
                         return;
@@ -80,7 +92,7 @@ define('obj', ['tool', 'str'], function (tool, str) {
                 default:
                     throw new Error(err.wrngPrms + 'define', 'obj');
                 }
-                return $fn;
+                return $mapObj.$constructor;
             },
             /**
              * Factory for new exemplars

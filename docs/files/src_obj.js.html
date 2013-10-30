@@ -130,10 +130,14 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
                 $instance,
                 $proto = {},
                 $obj = {};
-            $extend = o.$extend;
-            $private = o.$private;
-            $static = o.$static;
-            $isSingle = o.$isSingle;
+//            $extend = o.$extend;
+//            delete o.$extend;
+//            $private = tool.extend({}, o.$private || {}, true);
+//            delete o.$private;
+//            $static = o.$static;
+//            delete o.$static;
+//            $isSingle = o.$isSingle;
+//            delete o.$isSingle;
             for (prop in o) {
                 if (o.hasOwnProperty(prop)) {
                     switch (typeof o[prop]) {
@@ -147,9 +151,9 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
             }
             $constructor = function () {
                 tool.extend(this, $obj, true);
+                //this = $obj;
             };
-            $constructor.prototype =  $proto;
-
+            $constructor.prototype = $proto;
             return $constructor;
         },
         obj = {
@@ -164,13 +168,6 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
                 var me = this,
                     paramsLen = arguments.length,
                     $fn;
-//                mapObj = {
-//                    constructor: function () {},
-//                    isSingleton: false,
-//                    instance: null,
-//                    $proto: null,
-//                    $exemplar: null
-//                };
                 switch (paramsLen) {
                 case 1:
 

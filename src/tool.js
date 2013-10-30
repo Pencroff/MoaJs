@@ -10,6 +10,18 @@ define('tool', ['str'], function (str) {
         is = function (obj, type) {
             return typeof obj === type;
         };
+    if (!Object.create) {
+        Object.create = (function () {
+            function F() {}
+            return function (o) {
+                if (arguments.length !== 1) {
+                    throw new Error('Object.create implementation only accepts one parameter.');
+                }
+                F.prototype = o;
+                return new F();
+            };
+        }());
+    }
     return {
         isObj: function (obj) {
             return is(obj, servStr.TObj) && obj !== null;

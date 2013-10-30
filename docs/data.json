@@ -179,7 +179,7 @@
         },
         {
             "file": "src\\obj.js",
-            "line": 49,
+            "line": 53,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
@@ -204,7 +204,7 @@
         },
         {
             "file": "src\\obj.js",
-            "line": 85,
+            "line": 82,
             "description": "Factory for new exemplars",
             "itemtype": "method",
             "name": "create",
