@@ -82,6 +82,10 @@
                 }
                 $proto = extend(Object.create(parent.$proto), $proto, true);
                 $proto.$base = parent.$constructor;
+//                construct = function () {
+//                    var args = Array.prototype.slice.call(arguments);
+//                    construct.apply(parent.$constructor.apply(this, args), args);
+//                };
                 $proto.$baseproto = parent.$proto;
                 $mapObj.$proto = $proto;
             }
