@@ -35,12 +35,6 @@ define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
             expect(item.getTestProp()).to.equal(item.testProp);
             expect(item.item).to.equal(1);
             expect(item.prop).to.equal('a');
-            item = obj.create('simpleClass', 1, 'a');
-            expect(item).to.have.ownProperty('item');
-            expect(item).to.have.ownProperty('prop');
-            expect(item.getTestProp()).to.equal(item.testProp);
-            expect(item.item).to.equal(1);
-            expect(item.prop).to.equal('a');
             done();
         });
         it('Test $extend object', function (done) {
@@ -114,34 +108,6 @@ define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
             constructor2 = obj.define('simpleClass');
             expect(constructorFn === constructor2).to.true;
             expect(function () {obj.define('wrongClass')}).to.throw('Object \'wrongClass\' not found');
-            done();
-        });
-        it('Test create method', function (done) {
-            var simpleObj = {
-                    $construct: function (item, prop) {
-                        this.item = item;
-                        this.prop = prop;
-                    },
-                    testProp: 'Name',
-                    getTestProp: function () {
-                        return this.testProp;
-                    }
-                },
-                ConstructorFn,
-                item,
-                itemCreate;
-            ConstructorFn = obj.define('simpleClass', simpleObj);
-            item = new ConstructorFn();
-            itemCreate = obj.create('simpleClass');
-            expect(tool.isEqual(item, itemCreate)).to.true;
-            expect(itemCreate instanceof ConstructorFn).to.true;
-            item = obj.create('simpleClass', 'Obj Name', 'New Name');
-            expect(item).to.have.ownProperty('item');
-            expect(item).to.have.ownProperty('prop');
-            expect(item.item).to.equal('Obj Name');
-            expect(item.prop).to.equal('New Name');
-            expect(item.testProp === 'Name').to.true;
-            expect(item.getTestProp() === 'Name').to.true;
             done();
         });
     });

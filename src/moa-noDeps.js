@@ -57,11 +57,8 @@
                 extendType = o.$extend,
                 construct = o.$construct,
                 parent,
-                prop,
                 $proto = {},
-                //$obj = {},
                 $mapObj = {
-                    //$obj: $obj,
                     $proto: $proto,
                     $extend: extendType,
                     $mixin: o.$mixin,
@@ -92,9 +89,6 @@
                 return t;
             };
             $mapObj.$constructor = construct;
-//            function () {
-//                extend(this, $obj, true);
-//            };
             $mapObj.$constructor.prototype = $proto;
             $mapObj.$constructor.prototype.constructor = construct;
             return $mapObj;
@@ -133,51 +127,6 @@
                     throw wrongParamsErr('define');
                 }
                 return mapObj.$constructor;
-            },
-            /**
-             * Factory for new exemplars
-             * @method create
-             * @param objName {string} name of object type
-             * @param mergeObj {object} object for merging with implementing type (with override)
-             * @return {object} new exemplar of selected type in first parameter
-             */
-            create: function (objName) {
-                var len = arguments.length,
-                    mapObj,
-                    item,
-                    args,
-                    ret;
-                mapObj = map[objName];
-                if (!mapObj) {
-                    throw notFoundErr(objName);
-                }
-                if (len === 1) {
-                    return new mapObj.$constructor();
-                } else {
-                    item = Object.create(mapObj.$proto);
-                    args = Array.prototype.slice.call(arguments, 1);
-                    ret = mapObj.$constructor.apply(item, args);
-                    return Object(ret) === ret ? ret : item;
-                }
-//                switch (len) {
-//                case 1:
-//                    mapObj = map[objName];
-//                    if (!mapObj) {
-//                        throw notFoundErr(objName);
-//                    }
-//                    item = new mapObj.$constructor();
-//                    break;
-//                case 2:
-//                    mapObj = map[objName];
-//                    if (!mapObj) {
-//                        throw notFoundErr(objName);
-//                    }
-//                    item = new mapObj.$constructor();
-//                    extend(item, mergeObj, true);
-//                    break;
-//                default:
-//                    throw wrongParamsErr('create');
-//                }
             }
         };
     // Return as AMD module or attach to head object
