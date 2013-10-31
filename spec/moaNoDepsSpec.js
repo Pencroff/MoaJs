@@ -1,15 +1,15 @@
 /**
- * Created with JetBrains WebStorm.
+ * Created with WebStorm.
  * Project: MoaJs
  * User: Sergii Danilov
- * Date: 8/29/13
- * Time: 5:02 PM
+ * Date: 10/31/13
+ * Time: 6:11 PM
  */
 /*global define:true, describe:true, it:true*/
-define(['obj', 'tool', 'chai'], function (obj, tool, chai) {
+define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
     'use strict';
     var expect = chai.expect;
-    describe('Test "Obj" instance:', function () {
+    describe('Test "Moa" noDep instance', function () {
         it('Define simple object', function (done) {
             var simpleObj = {
                     testProp: 'Name',

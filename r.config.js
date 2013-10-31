@@ -4,7 +4,6 @@
  * Time: 23:10
  */
 'use strict';
-
 require.config({
     deps: ['Moa']
 //    paths: {

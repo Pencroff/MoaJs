@@ -1,7 +1,7 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "obj"
+        "Moa"
     ],
     "modules": [
         "Moa"
@@ -10,7 +10,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "Moa",
             "name": "Moa",
-            "description": "Implementation OOP principles in JavaScript"
+            "description": "Prototype inheritance and extensions in JavaScript"
         }
     ]
 } };

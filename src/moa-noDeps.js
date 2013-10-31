@@ -1,16 +1,38 @@
 /**
- * Created with JetBrains WebStorm by Pencroff for MoaJs.
- * Date: 27.08.2013
- * Time: 7:32
+ * Created with WebStorm.
+ * Project: MoaJs
+ * User: Sergii Danilov
+ * Date: 10/31/13
+ * Time: 6:10 PM
  */
-/*global define:true*/
-
-define('obj', ['tool', 'str'], function (tool, str) {
-    'use strict';
+/*global define:true, module:true*/
+/**
+ Prototype inheritance and extensions in JavaScript
+ @module Moa
+ */
+(function () {
+    "use strict";
     var map = {},
-        extend = tool.extend,
-        err = str.err,
-        fn = str._serv_.TFunc,
+        extend = function (target, source, isOverride) {
+            var prop;
+            if (isOverride) {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        target[prop] = source[prop];
+                    }
+                }
+            } else {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        if (!target[prop]) {
+                            target[prop] = source[prop];
+                        }
+                    }
+                }
+            }
+            return target;
+        },
+        fn = 'function',
         notFoundErr = function (type) {
             return new Error('Object \'' + type + '\' not found', 'obj');
         },
@@ -39,11 +61,11 @@ define('obj', ['tool', 'str'], function (tool, str) {
             for (prop in o) {
                 if (o.hasOwnProperty(prop)) {
                     switch (typeof o[prop]) {
-                    case fn:
-                        $proto[prop] = o[prop];
-                        break;
-                    default:
-                        $obj[prop] = o[prop];
+                        case fn:
+                            $proto[prop] = o[prop];
+                            break;
+                        default:
+                            $obj[prop] = o[prop];
                     }
                 }
             }
@@ -67,7 +89,17 @@ define('obj', ['tool', 'str'], function (tool, str) {
             $mapObj.$constructor.prototype = $proto;
             return $mapObj;
         },
-        obj = {
+        /**
+         @class Moa
+        */
+        Moa = {
+            /**
+             * Define new or inherited type
+             * @method define
+             * @param objName {string} name of object type
+             * @param secondParam {Object} implementation of behavior for current type of object. If it is null - delete declared object
+             * @return {function} constructor of defined object type
+             */
             define: function (objName, secondParam) {
                 var me = this,
                     paramsLen = arguments.length,
@@ -93,6 +125,13 @@ define('obj', ['tool', 'str'], function (tool, str) {
                 }
                 return $mapObj.$constructor;
             },
+            /**
+             * Factory for new exemplars
+             * @method create
+             * @param objName {string} name of object type
+             * @param mergeObj {object} object for merging with implementing type (with override)
+             * @return {object} new exemplar of selected type in first parameter
+             */
             create: function (objName, mergeObj) {
                 var paramsLen = arguments.length,
                     $mapObj,
@@ -119,5 +158,12 @@ define('obj', ['tool', 'str'], function (tool, str) {
                 return exemplar;
             }
         };
-    return obj;
-});
+    // Return as AMD module or attach to head object
+    if (typeof define !== 'undefined') {
+        define([], function () { return Moa; });
+    } else if (typeof window !== 'undefined') {
+        window.Moa = Moa;
+    } else {
+        module.exports = Moa;
+    }
+}());

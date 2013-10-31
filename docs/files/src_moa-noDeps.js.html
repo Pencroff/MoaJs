@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\obj.js - MoaJs</title>
+    <title>src\moa-noDeps.js - MoaJs</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.7.0/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -100,24 +100,46 @@
                 <div id="docs-main">
                     <div class="content">
                         <div class="page-header">
-    <h1>src\obj.js <small>File</small></h1>
+    <h1>src\moa-noDeps.js <small>File</small></h1>
 </div>
 
 <div class="file">
     <pre class="prettyprint linenums">
 /**
- * Created with JetBrains WebStorm by Pencroff for MoaJs.
- * Date: 27.08.2013
- * Time: 7:32
+ * Created with WebStorm.
+ * Project: MoaJs
+ * User: Sergii Danilov
+ * Date: 10/31/13
+ * Time: 6:10 PM
  */
-/*global define:true*/
-
-define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str) {
-    &#x27;use strict&#x27;;
+/*global define:true, module:true*/
+/**
+ Prototype inheritance and extensions in JavaScript
+ @module Moa
+ */
+(function () {
+    &quot;use strict&quot;;
     var map = {},
-        extend = tool.extend,
-        err = str.err,
-        fn = str._serv_.TFunc,
+        extend = function (target, source, isOverride) {
+            var prop;
+            if (isOverride) {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        target[prop] = source[prop];
+                    }
+                }
+            } else {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        if (!target[prop]) {
+                            target[prop] = source[prop];
+                        }
+                    }
+                }
+            }
+            return target;
+        },
+        fn = &#x27;function&#x27;,
         notFoundErr = function (type) {
             return new Error(&#x27;Object \&#x27;&#x27; + type + &#x27;\&#x27; not found&#x27;, &#x27;obj&#x27;);
         },
@@ -146,11 +168,11 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
             for (prop in o) {
                 if (o.hasOwnProperty(prop)) {
                     switch (typeof o[prop]) {
-                    case fn:
-                        $proto[prop] = o[prop];
-                        break;
-                    default:
-                        $obj[prop] = o[prop];
+                        case fn:
+                            $proto[prop] = o[prop];
+                            break;
+                        default:
+                            $obj[prop] = o[prop];
                     }
                 }
             }
@@ -174,7 +196,17 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
             $mapObj.$constructor.prototype = $proto;
             return $mapObj;
         },
-        obj = {
+        /**
+         @class Moa
+        */
+        Moa = {
+            /**
+             * Define new or inherited type
+             * @method define
+             * @param objName {string} name of object type
+             * @param secondParam {Object} implementation of behavior for current type of object. If it is null - delete declared object
+             * @return {function} constructor of defined object type
+             */
             define: function (objName, secondParam) {
                 var me = this,
                     paramsLen = arguments.length,
@@ -200,6 +232,13 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
                 }
                 return $mapObj.$constructor;
             },
+            /**
+             * Factory for new exemplars
+             * @method create
+             * @param objName {string} name of object type
+             * @param mergeObj {object} object for merging with implementing type (with override)
+             * @return {object} new exemplar of selected type in first parameter
+             */
             create: function (objName, mergeObj) {
                 var paramsLen = arguments.length,
                     $mapObj,
@@ -226,8 +265,15 @@ define(&#x27;obj&#x27;, [&#x27;tool&#x27;, &#x27;str&#x27;], function (tool, str
                 return exemplar;
             }
         };
-    return obj;
-});
+    // Return as AMD module or attach to head object
+    if (typeof define !== &#x27;undefined&#x27;) {
+        define([], function () { return Moa; });
+    } else if (typeof window !== &#x27;undefined&#x27;) {
+        window.Moa = Moa;
+    } else {
+        module.exports = Moa;
+    }
+}());
     </pre>
 </div>
 
