@@ -12,22 +12,35 @@ define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
     describe('Test "Moa" noDep instance', function () {
         it('Define simple object', function (done) {
             var simpleObj = {
+                    $construct: function (item, prop) {
+                        this.item = item;
+                        this.prop = prop;
+                    },
                     testProp: 'Name',
                     getTestProp: function () {
                         return this.testProp;
                     }
                 },
                 constructorFn,
-                item;
+                item, item2;
             expect(function () {obj.define()}).to.throw('Wrong parameters in define');
             expect(function () {obj.define('type', {}, 1)}).to.throw('Wrong parameters in define');
             constructorFn = obj.define('simpleClass', simpleObj);
-            item = new constructorFn();
+            item = new constructorFn(1, 'a');
             expect(constructorFn).to.be.a('function');
             expect(constructorFn.prototype).to.have.ownProperty('getTestProp');
-            expect(constructorFn).to.not.have.ownProperty('getTestProp');
-            expect(item).to.have.ownProperty('testProp');
-            expect(item.testProp === item.getTestProp()).to.true;
+            expect(constructorFn.prototype).to.have.ownProperty('testProp');
+            expect(item).to.have.ownProperty('item');
+            expect(item).to.have.ownProperty('prop');
+            expect(item.getTestProp()).to.equal(item.testProp);
+            expect(item.item).to.equal(1);
+            expect(item.prop).to.equal('a');
+            item = obj.create('simpleClass', 1, 'a');
+            expect(item).to.have.ownProperty('item');
+            expect(item).to.have.ownProperty('prop');
+            expect(item.getTestProp()).to.equal(item.testProp);
+            expect(item.item).to.equal(1);
+            expect(item.prop).to.equal('a');
             done();
         });
         it('Test $extend object', function (done) {
@@ -68,8 +81,9 @@ define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
             expect(constructorFn.prototype).to.have.ownProperty('$base');
             expect(constructorFn.prototype).to.have.ownProperty('$getType');
             expect(constructorFn).to.not.have.ownProperty('getTestProp');
-            expect(item).to.have.ownProperty('testProp');
+            expect(constructorFn.prototype).to.have.ownProperty('testProp');
             expect(item).to.not.have.ownProperty('$extend');
+            expect(constructorFn.prototype).to.not.have.ownProperty('$extend');
             expect(item.testProp === 'Child name').to.true;
             expect(item.getTestProp() === 'Child name').to.true;
             expect(item.extraMethod() === 'Extra:Child name').to.true;
@@ -104,6 +118,10 @@ define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
         });
         it('Test create method', function (done) {
             var simpleObj = {
+                    $construct: function (item, prop) {
+                        this.item = item;
+                        this.prop = prop;
+                    },
                     testProp: 'Name',
                     getTestProp: function () {
                         return this.testProp;
@@ -117,15 +135,13 @@ define(['moa-noDeps', 'tool', 'chai'], function (obj, tool, chai) {
             itemCreate = obj.create('simpleClass');
             expect(tool.isEqual(item, itemCreate)).to.true;
             expect(itemCreate instanceof ConstructorFn).to.true;
-            item = obj.create('simpleClass', {
-                name: 'Obj Name',
-                testProp: 'New Name',
-                extraMethod: function () {}
-            });
-            expect(item).to.have.ownProperty('name');
-            expect(item).to.have.ownProperty('extraMethod');
-            expect(item.testProp === 'New Name').to.true;
-            expect(item.getTestProp() === 'New Name').to.true;
+            item = obj.create('simpleClass', 'Obj Name', 'New Name');
+            expect(item).to.have.ownProperty('item');
+            expect(item).to.have.ownProperty('prop');
+            expect(item.item).to.equal('Obj Name');
+            expect(item.prop).to.equal('New Name');
+            expect(item.testProp === 'Name').to.true;
+            expect(item.getTestProp() === 'Name').to.true;
             done();
         });
     });

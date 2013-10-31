@@ -58,7 +58,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src\\moa-noDeps.js",
-            "line": 92,
+            "line": 102,
             "description": "Prototype inheritance and extensions in JavaScript"
         }
     },
@@ -74,7 +74,7 @@
             "module": "Moa",
             "namespace": "",
             "file": "src\\moa-noDeps.js",
-            "line": 92
+            "line": 102
         }
     },
     "classitems": [
@@ -86,7 +86,7 @@
         },
         {
             "file": "src\\moa-noDeps.js",
-            "line": 96,
+            "line": 106,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
@@ -111,7 +111,7 @@
         },
         {
             "file": "src\\moa-noDeps.js",
-            "line": 128,
+            "line": 137,
             "description": "Factory for new exemplars",
             "itemtype": "method",
             "name": "create",
