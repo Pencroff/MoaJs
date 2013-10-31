@@ -78,7 +78,10 @@ define('obj', ['tool', 'str'], function (tool, str) {
                     $mapObj;
                 switch (paramsLen) {
                 case 1:
-
+                    $mapObj = map[objName];
+                    if (!$mapObj) {
+                        throw new Error('Object \'' + objName + '\' didn\'t find', 'obj');
+                    }
                     break;
                 case 2:
                     if (secondParam !== null) {
@@ -90,7 +93,7 @@ define('obj', ['tool', 'str'], function (tool, str) {
                     }
                     break;
                 default:
-                    throw new Error(err.wrngPrms + 'define', 'obj');
+                    throw new Error('Wrong parameters in define', 'obj');
                 }
                 return $mapObj.$constructor;
             },

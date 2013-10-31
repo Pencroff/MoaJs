@@ -19,6 +19,8 @@ define(['obj', 'tool', 'chai'], function (obj, tool, chai) {
                 },
                 constructorFn,
                 item;
+            expect(function () {obj.define()}).to.throw('Wrong parameters in define');
+            expect(function () {obj.define('type', {}, 1)}).to.throw('Wrong parameters in define');
             constructorFn = obj.define('simpleClass', simpleObj);
             item = new constructorFn();
             expect(constructorFn).to.be.a('function');
@@ -28,7 +30,6 @@ define(['obj', 'tool', 'chai'], function (obj, tool, chai) {
             expect(item.testProp === item.getTestProp()).to.true;
             done();
         });
-
         it('Test $extend object', function (done) {
             var base = {
                     testProp: 'Name',
@@ -86,45 +87,20 @@ define(['obj', 'tool', 'chai'], function (obj, tool, chai) {
             expect(tool.isEqual(item, item2)).to.true;
             done();
         });
-
-//        it('The same type for using with "new" and without', function (done) {
-//            var simpleObj = {
-//                itemNo: 1,
-//                itemName: 'Name',
-//                objString: function () {
-//                    var me = this,
-//                        str = '';
-//                    str += me.itemNo;
-//                    str += ' :: ';
-//                    str += me.itemName;
-//                    return str;
-//                }
-//            },
-//                simpleFirst = obj('simple', simpleObj),
-//                simple = obj('simple'),
-//                simple2 = obj('simple'),
-//                simpleNew = new obj('simple');
-//            expect(simpleFirst.objString()).to.equal('1 :: Name');
-//            expect(simple).to.equal(simpleNew);
-//            expect(simple === simple2).to.false;
-//            expect(simple.objString()).to.equal('1 :: Name');
-//            expect(simpleNew.objString()).to.equal('1 :: Name');
-//            done();
-//        });
-//        it('Declaration new obj to "map"', function (done) {
-//            var object = {foo: 'foo'},
-//                newObj = {action: 'action'},
-//                o = obj('object', object),
-//                o2 = obj('object'),
-//                o3 = new obj('object'),
-//                newo = new obj('newObject', newObj),
-//                newo2 = new obj('newObject'),
-//                newo3 = obj('newObject');
-//            expect(o).to.equal(o2);
-//            expect(o).to.equal(o3);
-//            expect(newo).to.equal(newo2);
-//            expect(newo).to.equal(newo3);
-//            done();
-//        });
+        it('Get defined constructor', function (done) {
+            var simpleObj = {
+                    testProp: 'Name',
+                    getTestProp: function () {
+                        return this.testProp;
+                    }
+                },
+                constructorFn,
+                constructor2;
+            constructorFn = obj.define('simpleClass', simpleObj);
+            constructor2 = obj.define('simpleClass');
+            expect(constructorFn === constructor2).to.true;
+            expect(function () {obj.define('wrongClass')}).to.throw('Object \'wrongClass\' didn\'t find');
+            done();
+        });
     });
 });
