@@ -106,21 +106,157 @@
 <div class="file">
     <pre class="prettyprint linenums">
 /**
- * Created with JetBrains WebStorm.
+ * Created with WebStorm.
  * Project: MoaJs
  * User: Sergii Danilov
- * Date: 8/27/13
- * Time: 6:02 PM
+ * Date: 10/31/13
+ * Time: 6:10 PM
  */
-/*global define:true*/
-define(&#x27;Moa&#x27;, [&#x27;obj&#x27;, &#x27;tool&#x27;], function (obj, tool) {
-    &#x27;use strict&#x27;;
-    var _moa = {
-        Obj: obj,
-        Tool: tool
-    };
-    return _moa;
-});
+/*global define:true, module:true*/
+/**
+ Prototype inheritance and extensions in JavaScript
+ @module Moa
+ */
+(function () {
+    &quot;use strict&quot;;
+    if (!Object.create) {
+        Object.create = (function () {
+            function F() {}
+            return function (o) {
+                if (arguments.length !== 1) {
+                    throw new Error(&#x27;Object.create implementation only accepts one parameter.&#x27;);
+                }
+                F.prototype = o;
+                return new F();
+            };
+        }());
+    }
+    var map = {},
+        fn = &#x27;function&#x27;,
+        ob = &#x27;object&#x27;,
+        un = &#x27;undefined&#x27;,
+        undef,
+        extend = function (target, source) {
+            var prop;
+            for (prop in source) {
+                if (source.hasOwnProperty(prop)) {
+                    target[prop] = source[prop];
+                }
+            }
+            return target;
+        },
+        wrongParamsErr = function (method, param) {
+            var msg = &#x27;Wrong parameters in &#x27; + method;
+            if (param) {
+                msg = &#x27;Wrong parameter &#x27; + param + &#x27; in &#x27; + method;
+            }
+            return new Error(msg, &#x27;Moa&#x27;);
+        },
+        wrongType = function (extendType) {
+            return new Error(&#x27;Type &#x27; + extendType + &#x27; not found&#x27;, &#x27;Moa&#x27;);
+        },
+        build = function (type, base, definition) {
+            /*
+                $mixin string / [string]
+                $single: true / false
+            */
+            var basetype,
+                $ctor = definition.$ctor,
+                $base = {};
+            if ($ctor) {
+                delete definition.$ctor;
+            } else {
+                $ctor = function () {};
+            }
+            delete definition.$extend;
+            if (base) {
+                basetype = base.$basetype;
+                definition = extend(Object.create(base.$ctor.prototype), definition);
+            }
+            definition.$getType = function () {
+                return type;
+            };
+            extend($base, definition);
+            $ctor.prototype = definition;
+            $ctor.prototype.constructor = $ctor;
+            $base.$ctor = $ctor;
+            return {
+                $type: type,
+                $basetype: basetype,
+                $ctor: $ctor,
+                $base: $base
+            };
+        },
+        /**
+         @class Moa
+        */
+        Moa = {
+            /**
+             * Define new or inherited type
+             * @method define
+             * @param type {string} name of object type
+             * @param definition {Object / Function} implementation of behavior for current type of object. If it is null - delete declared object
+             * @return {function} constructor of defined object type
+             */
+            define: function (type, definition) {
+                var mapObj, baseType, base,
+                    len = arguments.length;
+                switch (len) {
+                case 1:
+                    mapObj = map[type];
+                    if (!mapObj) {
+                        throw wrongType(type);
+                    }
+                    break;
+                case 2:
+                    switch (typeof definition) {
+                    case fn:
+                        baseType = definition().$extend;
+                        base = map[baseType];
+                        if (!baseType) {
+                            throw wrongParamsErr(&#x27;definition&#x27;, &#x27;$extend&#x27;);
+                        }
+                        if (!base) {
+                            throw wrongType(baseType);
+                        }
+                        mapObj = build(type, base, definition(base.$base));
+                        map[type] = mapObj;
+                        break;
+                    case ob:
+                        if (definition !== null) {
+                            baseType = definition.$extend;
+                            if (baseType) {
+                                base = map[baseType];
+                                if (!base) {
+                                    throw wrongType(baseType);
+                                }
+                            }
+                            mapObj = build(type, base, definition);
+                            map[type] = mapObj;
+                        } else {
+                            delete map[type];
+                            return undef;
+                        }
+                        break;
+                    default:
+                        throw wrongParamsErr(&#x27;define&#x27;, &#x27;definition&#x27;);
+                    }
+                    break;
+                default:
+                    throw wrongParamsErr(&#x27;define&#x27;);
+                }
+                return mapObj.$ctor;
+            }
+        };
+    // Return as AMD module or attach to head object
+    if (typeof define !== un) {
+        define([], function () { return Moa; });
+    } else if (typeof window !== un) {
+        window.Moa = Moa;
+    } else {
+        module.exports = Moa;
+    }
+}());
     </pre>
 </div>
 

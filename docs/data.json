@@ -7,28 +7,14 @@
         "logo": "../extras/moa-logo-web.png"
     },
     "files": {
-        "src\\moa-noDeps.js": {
-            "name": "src\\moa-noDeps.js",
+        "src\\moa.js": {
+            "name": "src\\moa.js",
             "modules": {
                 "Moa": 1
             },
             "classes": {
                 "Moa": 1
             },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src\\moa.js": {
-            "name": "src\\moa.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src\\obj.js": {
-            "name": "src\\obj.js",
-            "modules": {},
-            "classes": {},
             "fors": {},
             "namespaces": {}
         },
@@ -57,8 +43,8 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src\\moa-noDeps.js",
-            "line": 102,
+            "file": "src\\moa.js",
+            "line": 83,
             "description": "Prototype inheritance and extensions in JavaScript"
         }
     },
@@ -73,33 +59,33 @@
             "extension_for": [],
             "module": "Moa",
             "namespace": "",
-            "file": "src\\moa-noDeps.js",
-            "line": 102
+            "file": "src\\moa.js",
+            "line": 83
         }
     },
     "classitems": [
         {
-            "file": "src\\moa-noDeps.js",
+            "file": "src\\moa.js",
             "line": 1,
             "description": "Created with WebStorm.\nProject: MoaJs\nUser: Sergii Danilov\nDate: 10/31/13\nTime: 6:10 PM",
             "class": "Moa"
         },
         {
-            "file": "src\\moa-noDeps.js",
-            "line": 106,
+            "file": "src\\moa.js",
+            "line": 87,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
             "params": [
                 {
-                    "name": "objName",
+                    "name": "type",
                     "description": "name of object type",
                     "type": "String"
                 },
                 {
-                    "name": "secondParam",
+                    "name": "definition",
                     "description": "implementation of behavior for current type of object. If it is null - delete declared object",
-                    "type": "Object"
+                    "type": "Object / Function"
                 }
             ],
             "return": {
@@ -107,45 +93,6 @@
                 "type": "Function"
             },
             "class": "Moa",
-            "module": "Moa"
-        },
-        {
-            "file": "src\\moa-noDeps.js",
-            "line": 137,
-            "description": "Factory for new exemplars",
-            "itemtype": "method",
-            "name": "create",
-            "params": [
-                {
-                    "name": "objName",
-                    "description": "name of object type",
-                    "type": "String"
-                },
-                {
-                    "name": "mergeObj",
-                    "description": "object for merging with implementing type (with override)",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "new exemplar of selected type in first parameter",
-                "type": "Object"
-            },
-            "class": "Moa",
-            "module": "Moa"
-        },
-        {
-            "file": "src\\moa.js",
-            "line": 1,
-            "description": "Created with JetBrains WebStorm.\nProject: MoaJs\nUser: Sergii Danilov\nDate: 8/27/13\nTime: 6:02 PM",
-            "class": "",
-            "module": "Moa"
-        },
-        {
-            "file": "src\\obj.js",
-            "line": 1,
-            "description": "Created with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:32",
-            "class": "",
             "module": "Moa"
         },
         {
@@ -166,15 +113,7 @@
     "warnings": [
         {
             "message": "Missing item type\nCreated with WebStorm.\nProject: MoaJs\nUser: Sergii Danilov\nDate: 10/31/13\nTime: 6:10 PM",
-            "line": " src\\moa-noDeps.js:1"
-        },
-        {
-            "message": "Missing item type\nCreated with JetBrains WebStorm.\nProject: MoaJs\nUser: Sergii Danilov\nDate: 8/27/13\nTime: 6:02 PM",
             "line": " src\\moa.js:1"
-        },
-        {
-            "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 27.08.2013\nTime: 7:32",
-            "line": " src\\obj.js:1"
         },
         {
             "message": "Missing item type\nCreated with JetBrains WebStorm by Pencroff for MoaJs.\nDate: 28.08.2013\nTime: 8:20",
