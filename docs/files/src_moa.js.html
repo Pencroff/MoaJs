@@ -175,6 +175,9 @@
         wrongType = function (extendType) {
             return new Error(&#x27;Type &#x27; + extendType + &#x27; not found&#x27;, &#x27;Moa&#x27;);
         },
+        getBase = function () {
+
+        },
         build = function (type, base, definition) {
             /*
                 $mixin string / [string]
@@ -189,10 +192,8 @@
                 $ctor = function () {};
             }
             delete definition.$extend;
-            if (base) {
-                basetype = base.$basetype;
-                definition = extend(Object.create(base.$ctor.prototype), definition);
-            }
+            basetype = base.$basetype;
+            definition = extend(Object.create(base.$ctor.prototype), definition);
             definition.getType = function () {
                 return type;
             };
@@ -240,7 +241,6 @@
                             throw wrongType(baseType);
                         }
                         mapObj = build(type, base, definition(base.$base));
-                        map[type] = mapObj;
                         break;
                     case ob:
                         if (definition !== null) {
@@ -253,7 +253,6 @@
                                 throw wrongType(baseType);
                             }
                             mapObj = build(type, base, definition);
-                            map[type] = mapObj;
                         } else {
                             delete map[type];
                             return undef;
@@ -262,6 +261,7 @@
                     default:
                         throw wrongParamsErr(&#x27;define&#x27;, &#x27;definition&#x27;);
                     }
+                    map[type] = mapObj;
                     break;
                 default:
                     throw wrongParamsErr(&#x27;define&#x27;);

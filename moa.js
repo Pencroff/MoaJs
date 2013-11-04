@@ -39,10 +39,8 @@
         var basetype, $ctor = definition.$ctor, $base = {};
         $ctor ? delete definition.$ctor : $ctor = function() {};
         delete definition.$extend;
-        if (base) {
-            basetype = base.$basetype;
-            definition = extend(Object.create(base.$ctor.prototype), definition);
-        }
+        basetype = base.$basetype;
+        definition = extend(Object.create(base.$ctor.prototype), definition);
         definition.getType = function() {
             return type;
         };
@@ -73,7 +71,6 @@
                     base = map[baseType];
                     if (!base) throw wrongType(baseType);
                     mapObj = build(type, base, definition(base.$base));
-                    map[type] = mapObj;
                     break;
 
                   case ob:
@@ -86,12 +83,12 @@
                     base = map[baseType];
                     if (!base) throw wrongType(baseType);
                     mapObj = build(type, base, definition);
-                    map[type] = mapObj;
                     break;
 
                   default:
                     throw wrongParamsErr("define", "definition");
                 }
+                map[type] = mapObj;
                 break;
 
               default:
