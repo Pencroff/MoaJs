@@ -24,11 +24,31 @@
             };
         }());
     }
-    var map = {},
+    var undef,
         fn = 'function',
         ob = 'object',
         un = 'undefined',
-        undef,
+        $proto$ = (function () {
+            var obj, type = '$prototype$',
+                ctor = function () {};
+            ctor.prototype = {
+                getType: function () {
+                    return type;
+                }
+            };
+            ctor.prototype.constructor = ctor;
+            obj = new ctor();
+            obj.$ctor = ctor;
+            return {
+                $type: obj.getType(),
+                $basetype: undef,
+                $ctor: ctor,
+                $base: obj
+            };
+        }()),
+        map = {
+            '$prototype$': $proto$
+        },
         extend = function (target, source) {
             var prop;
             for (prop in source) {
@@ -66,7 +86,7 @@
                 basetype = base.$basetype;
                 definition = extend(Object.create(base.$ctor.prototype), definition);
             }
-            definition.$getType = function () {
+            definition.getType = function () {
                 return type;
             };
             extend($base, definition);
@@ -105,10 +125,10 @@
                     switch (typeof definition) {
                     case fn:
                         baseType = definition().$extend;
-                        base = map[baseType];
                         if (!baseType) {
-                            throw wrongParamsErr('definition', '$extend');
+                            baseType = '$prototype$';
                         }
+                        base = map[baseType];
                         if (!base) {
                             throw wrongType(baseType);
                         }
@@ -118,11 +138,12 @@
                     case ob:
                         if (definition !== null) {
                             baseType = definition.$extend;
-                            if (baseType) {
-                                base = map[baseType];
-                                if (!base) {
-                                    throw wrongType(baseType);
-                                }
+                            if (!baseType) {
+                                baseType = '$prototype$';
+                            }
+                            base = map[baseType];
+                            if (!base) {
+                                throw wrongType(baseType);
                             }
                             mapObj = build(type, base, definition);
                             map[type] = mapObj;

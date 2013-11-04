@@ -131,11 +131,31 @@
             };
         }());
     }
-    var map = {},
+    var undef,
         fn = &#x27;function&#x27;,
         ob = &#x27;object&#x27;,
         un = &#x27;undefined&#x27;,
-        undef,
+        $proto$ = (function () {
+            var obj, type = &#x27;$prototype$&#x27;,
+                ctor = function () {};
+            ctor.prototype = {
+                getType: function () {
+                    return type;
+                }
+            };
+            ctor.prototype.constructor = ctor;
+            obj = new ctor();
+            obj.$ctor = ctor;
+            return {
+                $type: obj.getType(),
+                $basetype: undef,
+                $ctor: ctor,
+                $base: obj
+            };
+        }()),
+        map = {
+            &#x27;$prototype$&#x27;: $proto$
+        },
         extend = function (target, source) {
             var prop;
             for (prop in source) {
@@ -173,7 +193,7 @@
                 basetype = base.$basetype;
                 definition = extend(Object.create(base.$ctor.prototype), definition);
             }
-            definition.$getType = function () {
+            definition.getType = function () {
                 return type;
             };
             extend($base, definition);
@@ -212,10 +232,10 @@
                     switch (typeof definition) {
                     case fn:
                         baseType = definition().$extend;
-                        base = map[baseType];
                         if (!baseType) {
-                            throw wrongParamsErr(&#x27;definition&#x27;, &#x27;$extend&#x27;);
+                            baseType = &#x27;$prototype$&#x27;;
                         }
+                        base = map[baseType];
                         if (!base) {
                             throw wrongType(baseType);
                         }
@@ -225,11 +245,12 @@
                     case ob:
                         if (definition !== null) {
                             baseType = definition.$extend;
-                            if (baseType) {
-                                base = map[baseType];
-                                if (!base) {
-                                    throw wrongType(baseType);
-                                }
+                            if (!baseType) {
+                                baseType = &#x27;$prototype$&#x27;;
+                            }
+                            base = map[baseType];
+                            if (!base) {
+                                throw wrongType(baseType);
                             }
                             mapObj = build(type, base, definition);
                             map[type] = mapObj;

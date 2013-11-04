@@ -20,8 +20,8 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             item = new Ctor();
             expect(Ctor).to.be.a('function');
             expect(item).to.be.a('object');
-            expect(Ctor.prototype).to.have.ownProperty('$getType');
-            expect(item.$getType()).to.equal('obj');
+            expect(Ctor.prototype).to.have.ownProperty('getType');
+            expect(item.getType()).to.equal('obj');
             Ctor = moa.define('obj', null);
             expect(Ctor).to.be.a('undefined');
             done();
@@ -62,7 +62,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             expect(item.getTestProp()).to.equal('Child name');
             expect(item.extraMethod()).to.equal('Extra:Child name');
             expect(item.getConst()).to.equal(5);
-            expect(item.$getType()).to.equal('child');
+            expect(item.getType()).to.equal('child');
             done();
         });
         it('Extend wrong type', function (done) {
@@ -96,7 +96,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                         return {};
                     });
                 }
-            ).to.throw('Wrong parameter $extend in definition');
+            ).to.not.throw('Wrong parameter $extend in definition');
             done();
         });
         it('Get defined constructor', function (done) {
@@ -273,6 +273,43 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             expect(item).to.have.ownProperty('name');
             expect(item.name).to.equal('Nexus');
             expect(item.getName()).to.equal('Sub::Child::Nexus');
+            done();
+        });
+        it('Create base constructor with function', function (done) {
+            var Ctor, item, baseObj,
+                base = function ($base) {
+                    return {
+                        $ctor: function () {
+                            $base.$ctor.call(this);
+                        },
+                        getBase: function () {
+                            return $base;
+                        }
+                    };
+                },
+                child = function ($base) {
+                    return {
+                        $extend: 'base',
+                        $ctor: function () {
+                            $base.$ctor.call(this);
+                        },
+                        getBase: function () {
+                            return $base;
+                        }
+                    };
+                };
+            moa.define('base', base);
+            moa.define('child', child);
+            Ctor = moa.define('base');
+            item = new Ctor();
+            baseObj = item.getBase();
+            expect(item.getType()).to.equal('base');
+            expect(baseObj.getType()).to.equal('$prototype$');
+            Ctor = moa.define('child');
+            item = new Ctor();
+            baseObj = item.getBase();
+            expect(item.getType()).to.equal('child');
+            expect(baseObj.getType()).to.equal('base');
             done();
         });
     });

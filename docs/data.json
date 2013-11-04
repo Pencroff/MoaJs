@@ -44,7 +44,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src\\moa.js",
-            "line": 83,
+            "line": 103,
             "description": "Prototype inheritance and extensions in JavaScript"
         }
     },
@@ -60,7 +60,7 @@
             "module": "Moa",
             "namespace": "",
             "file": "src\\moa.js",
-            "line": 83
+            "line": 103
         }
     },
     "classitems": [
@@ -72,7 +72,7 @@
         },
         {
             "file": "src\\moa.js",
-            "line": 87,
+            "line": 107,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
