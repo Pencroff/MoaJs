@@ -280,7 +280,8 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                 base = function ($base) {
                     return {
                         $ctor: function () {
-                            $base.$ctor.call(this);
+                            // $base is undefined
+                            //$base.$ctor.call(this);
                         },
                         getBase: function () {
                             return $base;
@@ -304,7 +305,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             item = new Ctor();
             baseObj = item.getBase();
             expect(item.getType()).to.equal('base');
-            expect(baseObj.getType()).to.equal('$prototype$');
+            expect(baseObj).to.be.undefined;
             Ctor = moa.define('child');
             item = new Ctor();
             baseObj = item.getBase();

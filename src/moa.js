@@ -28,27 +28,7 @@
         fn = 'function',
         ob = 'object',
         un = 'undefined',
-        $proto$ = (function () {
-            var obj, type = '$prototype$',
-                ctor = function () {};
-            ctor.prototype = {
-                getType: function () {
-                    return type;
-                }
-            };
-            ctor.prototype.constructor = ctor;
-            obj = new ctor();
-            obj.$ctor = ctor;
-            return {
-                $type: obj.getType(),
-                $basetype: undef,
-                $ctor: ctor,
-                $base: obj
-            };
-        }()),
-        map = {
-            '$prototype$': $proto$
-        },
+        map = {},
         extend = function (target, source) {
             var prop;
             for (prop in source) {
@@ -68,9 +48,6 @@
         wrongType = function (extendType) {
             return new Error('Type ' + extendType + ' not found', 'Moa');
         },
-        getBase = function () {
-
-        },
         build = function (type, base, definition) {
             /*
                 $mixin string / [string]
@@ -85,8 +62,10 @@
                 $ctor = function () {};
             }
             delete definition.$extend;
-            basetype = base.$basetype;
-            definition = extend(Object.create(base.$ctor.prototype), definition);
+            if (base !== undef) {
+                basetype = base.$basetype;
+                definition = extend(Object.create(base.$ctor.prototype), definition);
+            }
             definition.getType = function () {
                 return type;
             };
@@ -126,24 +105,24 @@
                     switch (typeof definition) {
                     case fn:
                         baseType = definition().$extend;
-                        if (baseType === undef) {
-                            baseType = '$prototype$';
+                        if (baseType !== undef) {
+                            base = map[baseType];
+                            if (base === undef) {
+                                throw wrongType(baseType);
+                            }
+                            mapObj = build(type, base, definition(base.$base));
+                        } else {
+                            mapObj = build(type, undef, definition(undef));
                         }
-                        base = map[baseType];
-                        if (base === undef) {
-                            throw wrongType(baseType);
-                        }
-                        mapObj = build(type, base, definition(base.$base));
                         break;
                     case ob:
                         if (definition !== null) {
                             baseType = definition.$extend;
-                            if (baseType === undef) {
-                                baseType = '$prototype$';
-                            }
-                            base = map[baseType];
-                            if (base === undef) {
-                                throw wrongType(baseType);
+                            if (baseType !== undef) {
+                                base = map[baseType];
+                                if (base === undef) {
+                                    throw wrongType(baseType);
+                                }
                             }
                             mapObj = build(type, base, definition);
                         } else {
@@ -163,9 +142,9 @@
             }
         };
     // Return as AMD module or attach to head object
-    if (define !== undef) {
+    if (typeof define !== un) {
         define([], function () { return Moa; });
-    } else if (window !== undef) {
+    } else if (typeof window !== un) {
         window.Moa = Moa;
     } else {
         module.exports = Moa;

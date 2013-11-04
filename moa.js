@@ -7,25 +7,7 @@
             return new F();
         };
     }());
-    var undef, fn = "function", ob = "object", $proto$ = function() {
-        var obj, type = "$prototype$", ctor = function() {};
-        ctor.prototype = {
-            getType: function() {
-                return type;
-            }
-        };
-        ctor.prototype.constructor = ctor;
-        obj = new ctor();
-        obj.$ctor = ctor;
-        return {
-            $type: obj.getType(),
-            $basetype: undef,
-            $ctor: ctor,
-            $base: obj
-        };
-    }(), map = {
-        $prototype$: $proto$
-    }, extend = function(target, source) {
+    var undef, fn = "function", ob = "object", un = "undefined", map = {}, extend = function(target, source) {
         var prop;
         for (prop in source) source.hasOwnProperty(prop) && (target[prop] = source[prop]);
         return target;
@@ -39,8 +21,10 @@
         var basetype, $ctor = definition.$ctor, $base = {};
         $ctor !== undef ? delete definition.$ctor : $ctor = function() {};
         delete definition.$extend;
-        basetype = base.$basetype;
-        definition = extend(Object.create(base.$ctor.prototype), definition);
+        if (base !== undef) {
+            basetype = base.$basetype;
+            definition = extend(Object.create(base.$ctor.prototype), definition);
+        }
         definition.getType = function() {
             return type;
         };
@@ -67,10 +51,11 @@
                 switch (typeof definition) {
                   case fn:
                     baseType = definition().$extend;
-                    baseType === undef && (baseType = "$prototype$");
-                    base = map[baseType];
-                    if (base === undef) throw wrongType(baseType);
-                    mapObj = build(type, base, definition(base.$base));
+                    if (baseType !== undef) {
+                        base = map[baseType];
+                        if (base === undef) throw wrongType(baseType);
+                        mapObj = build(type, base, definition(base.$base));
+                    } else mapObj = build(type, undef, definition(undef));
                     break;
 
                   case ob:
@@ -79,9 +64,10 @@
                         return undef;
                     }
                     baseType = definition.$extend;
-                    baseType === undef && (baseType = "$prototype$");
-                    base = map[baseType];
-                    if (base === undef) throw wrongType(baseType);
+                    if (baseType !== undef) {
+                        base = map[baseType];
+                        if (base === undef) throw wrongType(baseType);
+                    }
                     mapObj = build(type, base, definition);
                     break;
 
@@ -97,7 +83,7 @@
             return mapObj.$ctor;
         }
     };
-    define !== undef ? define("Moa", [], function() {
+    typeof define !== un ? define("Moa", [], function() {
         return Moa;
-    }) : window !== undef ? window.Moa = Moa : module.exports = Moa;
+    }) : typeof window !== un ? window.Moa = Moa : module.exports = Moa;
 })();
