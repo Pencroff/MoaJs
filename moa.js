@@ -7,7 +7,7 @@
             return new F();
         };
     }());
-    var undef, fn = "function", ob = "object", un = "undefined", $proto$ = function() {
+    var undef, fn = "function", ob = "object", $proto$ = function() {
         var obj, type = "$prototype$", ctor = function() {};
         ctor.prototype = {
             getType: function() {
@@ -37,7 +37,7 @@
         return new Error("Type " + extendType + " not found", "Moa");
     }, build = function(type, base, definition) {
         var basetype, $ctor = definition.$ctor, $base = {};
-        $ctor ? delete definition.$ctor : $ctor = function() {};
+        $ctor !== undef ? delete definition.$ctor : $ctor = function() {};
         delete definition.$extend;
         basetype = base.$basetype;
         definition = extend(Object.create(base.$ctor.prototype), definition);
@@ -67,9 +67,9 @@
                 switch (typeof definition) {
                   case fn:
                     baseType = definition().$extend;
-                    baseType || (baseType = "$prototype$");
+                    baseType === undef && (baseType = "$prototype$");
                     base = map[baseType];
-                    if (!base) throw wrongType(baseType);
+                    if (base === undef) throw wrongType(baseType);
                     mapObj = build(type, base, definition(base.$base));
                     break;
 
@@ -79,9 +79,9 @@
                         return undef;
                     }
                     baseType = definition.$extend;
-                    baseType || (baseType = "$prototype$");
+                    baseType === undef && (baseType = "$prototype$");
                     base = map[baseType];
-                    if (!base) throw wrongType(baseType);
+                    if (base === undef) throw wrongType(baseType);
                     mapObj = build(type, base, definition);
                     break;
 
@@ -97,7 +97,7 @@
             return mapObj.$ctor;
         }
     };
-    typeof define !== un ? define("Moa", [], function() {
+    define !== undef ? define("Moa", [], function() {
         return Moa;
-    }) : typeof window !== un ? window.Moa = Moa : module.exports = Moa;
+    }) : window !== undef ? window.Moa = Moa : module.exports = Moa;
 })();

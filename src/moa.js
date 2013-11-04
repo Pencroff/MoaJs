@@ -79,7 +79,7 @@
             var basetype,
                 $ctor = definition.$ctor,
                 $base = {};
-            if ($ctor) {
+            if ($ctor !== undef) {
                 delete definition.$ctor;
             } else {
                 $ctor = function () {};
@@ -126,11 +126,11 @@
                     switch (typeof definition) {
                     case fn:
                         baseType = definition().$extend;
-                        if (!baseType) {
+                        if (baseType === undef) {
                             baseType = '$prototype$';
                         }
                         base = map[baseType];
-                        if (!base) {
+                        if (base === undef) {
                             throw wrongType(baseType);
                         }
                         mapObj = build(type, base, definition(base.$base));
@@ -138,11 +138,11 @@
                     case ob:
                         if (definition !== null) {
                             baseType = definition.$extend;
-                            if (!baseType) {
+                            if (baseType === undef) {
                                 baseType = '$prototype$';
                             }
                             base = map[baseType];
-                            if (!base) {
+                            if (base === undef) {
                                 throw wrongType(baseType);
                             }
                             mapObj = build(type, base, definition);
@@ -163,9 +163,9 @@
             }
         };
     // Return as AMD module or attach to head object
-    if (typeof define !== un) {
+    if (define !== undef) {
         define([], function () { return Moa; });
-    } else if (typeof window !== un) {
+    } else if (window !== undef) {
         window.Moa = Moa;
     } else {
         module.exports = Moa;
