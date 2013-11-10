@@ -313,5 +313,48 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             expect(baseObj.getType()).to.equal('base');
             done();
         });
+        it('Test $static implementation', function (done) {
+            var base = {
+                    $ctor: function (name) {
+                        this.name = name;
+                    },
+                    getName: function () {
+                        return this.name;
+                    },
+                    $static: {
+                        getMsg: function () {
+                            return 'Static!';
+                        },
+                        staticProp: 'Common'
+                    }
+                },
+                Ctor;
+            Ctor = moa.define('base', base);
+            expect(Ctor).to.have.ownProperty('getMsg');
+            expect(Ctor).to.have.ownProperty('staticProp');
+            expect(Ctor.getMsg()).to.equal('Static!');
+            expect(Ctor.staticProp).to.equal('Common');
+            done();
+        });
+        it('Test singleton implementation', function (done) {
+            var base = {
+                    $ctor: function () {
+                        this.name = 'Moa';
+                    },
+                    getName: function () {
+                        return this.name;
+                    },
+                    $single: true
+                },
+                Ctor,
+                item;
+            Ctor = moa.define('base', base);
+            item = new Ctor();
+            expect(item.getName()).to.equal('Moa');
+            expect(new Ctor()).to.equal(item);
+            expect(Ctor()).to.equal(item);
+            expect(Ctor.getInstance()).to.equal(item);
+            done();
+        });
     });
 });

@@ -51,9 +51,10 @@
         build = function (type, base, definition) {
             /*
                 $mixin string / [string]
-                $single: true / false
             */
             var basetype,
+                $single = definition.$single,
+                $static = definition.$static,
                 $ctor = definition.$ctor,
                 $base = {};
             if ($ctor !== undef) {
@@ -61,7 +62,12 @@
             } else {
                 $ctor = function () {};
             }
+            delete definition.$single;
+            delete definition.$static;
             delete definition.$extend;
+            if ($static !== undef) {
+                extend($ctor, $static);
+            }
             if (base !== undef) {
                 basetype = base.$basetype;
                 definition = extend(Object.create(base.$ctor.prototype), definition);
@@ -72,6 +78,18 @@
             extend($base, definition);
             $ctor.prototype = definition;
             $ctor.prototype.constructor = $ctor;
+            if ($single !== undef && $single === true) {
+                (function () {
+                    var instance = new $ctor();
+                    $ctor = function () {
+                        return instance;
+                    };
+                    $ctor.getInstance = function () {
+                        return instance;
+                    };
+                }());
+            //} else {
+            }
             $base.$ctor = $ctor;
             return {
                 $type: type,

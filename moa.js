@@ -18,9 +18,12 @@
     }, wrongType = function(extendType) {
         return new Error("Type " + extendType + " not found", "Moa");
     }, build = function(type, base, definition) {
-        var basetype, $ctor = definition.$ctor, $base = {};
+        var basetype, $single = definition.$single, $static = definition.$static, $ctor = definition.$ctor, $base = {};
         $ctor !== undef ? delete definition.$ctor : $ctor = function() {};
+        delete definition.$single;
+        delete definition.$static;
         delete definition.$extend;
+        $static !== undef && extend($ctor, $static);
         if (base !== undef) {
             basetype = base.$basetype;
             definition = extend(Object.create(base.$ctor.prototype), definition);
@@ -31,6 +34,15 @@
         extend($base, definition);
         $ctor.prototype = definition;
         $ctor.prototype.constructor = $ctor;
+        $single !== undef && $single === !0 && function() {
+            var instance = new $ctor();
+            $ctor = function() {
+                return instance;
+            };
+            $ctor.getInstance = function() {
+                return instance;
+            };
+        }();
         $base.$ctor = $ctor;
         return {
             $type: type,
