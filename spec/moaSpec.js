@@ -12,10 +12,18 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
     describe('Test "Moa" implementation', function () {
         it('Define simple object', function (done) {
             var Ctor, item;
-            expect(function () {moa.define()}).to.throw('Wrong parameters in define');
-            expect(function () {moa.define('type', {}, 1)}).to.throw('Wrong parameters in define');
-            expect(function () {moa.define('type', 1)}).to.throw('Wrong parameter definition in define');
-            expect(function () {moa.define('type', 'object')}).to.throw('Wrong parameter definition in define');
+            expect(function () {
+                moa.define();
+            }).to.throw('Wrong parameters in define');
+            expect(function () {
+                moa.define('type', {}, 1);
+            }).to.throw('Wrong parameters in define');
+            expect(function () {
+                moa.define('type', 1);
+            }).to.throw('Wrong parameter definition in define');
+            expect(function () {
+                moa.define('type', 'object');
+            }).to.throw('Wrong parameter definition in define');
             Ctor = moa.define('obj', {});
             item = new Ctor();
             expect(Ctor).to.be.a('function');
@@ -49,7 +57,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                 };
             moa.define('base', base);
             Ctor = moa.define('child', child);
-            item =  new Ctor();
+            item = new Ctor();
             expect(Ctor).to.be.a('function');
             expect(Ctor.prototype).to.have.ownProperty('extraMethod');
             expect(Ctor.prototype).to.have.ownProperty('getConst');
@@ -110,8 +118,10 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                 constructor2;
             constructorFn = moa.define('simpleClass', simpleObj);
             constructor2 = moa.define('simpleClass');
-            expect(constructorFn === constructor2).to.true;
-            expect(function () {moa.define('wrongClass')}).to.throw('Type wrongClass not found');
+            expect(constructorFn === constructor2).to.equal(true);
+            expect(function () {
+                moa.define('wrongClass');
+            }).to.throw('Type wrongClass not found');
             done();
         });
         it('Using constructor', function (done) {
@@ -347,12 +357,14 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                     $single: true
                 },
                 Ctor,
+                ctor,
                 item;
             Ctor = moa.define('base', base);
+            ctor = Ctor;
             item = new Ctor();
             expect(item.getName()).to.equal('Moa');
             expect(new Ctor()).to.equal(item);
-            expect(Ctor()).to.equal(item);
+            expect(ctor()).to.equal(item);
             expect(Ctor.getInstance()).to.equal(item);
             done();
         });
