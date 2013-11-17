@@ -30,69 +30,45 @@
         un = 'undefined',
         map = {},
         mixins = {},
-        extend = (function () {
-            var fn;
-            if (!Object.keys) {
-                fn = function (target, source) {
-                    var prop;
-                    for (prop in source) {
-                        if (source.hasOwnProperty(prop)) {
-                            target[prop] = source[prop];
-                        }
-                    }
-                    //Some Object methods are not enumerable on Internet Explorer
-                    target.toString = source.toString;
-                    target.valueOf = source.valueOf;
-                    target.toLocaleString = source.toLocaleString;
-                    return target;
-                };
-            } else {
-                fn = function (target, source) {
-                    var keys = Object.keys(source),
-                        len = keys.length,
-                        i = 0,
-                        prop;
-                    while (i < len) {
-                        prop = keys[i];
-                        target[prop] = source[prop];
-                        i += 1;
-                    }
-                    return target;
-                };
+        extend = function (target, source) {
+            var prop;
+            for (prop in source) {
+                if (source.hasOwnProperty(prop)) {
+                    target[prop] = source[prop];
+                }
             }
-            return fn;
-        }()),
-        wrongParamsErr = function (method, param) {
+            //Some Object methods are not enumerable on Internet Explorer
+            target.toString = source.toString;
+            target.valueOf = source.valueOf;
+            target.toLocaleString = source.toLocaleString;
+            return target;
+        },
+        throwWrongParamsErr = function (method, param) {
             var msg = 'Wrong parameters in ' + method;
             if (param) {
                 msg = 'Wrong parameter ' + param + ' in ' + method;
             }
-            return new Error(msg, 'Moa');
+            throw new Error(msg, 'Moa');
         },
-        wrongType = function (extendType, isMixin) {
+        throwWrongType = function (extendType, isMixin) {
             var type = 'Type ';
             if (isMixin === true) {
                 type = 'Mixin type ';
             }
-            return new Error(type + extendType + ' not found', 'Moa');
+            throw new Error(type + extendType + ' not found', 'Moa');
         },
         addMixins = function ($proto, $mixin) {
-            var keys = Object.keys($mixin),
-                len = keys.length,
-                i = 0,
-                prop,
+            var prop,
                 value,
                 MixFn;
-            while (i < len) {
-                prop = keys[i];
+            for (prop in $mixin) {
                 value = $mixin[prop];
                 MixFn = mixins[value];
                 if (MixFn === undef) {
-                    throw wrongType(value, true);
+                    throwWrongType(value, true);
                 }
                 MixFn.call($proto);
                 $proto[prop] = new MixFn();
-                i += 1;
             }
             return $proto;
         },
@@ -138,7 +114,6 @@
                         return instance;
                     };
                 }());
-            //} else {
             }
             $base.$ctor = $ctor;
             return {
@@ -166,7 +141,7 @@
                 case 1:
                     mapObj = map[type];
                     if (!mapObj) {
-                        throw wrongType(type);
+                        throwWrongType(type);
                     }
                     break;
                 case 2:
@@ -176,7 +151,7 @@
                         if (baseType !== undef) {
                             base = map[baseType];
                             if (base === undef) {
-                                throw wrongType(baseType);
+                                throwWrongType(baseType);
                             }
                             mapObj = build(type, base, definition(base.$base));
                         } else {
@@ -189,7 +164,7 @@
                             if (baseType !== undef) {
                                 base = map[baseType];
                                 if (base === undef) {
-                                    throw wrongType(baseType);
+                                    throwWrongType(baseType);
                                 }
                             }
                             mapObj = build(type, base, definition);
@@ -199,12 +174,12 @@
                         }
                         break;
                     default:
-                        throw wrongParamsErr('define', 'definition');
+                        throwWrongParamsErr('define', 'definition');
                     }
                     map[type] = mapObj;
                     break;
                 default:
-                    throw wrongParamsErr('define');
+                    throwWrongParamsErr('define');
                 }
                 return mapObj.$ctor;
             },
@@ -216,7 +191,7 @@
              */
             mixin: function (mixType, definition) {
                 if (typeof definition !== fn) {
-                    wrongParamsErr('definition', 'mixin');
+                   throwWrongParamsErr('mixin', 'definition');
                 }
                 mixins[mixType] = definition;
             }

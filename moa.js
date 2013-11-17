@@ -7,41 +7,29 @@
             return new F();
         };
     }());
-    var undef, fn = "function", ob = "object", un = "undefined", map = {}, mixins = {}, extend = function() {
-        var fn;
-        fn = Object.keys ? function(target, source) {
-            for (var prop, keys = Object.keys(source), len = keys.length, i = 0; len > i; ) {
-                prop = keys[i];
-                target[prop] = source[prop];
-                i += 1;
-            }
-            return target;
-        } : function(target, source) {
-            var prop;
-            for (prop in source) source.hasOwnProperty(prop) && (target[prop] = source[prop]);
-            target.toString = source.toString;
-            target.valueOf = source.valueOf;
-            target.toLocaleString = source.toLocaleString;
-            return target;
-        };
-        return fn;
-    }(), wrongParamsErr = function(method, param) {
+    var undef, fn = "function", ob = "object", un = "undefined", map = {}, mixins = {}, extend = function(target, source) {
+        var prop;
+        for (prop in source) source.hasOwnProperty(prop) && (target[prop] = source[prop]);
+        target.toString = source.toString;
+        target.valueOf = source.valueOf;
+        target.toLocaleString = source.toLocaleString;
+        return target;
+    }, throwWrongParamsErr = function(method, param) {
         var msg = "Wrong parameters in " + method;
         param && (msg = "Wrong parameter " + param + " in " + method);
-        return new Error(msg, "Moa");
-    }, wrongType = function(extendType, isMixin) {
+        throw new Error(msg, "Moa");
+    }, throwWrongType = function(extendType, isMixin) {
         var type = "Type ";
         isMixin === !0 && (type = "Mixin type ");
-        return new Error(type + extendType + " not found", "Moa");
+        throw new Error(type + extendType + " not found", "Moa");
     }, addMixins = function($proto, $mixin) {
-        for (var prop, value, MixFn, keys = Object.keys($mixin), len = keys.length, i = 0; len > i; ) {
-            prop = keys[i];
+        var prop, value, MixFn;
+        for (prop in $mixin) {
             value = $mixin[prop];
             MixFn = mixins[value];
-            if (MixFn === undef) throw wrongType(value, !0);
+            MixFn === undef && throwWrongType(value, !0);
             MixFn.call($proto);
             $proto[prop] = new MixFn();
-            i += 1;
         }
         return $proto;
     }, build = function(type, base, definition) {
@@ -85,7 +73,7 @@
             switch (len) {
               case 1:
                 mapObj = map[type];
-                if (!mapObj) throw wrongType(type);
+                mapObj || throwWrongType(type);
                 break;
 
               case 2:
@@ -94,7 +82,7 @@
                     baseType = definition().$extend;
                     if (baseType !== undef) {
                         base = map[baseType];
-                        if (base === undef) throw wrongType(baseType);
+                        base === undef && throwWrongType(baseType);
                         mapObj = build(type, base, definition(base.$base));
                     } else mapObj = build(type, undef, definition(undef));
                     break;
@@ -107,24 +95,24 @@
                     baseType = definition.$extend;
                     if (baseType !== undef) {
                         base = map[baseType];
-                        if (base === undef) throw wrongType(baseType);
+                        base === undef && throwWrongType(baseType);
                     }
                     mapObj = build(type, base, definition);
                     break;
 
                   default:
-                    throw wrongParamsErr("define", "definition");
+                    throwWrongParamsErr("define", "definition");
                 }
                 map[type] = mapObj;
                 break;
 
               default:
-                throw wrongParamsErr("define");
+                throwWrongParamsErr("define");
             }
             return mapObj.$ctor;
         },
         mixin: function(mixType, definition) {
-            typeof definition !== fn && wrongParamsErr("definition", "mixin");
+            typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
             mixins[mixType] = definition;
         }
     };

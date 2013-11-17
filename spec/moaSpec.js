@@ -75,29 +75,23 @@ define(['moa', 'tool', 'chai'], function (Moa, tool, chai) {
         });
         it('Extend wrong type', function (done) {
             Moa.define('base', {});
-            expect(
-                function () {
-                    Moa.define('child', {
-                        $extend: 'base'
-                    });
-                }
-            ).to.not.throw('Type base not found');
-            expect(
-                function () {
-                    Moa.define('child', {
+            expect(function () {
+                Moa.define('child', {
+                    $extend: 'base'
+                });
+            }).to.not.throw('Type base not found');
+            expect(function () {
+                Moa.define('child', {
+                    $extend: 'base-base'
+                });
+            }).to.throw('Type base-base not found');
+            expect(function () {
+                Moa.define('child', function ($base) {
+                    return {
                         $extend: 'base-base'
-                    });
-                }
-            ).to.throw('Type base-base not found');
-            expect(
-                function () {
-                    Moa.define('child', function ($base) {
-                        return {
-                            $extend: 'base-base'
-                        };
-                    });
-                }
-            ).to.throw('Type base-base not found');
+                    };
+                });
+            }).to.throw('Type base-base not found');
             expect(
                 function () {
                     Moa.define('child', function ($base) {
@@ -416,22 +410,45 @@ define(['moa', 'tool', 'chai'], function (Moa, tool, chai) {
                         str: 'strMix'
                     }
                 },
-                numMix = {
-                    add: function () {
+                numMix = function () {
+                    this.add = function () {
                         return (this.a + this.b);
-                    },
-                    sub: function () {
-                        return (this.a - this.b);
-                    },
-                    mul: function () {
-                        return (this.a * this.b);
+                    };
+                },
+                strMix = function () {
+                    this.add = function () {
+                        return (this.a.toString() + this.b.toString());
+                    };
+                },
+                Ctor,
+                item;
+            Moa.mixin('numMix', numMix);
+            Moa.mixin('strMix', strMix);
+            Ctor = Moa.define('base', base);
+            item = new Ctor(10, 12);
+            expect(item.add()).to.equal('1012');
+            expect(item.num.add.call(item)).to.equal(22);
+            expect(item.str.add.call(item)).to.equal('1012');
+            done();
+        });
+        it('Test errors in mixins', function (done) {
+            var base = {
+                    $mixin: {
+                        nummix: 'numMixA'
                     }
                 },
-                strMix = {
-                    add: function () {
-                        return (this.a.toString() + this.b.toString());
-                    }
+                numMix = function () {
+                    this.add = function () {
+                        return (this.a + this.b);
+                    };
                 };
+            Moa.mixin('numMix', numMix);
+            expect(function () {
+                Moa.mixin('mix', {});
+            }).to.throw('Wrong parameter definition in mixin');
+            expect(function () {
+                Moa.define('base', base);
+            }).to.throw('Mixin type numMixA not found');
             done();
         });
     });
