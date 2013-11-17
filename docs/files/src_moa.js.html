@@ -136,15 +136,39 @@
         ob = &#x27;object&#x27;,
         un = &#x27;undefined&#x27;,
         map = {},
-        extend = function (target, source) {
-            var prop;
-            for (prop in source) {
-                if (source.hasOwnProperty(prop)) {
-                    target[prop] = source[prop];
-                }
+        mixins = {},
+        extend = (function () {
+            var fn;
+            if (!Object.keys) {
+                fn = function (target, source) {
+                    var prop;
+                    for (prop in source) {
+                        if (source.hasOwnProperty(prop)) {
+                            target[prop] = source[prop];
+                        }
+                    }
+                    //Some Object methods are not enumerable on Internet Explorer
+                    target.toString = source.toString;
+                    target.valueOf = source.valueOf;
+                    target.toLocaleString = source.toLocaleString;
+                    return target;
+                };
+            } else {
+                fn = function (target, source) {
+                    var keys = Object.keys(source),
+                        len = keys.length,
+                        i = 0,
+                        prop;
+                    while (i &lt; len) {
+                        prop = keys[i];
+                        target[prop] = source[prop];
+                        i += 1;
+                    }
+                    return target;
+                };
             }
-            return target;
-        },
+            return fn;
+        }()),
         wrongParamsErr = function (method, param) {
             var msg = &#x27;Wrong parameters in &#x27; + method;
             if (param) {
@@ -152,16 +176,38 @@
             }
             return new Error(msg, &#x27;Moa&#x27;);
         },
-        wrongType = function (extendType) {
-            return new Error(&#x27;Type &#x27; + extendType + &#x27; not found&#x27;, &#x27;Moa&#x27;);
+        wrongType = function (extendType, isMixin) {
+            var type = &#x27;Type &#x27;;
+            if (isMixin === true) {
+                type = &#x27;Mixin type &#x27;;
+            }
+            return new Error(type + extendType + &#x27; not found&#x27;, &#x27;Moa&#x27;);
+        },
+        addMixins = function ($proto, $mixin) {
+            var keys = Object.keys($mixin),
+                len = keys.length,
+                i = 0,
+                prop,
+                value,
+                MixFn;
+            while (i &lt; len) {
+                prop = keys[i];
+                value = $mixin[prop];
+                MixFn = mixins[value];
+                if (MixFn === undef) {
+                    throw wrongType(value, true);
+                }
+                MixFn.call($proto);
+                $proto[prop] = new MixFn();
+                i += 1;
+            }
+            return $proto;
         },
         build = function (type, base, definition) {
-            /*
-                $mixin string / [string]
-            */
             var basetype,
                 $single = definition.$single,
                 $static = definition.$static,
+                $mixin = definition.$mixin,
                 $ctor = definition.$ctor,
                 $base = {};
             if ($ctor !== undef) {
@@ -171,9 +217,13 @@
             }
             delete definition.$single;
             delete definition.$static;
+            delete definition.$mixin;
             delete definition.$extend;
             if ($static !== undef) {
                 extend($ctor, $static);
+            }
+            if ($mixin !== undef) {
+                definition = extend(addMixins({}, $mixin), definition);
             }
             if (base !== undef) {
                 basetype = base.$basetype;
@@ -264,6 +314,18 @@
                     throw wrongParamsErr(&#x27;define&#x27;);
                 }
                 return mapObj.$ctor;
+            },
+            /**
+             * Declare new mixin type
+             * @method mixin
+             * @param mixType {string} name of mixin type
+             * @param definition {Function} implementation of behavior for mixin.
+             */
+            mixin: function (mixType, definition) {
+                if (typeof definition !== fn) {
+                    wrongParamsErr(&#x27;definition&#x27;, &#x27;mixin&#x27;);
+                }
+                mixins[mixType] = definition;
             }
         };
     // Return as AMD module or attach to head object

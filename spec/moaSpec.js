@@ -6,31 +6,31 @@
  * Time: 6:11 PM
  */
 /*global define:true, describe:true, it:true*/
-define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
+define(['moa', 'tool', 'chai'], function (Moa, tool, chai) {
     'use strict';
     var expect = chai.expect;
     describe('Test "Moa" implementation', function () {
         it('Define simple object', function (done) {
             var Ctor, item;
             expect(function () {
-                moa.define();
+                Moa.define();
             }).to.throw('Wrong parameters in define');
             expect(function () {
-                moa.define('type', {}, 1);
+                Moa.define('type', {}, 1);
             }).to.throw('Wrong parameters in define');
             expect(function () {
-                moa.define('type', 1);
+                Moa.define('type', 1);
             }).to.throw('Wrong parameter definition in define');
             expect(function () {
-                moa.define('type', 'object');
+                Moa.define('type', 'object');
             }).to.throw('Wrong parameter definition in define');
-            Ctor = moa.define('obj', {});
+            Ctor = Moa.define('obj', {});
             item = new Ctor();
             expect(Ctor).to.be.a('function');
             expect(item).to.be.a('object');
             expect(Ctor.prototype).to.have.ownProperty('getType');
             expect(item.getType()).to.equal('obj');
-            Ctor = moa.define('obj', null);
+            Ctor = Moa.define('obj', null);
             expect(Ctor).to.be.a('undefined');
             done();
         });
@@ -55,8 +55,8 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                         return 'Extra:' + this.testProp;
                     }
                 };
-            moa.define('base', base);
-            Ctor = moa.define('child', child);
+            Moa.define('base', base);
+            Ctor = Moa.define('child', child);
             item = new Ctor();
             expect(Ctor).to.be.a('function');
             expect(Ctor.prototype).to.have.ownProperty('extraMethod');
@@ -74,24 +74,24 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             done();
         });
         it('Extend wrong type', function (done) {
-            moa.define('base', {});
+            Moa.define('base', {});
             expect(
                 function () {
-                    moa.define('child', {
+                    Moa.define('child', {
                         $extend: 'base'
                     });
                 }
             ).to.not.throw('Type base not found');
             expect(
                 function () {
-                    moa.define('child', {
+                    Moa.define('child', {
                         $extend: 'base-base'
                     });
                 }
             ).to.throw('Type base-base not found');
             expect(
                 function () {
-                    moa.define('child', function ($base) {
+                    Moa.define('child', function ($base) {
                         return {
                             $extend: 'base-base'
                         };
@@ -100,7 +100,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
             ).to.throw('Type base-base not found');
             expect(
                 function () {
-                    moa.define('child', function ($base) {
+                    Moa.define('child', function ($base) {
                         return {};
                     });
                 }
@@ -116,11 +116,11 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                 },
                 constructorFn,
                 constructor2;
-            constructorFn = moa.define('simpleClass', simpleObj);
-            constructor2 = moa.define('simpleClass');
+            constructorFn = Moa.define('simpleClass', simpleObj);
+            constructor2 = Moa.define('simpleClass');
             expect(constructorFn === constructor2).to.equal(true);
             expect(function () {
-                moa.define('wrongClass');
+                Moa.define('wrongClass');
             }).to.throw('Type wrongClass not found');
             done();
         });
@@ -137,7 +137,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                         this.name = v;
                     }
                 };
-            BaseCtor = moa.define('base', base);
+            BaseCtor = Moa.define('base', base);
             item = new BaseCtor('Nexus');
             item2 = new BaseCtor('Note');
             expect(BaseCtor.prototype).to.have.ownProperty('getName');
@@ -209,12 +209,12 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                         }
                     };
                 };
-            moa.define('base', base);
-            moa.define('child', child);
-            moa.define('subchild', subchild);
-            moa.define('sub2child', sub2child);
-            moa.define('sub3child', sub3child);
-            Ctor = moa.define('sub3child');
+            Moa.define('base', base);
+            Moa.define('child', child);
+            Moa.define('subchild', subchild);
+            Moa.define('sub2child', sub2child);
+            Moa.define('sub3child', sub3child);
+            Ctor = Moa.define('sub3child');
             item = new Ctor('Nexus', 5, 0.1, '5 inch', 'white');
             item2 = new Ctor('Note', 3, 0.15, '6 inch', 'black');
             expect(item).to.have.ownProperty('name');
@@ -276,9 +276,9 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                         }
                     };
                 };
-            moa.define('base', base);
-            moa.define('child', child);
-            Ctor = moa.define('subchild', subchild);
+            Moa.define('base', base);
+            Moa.define('child', child);
+            Ctor = Moa.define('subchild', subchild);
             item = new Ctor('Nexus');
             expect(item).to.have.ownProperty('name');
             expect(item.name).to.equal('Nexus');
@@ -309,14 +309,14 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                         }
                     };
                 };
-            moa.define('base', base);
-            moa.define('child', child);
-            Ctor = moa.define('base');
+            Moa.define('base', base);
+            Moa.define('child', child);
+            Ctor = Moa.define('base');
             item = new Ctor();
             baseObj = item.getBase();
             expect(item.getType()).to.equal('base');
             expect(baseObj).to.be.undefined;
-            Ctor = moa.define('child');
+            Ctor = Moa.define('child');
             item = new Ctor();
             baseObj = item.getBase();
             expect(item.getType()).to.equal('child');
@@ -339,7 +339,7 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                     }
                 },
                 Ctor;
-            Ctor = moa.define('base', base);
+            Ctor = Moa.define('base', base);
             expect(Ctor).to.have.ownProperty('getMsg');
             expect(Ctor).to.have.ownProperty('staticProp');
             expect(Ctor.getMsg()).to.equal('Static!');
@@ -359,13 +359,79 @@ define(['moa', 'tool', 'chai'], function (moa, tool, chai) {
                 Ctor,
                 ctor,
                 item;
-            Ctor = moa.define('base', base);
+            Ctor = Moa.define('base', base);
             ctor = Ctor;
             item = new Ctor();
             expect(item.getName()).to.equal('Moa');
             expect(new Ctor()).to.equal(item);
             expect(ctor()).to.equal(item);
             expect(Ctor.getInstance()).to.equal(item);
+            done();
+        });
+        it('Test base $mixin implementation', function (done) {
+            var base = {
+                    $ctor: function (a, b) {
+                        this.a = a;
+                        this.b = b;
+                    },
+                    $mixin: {
+                        nummix: 'numMix'
+                    },
+                    mul: function () {
+                        return 'a*b=' + this.nummix.mul.call(this);
+                    }
+                },
+                numMix = function () {
+                    this.add = function () {
+                        return (this.a + this.b);
+                    };
+                    this.sub = function () {
+                        return (this.a - this.b);
+                    };
+                    this.mul = function () {
+                        return (this.a * this.b);
+                    };
+                },
+                Ctor,
+                item;
+            Moa.mixin('numMix', numMix);
+            Ctor = Moa.define('base', base);
+            item = new Ctor(3, 4);
+            expect(Ctor.prototype).to.have.ownProperty('add');
+            expect(Ctor.prototype).to.have.ownProperty('sub');
+            expect(Ctor.prototype).to.have.ownProperty('mul');
+            expect(item.add()).to.equal(7);
+            expect(item.sub()).to.equal(-1);
+            expect(item.mul()).to.equal('a*b=12');
+            done();
+        });
+        it('Test multiple $mixin implementation', function (done) {
+            var base = {
+                    $ctor: function (a, b) {
+                        this.a = a;
+                        this.b = b;
+                    },
+                    $mixin: {
+                        num: 'numMix',
+                        str: 'strMix'
+                    }
+                },
+                numMix = {
+                    add: function () {
+                        return (this.a + this.b);
+                    },
+                    sub: function () {
+                        return (this.a - this.b);
+                    },
+                    mul: function () {
+                        return (this.a * this.b);
+                    }
+                },
+                strMix = {
+                    add: function () {
+                        return (this.a.toString() + this.b.toString());
+                    }
+                };
             done();
         });
     });

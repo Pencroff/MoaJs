@@ -44,7 +44,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src\\moa.js",
-            "line": 101,
+            "line": 151,
             "description": "Prototype inheritance and extensions in JavaScript"
         }
     },
@@ -60,7 +60,7 @@
             "module": "Moa",
             "namespace": "",
             "file": "src\\moa.js",
-            "line": 101
+            "line": 151
         }
     },
     "classitems": [
@@ -72,7 +72,7 @@
         },
         {
             "file": "src\\moa.js",
-            "line": 105,
+            "line": 155,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
@@ -92,6 +92,27 @@
                 "description": "constructor of defined object type",
                 "type": "Function"
             },
+            "class": "Moa",
+            "module": "Moa"
+        },
+        {
+            "file": "src\\moa.js",
+            "line": 211,
+            "description": "Declare new mixin type",
+            "itemtype": "method",
+            "name": "mixin",
+            "params": [
+                {
+                    "name": "mixType",
+                    "description": "name of mixin type",
+                    "type": "String"
+                },
+                {
+                    "name": "definition",
+                    "description": "implementation of behavior for mixin.",
+                    "type": "Function"
+                }
+            ],
             "class": "Moa",
             "module": "Moa"
         },
