@@ -74,6 +74,7 @@
         },
         build = function (type, base, definition) {
             var basetype,
+                $staticMixin,
                 $single = definition.$single,
                 $static = definition.$static,
                 $mixin = definition.$mixin,
@@ -89,6 +90,11 @@
             delete definition.$mixin;
             delete definition.$extend;
             if ($static !== undef) {
+                $staticMixin = $static.$mixin;
+                if ($staticMixin !== undef) {
+                    delete $static.$mixin;
+                    addMixins($ctor, $staticMixin);
+                }
                 extend($ctor, $static);
             }
             if ($mixin !== undef) {

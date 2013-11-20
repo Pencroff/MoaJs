@@ -33,13 +33,20 @@
         }
         return $proto;
     }, build = function(type, base, definition) {
-        var basetype, $single = definition.$single, $static = definition.$static, $mixin = definition.$mixin, $ctor = definition.$ctor, $base = {};
+        var basetype, $staticMixin, $single = definition.$single, $static = definition.$static, $mixin = definition.$mixin, $ctor = definition.$ctor, $base = {};
         $ctor !== undef ? delete definition.$ctor : $ctor = function() {};
         delete definition.$single;
         delete definition.$static;
         delete definition.$mixin;
         delete definition.$extend;
-        $static !== undef && extend($ctor, $static);
+        if ($static !== undef) {
+            $staticMixin = $static.$mixin;
+            if ($staticMixin !== undef) {
+                delete $static.$mixin;
+                addMixins($ctor, $staticMixin);
+            }
+            extend($ctor, $static);
+        }
         $mixin !== undef && (definition = extend(addMixins({}, $mixin), definition));
         if (base !== undef) {
             basetype = base.$basetype;

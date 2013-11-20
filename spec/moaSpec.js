@@ -451,5 +451,42 @@ define(['moa', 'tool', 'chai'], function (Moa, tool, chai) {
             }).to.throw('Mixin type numMixA not found');
             done();
         });
+        it('Test $static mixins implementation', function (done) {
+            var base = {
+                    $ctor: function (a, b) {
+                        this.a = a;
+                        this.b = b;
+                    },
+                    $mixin: {
+                        num: 'numMix'
+                    },
+                    $static: {
+                        $mixin: {
+                            str: 'strMix'
+                        },
+                        a: 11,
+                        b: 22
+                    }
+                },
+                numMix = function () {
+                    this.add = function () {
+                        return (this.a + this.b);
+                    };
+                },
+                strMix = function () {
+                    this.add = function () {
+                        return (this.a.toString() + this.b.toString());
+                    };
+                },
+                Ctor,
+                item;
+            Moa.mixin('numMix', numMix);
+            Moa.mixin('strMix', strMix);
+            Ctor = Moa.define('base', base);
+            item = new Ctor(10, 12);
+            expect(item.add()).to.equal(22);
+            expect(Ctor.add()).to.equal('1122');
+            done();
+        });
     });
 });

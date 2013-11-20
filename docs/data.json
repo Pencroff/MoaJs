@@ -44,7 +44,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src\\moa.js",
-            "line": 126,
+            "line": 132,
             "description": "Prototype inheritance and extensions in JavaScript"
         }
     },
@@ -60,7 +60,7 @@
             "module": "Moa",
             "namespace": "",
             "file": "src\\moa.js",
-            "line": 126
+            "line": 132
         }
     },
     "classitems": [
@@ -72,7 +72,7 @@
         },
         {
             "file": "src\\moa.js",
-            "line": 130,
+            "line": 136,
             "description": "Define new or inherited type",
             "itemtype": "method",
             "name": "define",
@@ -97,7 +97,7 @@
         },
         {
             "file": "src\\moa.js",
-            "line": 186,
+            "line": 192,
             "description": "Declare new mixin type",
             "itemtype": "method",
             "name": "mixin",
