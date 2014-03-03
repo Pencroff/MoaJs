@@ -33,6 +33,6 @@
     "mocha": "~1.12.0",
     "karma-mocha": "~0.1.0",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-requirejs": "~0.3.5"
+    "grunt-requirejs": "~0.4.1"
   }
 }

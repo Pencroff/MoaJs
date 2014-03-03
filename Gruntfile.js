@@ -5,21 +5,6 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        yuidoc: {
-            compile: {
-                name: '<%= pkg.name %>',
-                description: '<%= pkg.description %>',
-                version: '<%= pkg.version %>',
-                url: '<%= pkg.homepage %>',
-                logo: '../extras/moa-logo-web.png',
-                options: {
-                    paths: 'src/',
-                    outdir: 'docs/',
-                    themedir: 'extras/yuidoc-bootstrap-theme/',
-                    helpers: ['extras/yuidoc-bootstrap-theme/helpers/helpers.js']
-                }
-            }
-        },
 //        karma: {
 //            unit: {
 //                configFile: 'karma.conf.js',
@@ -154,10 +139,9 @@ module.exports = function (grunt) {
 
     });
     // Default task(s).
-    grunt.loadNpmTasks('grunt-contrib-yuidoc');
 //    grunt.loadNpmTasks('grunt-karma');
 //    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-requirejs');
-    grunt.registerTask('default', ['yuidoc', 'requirejs']); //, 'karma:unit:start', 'watch'
+    grunt.registerTask('default', ['requirejs:build']); //, 'karma:unit:start', 'watch'
 
 };
