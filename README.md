@@ -1,4 +1,4 @@
-MoaJs
+![MoaJs](https://raw.github.com/Pencroff/MoaJs/master/extras/moa-logo-web.png "MoaJs") MoaJs 
 =====
 
 ExtJs sintaxis for implementation object inheritance, static methods / properties, mixins and less then 2kB minified JavaScript code (again bicycle) :) 
@@ -6,8 +6,6 @@ ExtJs sintaxis for implementation object inheritance, static methods / propertie
 ### Documentation ###
 
 - **MoaJs API**
-	
-	MoaJs containe several predefined methods:
 		
 	- `define` - declare new object type / get constructor by type name
 	- `mixin` - declare new mixin type
