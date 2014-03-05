@@ -4,10 +4,9 @@
  * Time: 21:09
  */
 /*global define:true*/
-define('tool', ['str'], function (str) {
+define('tool', function () {
     'use strict';
-    var servStr = str._serv_,
-        is = function (obj, type) {
+    var is = function (obj, type) {
             return typeof obj === type;
         };
     if (!Object.create) {
@@ -24,16 +23,16 @@ define('tool', ['str'], function (str) {
     }
     return {
         isObj: function (obj) {
-            return is(obj, servStr.TObj) && obj !== null;
+            return is(obj, 'object') && obj !== null;
         },
         isFunc: function (obj) {
-            return is(obj, servStr.TFunc);
+            return is(obj, 'function');
         },
         isStr: function (obj) {
-            return is(obj, servStr.TStr);
+            return is(obj, 'string');
         },
         isUndef: function (obj) {
-            return is(obj, servStr.TUndef);
+            return is(obj, 'undefined');
         },
         isArray: function (obj) {
             return Object.prototype.toString.call(obj) === '[object Array]';

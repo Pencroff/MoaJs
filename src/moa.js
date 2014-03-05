@@ -197,7 +197,7 @@
              */
             mixin: function (mixType, definition) {
                 if (typeof definition !== fn) {
-                   throwWrongParamsErr('mixin', 'definition');
+                    throwWrongParamsErr('mixin', 'definition');
                 }
                 mixins[mixType] = definition;
             }

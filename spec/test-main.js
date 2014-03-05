@@ -13,19 +13,12 @@ for (var file in window.__karma__.files) {
 requirejs.config({
     // Karma serves files from '/base'
     baseUrl: '/base/src/',
-
     paths: {
         'chai': '../extras/chai/chai'
-//        'jquery': '../lib/jquery',
-//        'underscore': '../lib/underscore',
     },
-
     shim: {
 //        'underscore': {
 //            exports: '_'
-//        }    //
-//        chai: {
-//            exports: 'chai'
 //        }
     },
 
