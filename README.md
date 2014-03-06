@@ -52,7 +52,44 @@ Declaration with $base closure
 - **Inheritance declaration**
 - **Using `$base` closure**
 - **Static methods declaration**
-- **Mixins decraration**
+- **Mixins**
+
+Declaration mixins
+```javascript
+	var BaseConstructor, item,
+		numMix = function () {
+            this.add = function () {
+                return (this.a + this.b);
+            };
+        },
+        strMix = function () {
+            this.add = function () {
+                return (this.a.toString() + this.b.toString());
+            };
+        },
+		base = {
+            $ctor: function (a, b) {
+                this.a = a;
+                this.b = b;
+            },
+            $mixin: {
+                num: 'numMix',
+                str: 'strMix'
+            }
+        };
+```
+Using mixins
+```javascript
+	Moa.mixin('numMix', numMix);
+    Moa.mixin('strMix', strMix);
+    BaseConstructor = Moa.define('base', base);
+	item = new BaseConstructor(10, 12);
+	item.add(); // '1012' - last 'str' mixin override 'num' mixin
+	// but you already use it
+	item.num.add.call(item); // 22
+	item.str.add.call(item); // '1012' 
+```
+
 - **Singleton**
 
 ### Changelog ###
