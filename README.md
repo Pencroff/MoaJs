@@ -33,7 +33,8 @@ Declaration inheritance and `$base` closure
 ```javascript
 	// Moa.define($name, $function)
 	// $name - type name
-	// $function - function with declaration fields and methods, has $base parameter, for parrent implementation
+	// $function - function with declaration fields and methods,
+	//				has $base parameter, for parrent implementation
 	var constructor = Moa.define('child', function ($base) {
 		// $base - containe reference to 'baseObj'
         return {
