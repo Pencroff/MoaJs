@@ -87,7 +87,7 @@ Declaration
 Using
 ```
 	childItem = new child('Pet', 7);
-	childItem.getName(); // Child: Pet
+	childItem.getName(); // 'Child: Pet'
 	childItem.getAge();  // 7
 ```
 
