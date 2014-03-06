@@ -51,7 +51,6 @@ Declaration with $base closure
 
 - **Inheritance declaration**
 - **Using `$base` closure**
-- **Static methods declaration**
 - **Mixins**
 
 Declaration mixins
@@ -77,12 +76,13 @@ Declaration mixins
                 str: 'strMix'
             }
         };
+	Moa.mixin('numMix', numMix);
+    Moa.mixin('strMix', strMix);
+	Moa.define('base', base);
 ```
 Using mixins
 ```javascript
-	Moa.mixin('numMix', numMix);
-    Moa.mixin('strMix', strMix);
-    BaseConstructor = Moa.define('base', base);
+	BaseConstructor = Moa.define('base');
 	item = new BaseConstructor(10, 12);
 	item.add(); // '1012' - last 'str' mixin override 'num' mixin
 	// but you already use it
@@ -90,7 +90,33 @@ Using mixins
 	item.str.add.call(item); // '1012' 
 ```
 
+- **Static methods declaration**
+
+
+
 - **Singleton**
+
+Declaration
+```javascript
+var itemA, itemB, ItemC,
+	singeltonConstructor = Moa.define('singleExample', {
+	$single: true,
+	$ctor: function () {
+        this.name = 'Moa';
+    },
+    getName: function () {
+        return this.name;
+    }
+})
+```
+Using
+```javascript
+	// Unfortunately it can not have constructor parameters
+	itemA = new singeltonConstructor();
+	itemB = singeltonConstructor();
+	itemC = singeltonConstructor.getInstance();
+	// itemA equal itemB equal itemC
+```
 
 ### Changelog ###
 
