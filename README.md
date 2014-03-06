@@ -14,7 +14,7 @@ ExtJs sintaxis for implementation object inheritance, static methods / propertie
 
 - **Object declaration**
 
-Declaration without $base closure
+Declaration without `$base` closure
 ```javascript
 	// Moa.define($name, $object)
 	// $name - type name
@@ -29,7 +29,7 @@ Declaration without $base closure
 		}
 	});
 ```
-Declaration with $base closure
+Declaration inheritance and `$base` closure
 ```javascript
 	// Moa.define($name, $function)
 	// $name - type name
@@ -49,8 +49,46 @@ Declaration with $base closure
 	});
 ```
 
-- **Inheritance declaration**
-- **Using `$base` closure**
+- **`$base` closure**
+
+Declaration
+```javascript
+	var childItem,
+		base = Moa.define('base', function ($base) {
+			// $base - undefined
+			return {
+				$ctor: function (name) {
+		            this.name = name;
+		        },
+				getName: function() {
+					return this.name;
+				}
+			};
+		}),
+		child = Moa.define('child', function ($base) {
+	        return {
+	            $extend: 'base',
+	            $ctor: function (name, age) {
+	                this.age = age;
+	                $base.$ctor.call(this, name);
+	            },
+				// override base implementation
+				getName: function() {
+					return 'Child: ' + $base.getName.call(this);
+				}
+	            getAge: function () {
+	                return this.age;
+	            }
+			};
+        };
+```
+Using
+```
+	childItem = new child('Pet', 7);
+	childItem.getName(); // Child: Pet
+	childItem.getAge();  // 7
+```
+
 - **Mixins**
 
 Declaration mixins
