@@ -67,6 +67,7 @@ Declaration
 			};
 		}),
 		child = Moa.define('child', function ($base) {
+			// $base - reference to 'base' type
 	        return {
 	            $extend: 'base',
 	            $ctor: function (name, age) {
