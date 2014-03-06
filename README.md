@@ -18,25 +18,34 @@ Declaration without $base closure
 ```javascript
 	// Moa.define($name, $object)
 	// $name - type name
-	// $object - object with declaration fields and methods 
+	// $object - object with declaration fields and methods
+	// $ctor - object constructor 
 	var constructor = Moa.define('baseObj', {
-		fieldA: 'ABC',
-		fieldB: 17,
-		getName: function() {}
+		$ctor: function (name) {
+            this.name = name;
+        },
+		getName: function() {
+			return this.name;
+		}
 	});
 ```
 Declaration with $base closure
 ```javascript
 	// Moa.define($name, $function)
 	// $name - type name
-	// $function - function with declaration fields and methods
-	var constructor = Moa.define('child', function($base) {
-		return {
-			$extend: 'baseObj',
-			fieldA: 'XYZ',	// overrided field
-			fieldC: 17,		// new field
-			getAge: function() {}
-		}
+	// $function - function with declaration fields and methods, has $base parameter, for parrent implementation
+	var constructor = Moa.define('child', function ($base) {
+		// $base - containe reference to 'baseObj'
+        return {
+            $extend: 'baseObj',
+            $ctor: function (name, age) {
+                this.age = age;
+                $base.$ctor.call(this, name);
+            },
+            getAge: function () {
+                return this.age;
+            }
+        };
 	});
 ```
 
