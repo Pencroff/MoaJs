@@ -13,6 +13,10 @@ ExtJs sintaxis for implementation object inheritance, static methods / propertie
 
 
 - **Object declaration**
+
+```javascript
+	var constructor = Moa.define('newType', {});
+
 - **Inheritance declaration**
 - **Using `$base` closure**
 - **Static methods declaration**
