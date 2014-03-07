@@ -220,3 +220,6 @@ Copyright © 2013-2014 Sergii Danilov, [pencroff.com](http://pencroff.com "pencr
 
 MoaJs may be freely distributed under the MIT license.
 
+
+**Feel free to contact me should you require any futher information.**
+
