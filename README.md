@@ -77,12 +77,12 @@ Declaration
 				// override base implementation
 				getName: function() {
 					return 'Child: ' + $base.getName.call(this);
-				}
+				},
 	            getAge: function () {
 	                return this.age;
 	            }
 			};
-        };
+        });
 ```
 Using
 ```
