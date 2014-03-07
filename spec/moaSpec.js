@@ -486,6 +486,7 @@ define(['moa', 'tool', 'chai'], function (Moa, tool, chai) {
             item = new Ctor(10, 12);
             expect(item.add()).to.equal(22);
             expect(Ctor.add()).to.equal('1122');
+            expect(Ctor.str.add.call(Ctor)).to.equal('1122');
             done();
         });
     });

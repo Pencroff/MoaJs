@@ -1,7 +1,7 @@
 ![MoaJs](https://raw.github.com/Pencroff/MoaJs/master/extras/moa-logo-web.png "MoaJs") MoaJs 
 =====
 
-ExtJs sintaxis for implementation object inheritance, static methods / properties, mixins and less then 2kB minified JavaScript code (again bicycle) :) 
+ExtJs syntax for implementation object inheritance, static methods / properties, mixins and less then 2kB minified JavaScript code (again bicycle) :) 
 
 ### Documentation ###
 
@@ -130,9 +130,41 @@ Using mixins
 	item.str.add.call(item); // '1012' 
 ```
 
-- **Static methods declaration**
+- **Static methods and mixin declaration**
 
-
+Declaration
+```javascript
+var baseCtor, item,
+    strMix = function () {
+        this.add = function () {
+            return (this.a.toString() + this.b.toString());
+        };
+    }
+	base = {
+        $ctor: function () {
+        },
+        $static: {
+			// Also you can declare static mixins in usual way
+			$mixin: {
+                str: 'strMix'
+            },
+            getMsg: function () {
+                return 'Static!';
+            },
+            a: 15,
+			b: 17
+        }
+    };
+Moa.mixin('strMix', strMix);
+Moa.define('base', base);
+```
+Using
+```javascript
+	baseCtor = Moa.define('base');
+	baseCtor.getMsg(); // 'Static!' - static method
+	baseCtor.add(); // '15' + '17' => '1517' - static mixin
+	Ctor.str.add.call(Ctor); // '1517'
+```
 
 - **Singleton**
 
@@ -162,12 +194,12 @@ Using
 
 MoaJs v0.1
 
-- define object constructor and get it by type name
+- declare object in ExtJs syntax and get it by type name
 - object inheritance with $extend by type name
 - using $base closure for executin parent constructor or methods
 - static methods
 - simple 'singleton' declaration
-- mixins implementation
+- mixins
 - static mixins
 - support client side (AMD / direct reference)
 - support CommonJs declaration
