@@ -1,7 +1,7 @@
 ![MoaJs](https://raw.github.com/Pencroff/MoaJs/master/extras/moa-logo-web.png "MoaJs") MoaJs 
 =====
 
-ExtJs syntax for implementation object inheritance, static methods / properties, mixins and less then 2kB minified JavaScript code (again bicycle) :) 
+ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and less then 2kB minified JavaScript code. 
 
 ### Documentation ###
 
