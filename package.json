@@ -1,7 +1,7 @@
 {
   "name": "MoaJs",
-  "version": "0.1",
-  "description": "JavaScript lib OOP",
+  "version": "0.1.0",
+  "description": "ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and less then 2kB minified JavaScript code.",
   "main": "moa.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,9 @@
   },
   "keywords": [
     "JavaScript",
-    "OOP"
+    "inheritance",
+    "mixins",
+    "static"
   ],
   "author": "Pencroff",
   "license": "MIT",
