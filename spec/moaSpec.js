@@ -6,7 +6,7 @@
  * Time: 6:11 PM
  */
 /*global define:true, describe:true, it:true*/
-define(['moa', 'tool', 'chai'], function (Moa, tool, chai) {
+define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
     'use strict';
     var expect = chai.expect;
     describe('Test "Moa" implementation', function () {

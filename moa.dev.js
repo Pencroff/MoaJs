@@ -93,7 +93,6 @@
                         mapObj = build(type, base, definition(base.$base));
                     } else mapObj = build(type, undef, definition(undef));
                     break;
-
                   case ob:
                     if (null === definition) {
                         delete map[type];

@@ -17,8 +17,12 @@ module.exports = function (config) {
         files: [
             'spec/test-main.js',
             {pattern: 'extras/chai/chai.js', included: false},
+            {pattern: 'extras/sinon/sinon-1.7.3.js', included: false},
+            {pattern: 'extras/sinon/sinon-chai.js', included: false},
             {pattern: 'src/*.js', included: false},
-            {pattern: 'spec/*.js', included: false}
+            {pattern: 'spec/*.js', included: false},
+            {pattern: 'items/mixins/src/*.js', included: false},
+            {pattern: 'items/mixins/spec/*.js', included: false}
         ],
 
 
@@ -29,7 +33,7 @@ module.exports = function (config) {
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress'],
 
         preprocessors: {
             // source files, that you wanna generate coverage for

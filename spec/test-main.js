@@ -12,9 +12,14 @@ for (var file in window.__karma__.files) {
 
 requirejs.config({
     // Karma serves files from '/base'
-    baseUrl: '/base/src/',
+    baseUrl: '/base',
     paths: {
-        'chai': '../extras/chai/chai'
+        'Moa': 'src/moa',
+        'tool': 'src/tool',
+        'mixinsSrc': 'items/mixins/src',
+        'chai': 'extras/chai/chai',
+        'sinon': 'extras/sinon/sinon-1.7.3',
+        'sinon-chai': 'extras/sinon/sinon-chai'
     },
     shim: {
 //        'underscore': {

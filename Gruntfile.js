@@ -53,15 +53,22 @@ module.exports = function (grunt) {
                     }
                 }
             }
+        },
+        benchmark: {
+//            all: {
+//                src: ['benchmarks/*.js'],
+//                dest: 'benchmarks/result.csv'
+//            },
+            /*grunt benchmark:benchMixSearch*/
+            benchMixSearch: {
+                src: ['items/mixins/benchmarks/benchMixSearch.js']
+            }
         }
-
-
-
     });
     // Default task(s).
 //    grunt.loadNpmTasks('grunt-karma');
-//    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-benchmark');
     grunt.registerTask('default', ['requirejs']); //, 'karma:unit:start', 'watch'
 
 };
