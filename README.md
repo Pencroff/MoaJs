@@ -3,7 +3,7 @@
 
 ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and less then 2kB minified JavaScript code. 
 
-### Documentation ###
+## Documentation ##
 
 - **MoaJs API**
 		
@@ -189,10 +189,52 @@ Using
 	itemC = singeltonConstructor.getInstance();
 	// itemA equal itemB equal itemC
 ```
+## Items ##
 
-### Changelog ###
+### Mixins ###
 
-MoaJs v0.1
+- **Randomise mixin**
+	- rnd from 0 to range
+	- rnd in range min - max
+- **Search mixin**
+	- linear search (equal, less, greater)
+	- binary search (equal, greater)
+- **Sort mixin**
+	- swap elements
+	- qsort
+	- comb sort
+	- gnome sort
+	- shaker sort
+	- insert sort
+	- binary insert sort
+	- merge sort
+	- hybrid merge sort with insert sort
+	- one array merge sort
+	- selection sort
+- **Throw Error mixin**
+
+	*Generate error if not right condition*
+
+	- undefined error
+	- indexOf error
+	- notInRange error
+	- notInstanceOf error
+	- notObj error
+	- notFn error
+	- notStr error
+	- notEqual error
+
+## Changelog ##
+
+MoaJs v0.1.1
+
+- rindomise mixin
+- search mixin
+- sort mixin
+- throw error mixin
+- [grunt-benchmark](https://www.npmjs.org/package/grunt-benchmark) for testing performance
+
+MoaJs v0.1.0
 
 - declare object in ExtJs syntax and get it by type name
 - object inheritance with $extend by type name
@@ -204,18 +246,18 @@ MoaJs v0.1
 - support client side (AMD / direct reference)
 - support CommonJs declaration
 
-### Performance ###
+## Performance ##
 
 [Link to jsperf.com](http://jsperf.com/moo-resig-ender-my/31)
 
-### Sources of inspirations ###
+## Sources of inspirations ##
 
 - [JavaScript Override Patterns](http://webreflection.blogspot.ie/2010/02/javascript-override-patterns.html "JavaScript Override Patterns")
 - [my.class.js](http://jiem.github.io/my-class/ "my.class.js")
 - [Objs](https://github.com/tekool/objs/ "Objs")
 - [A fresh look at JavaScript Mixins](http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/ "A fresh look at JavaScript Mixins")
 
-### License ###
+## License ##
 Copyright © 2013-2014 Sergii Danilov, [pencroff.com](http://pencroff.com "pencroff.com")
 
 MoaJs may be freely distributed under the MIT license.

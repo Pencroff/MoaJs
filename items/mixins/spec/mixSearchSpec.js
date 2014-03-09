@@ -6,7 +6,7 @@
  * Time: 12:08 PM
  */
 /*global define:true, describe:true, it:true*/
-define(['Moa', 'chai', 'mixinsSrc/MixSearch'], function (Moa, chai, mix) {
+define(['Moa', 'chai', 'mixinsSrc/MixSearch'], function (Moa, chai) {
     'use strict';
     var expect = chai.expect;
     describe('Test Algorithm Mixin', function () {

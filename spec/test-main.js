@@ -16,15 +16,18 @@ requirejs.config({
     paths: {
         'Moa': 'src/moa',
         'tool': 'src/tool',
-        'mixinsSrc': 'items/mixins/src',
         'chai': 'extras/chai/chai',
         'sinon': 'extras/sinon/sinon-1.7.3',
-        'sinon-chai': 'extras/sinon/sinon-chai'
+        'sinon-chai': 'extras/sinon/sinon-chai',
+        'mixinsSrc': 'items/mixins/src'
     },
     shim: {
-//        'underscore': {
-//            exports: '_'
-//        }
+        sinon: {
+            exports: 'sinon'
+        },
+        'sinon-chai': {
+            exports: 'sinon-chai'
+        }
     },
 
     // ask Require.js to load these files (all our tests)

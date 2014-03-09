@@ -62,6 +62,10 @@ module.exports = function (grunt) {
             /*grunt benchmark:benchMixSearch*/
             benchMixSearch: {
                 src: ['items/mixins/benchmarks/benchMixSearch.js']
+            },
+            /*grunt benchmark:benchMixSort*/
+            benchMixSort: {
+                src: ['items/mixins/benchmarks/benchMixSort.js']
             }
         }
     });
