@@ -226,6 +226,10 @@ Using
 
 ## Changelog ##
 
+MoaJs v0.1.2
+
+- IoC implementation
+
 MoaJs v0.1.1
 
 - rindomise mixin
