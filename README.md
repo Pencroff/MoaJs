@@ -10,7 +10,13 @@ ExtJs syntax for declaration object inheritance, mixins, static methods / proper
 	- `define` - declare new object type / get constructor by type name
 	- `mixin` - declare new mixin type
 	- `getType()` - predefined exemplar method, which return declared type name  
-
+	- `getRegistry()` - return object with arrays of types and mixins
+	```javascript
+	{
+		type: ['base', 'child'],
+		mixin: ['numMix', 'strMix']
+	}
+	```
 
 - **Object declaration**
 
