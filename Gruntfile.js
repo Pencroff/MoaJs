@@ -19,6 +19,10 @@ module.exports = function (grunt) {
                     mainConfigFile: 'r.config.js',
                     optimize: 'uglify2',
                     out: 'moa.dev.js',
+                    wrap: {
+                        startFile: "parts/start.frag",
+                        endFile: "parts/end.frag"
+                    },
                     uglify2: {
                         output: {
                             beautify      : true,  // beautify output?
@@ -45,6 +49,10 @@ module.exports = function (grunt) {
                     mainConfigFile: 'r.config.js',
                     optimize: 'uglify2',
                     out: 'moa.min.js',
+                    wrap: {
+                        startFile: "parts/start.frag",
+                        endFile: "parts/end.frag"
+                    },
                     preserveLicenseComments: false,
                     generateSourceMaps: true,
                     uglify2: {
