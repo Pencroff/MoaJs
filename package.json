@@ -1,6 +1,6 @@
 {
   "name": "MoaJs",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and less then 2kB minified JavaScript code.",
   "main": "moa.js",
   "scripts": {
