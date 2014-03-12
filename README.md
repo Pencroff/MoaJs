@@ -1,7 +1,7 @@
 ![MoaJs](https://raw.github.com/Pencroff/MoaJs/master/extras/moa-logo-web.png "MoaJs") MoaJs 
 =====
 
-ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and less then 2kB minified JavaScript code. 
+ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and near 2kB minified JavaScript code and 1kB gzip. You can see **current** version MoaJs in root and **release** version in `release` folder.
 
 ## Documentation ##
 
@@ -163,6 +163,7 @@ var baseCtor, item,
     };
 Moa.mixin('strMix', strMix);
 Moa.define('base', base);
+Moa.define('base', null); // delete exist declaration
 ```
 Using
 ```javascript
@@ -231,6 +232,11 @@ Using
 	- notEqual error
 
 ## Changelog ##
+
+MoaJs v0.1.3 - in process
+
+- IoC implementation
+- delete mixins `Moa.mixixn('mix', null)`
 
 MoaJs v0.1.2
 
