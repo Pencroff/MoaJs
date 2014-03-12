@@ -234,7 +234,8 @@ Using
 
 MoaJs v0.1.2
 
-- IoC implementation
+- `getRegistry` - list available types and mixins
+- Set up release process (version, minification, compression) and save result to `release` folder
 
 MoaJs v0.1.1
 
@@ -272,6 +273,7 @@ Copyright © 2013-2014 Sergii Danilov, [pencroff.com](http://pencroff.com "pencr
 
 MoaJs may be freely distributed under the MIT license.
 
+___
 
 **Feel free to contact me should you require any futher information.**
 

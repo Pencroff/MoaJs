@@ -1,3 +1,8 @@
+/*********************************************
+   The MIT License (MIT)
+   Copyright (c) 2013 - 2014 Sergii Danilov
+   MoaJs - v0.1.0 - 2014-03-12
+*********************************************/
 !function() {
     Object.create || (Object.create = function() {
         function F() {}
@@ -93,6 +98,7 @@
                         mapObj = build(type, base, definition(base.$base));
                     } else mapObj = build(type, undef, definition(undef));
                     break;
+
                   case ob:
                     if (null === definition) {
                         delete map[type];
@@ -120,6 +126,18 @@
         mixin: function(mixType, definition) {
             typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
             mixins[mixType] = definition;
+        },
+        getRegistry: function() {
+            var result, iterate = function(obj) {
+                var prop, arr = [];
+                for (prop in obj) obj.hasOwnProperty(prop) && arr.push(prop);
+                return arr;
+            };
+            result = {
+                type: iterate(map),
+                mixin: iterate(mixins)
+            };
+            return result;
         }
     };
     typeof define !== un ? define("Moa", [], function() {
