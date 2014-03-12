@@ -489,5 +489,29 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(Ctor.str.add.call(Ctor)).to.equal('1122');
             done();
         });
+        it('Test get registered types / mixins', function (done) {
+            var all,
+                base = {},
+                child = {
+                    $xtend: 'base'
+                },
+                numMix = function () {},
+                strMix = function () {};
+            Moa.mixin('mixA', numMix);
+            Moa.mixin('mixB', strMix);
+            Moa.define('typeA', base);
+            Moa.define('typeB', child);
+            all = Moa.getRegistry();
+            expect(all).to.be.an('object');
+            expect(all.type).to.be.instanceof(Array);
+            expect(all.mixin).to.be.instanceof(Array);
+            expect(all.type.length >= 2).to.be.true;
+            expect(all.mixin.length >= 2).to.be.true;
+            expect(all.type.indexOf('typeA')).to.not.equal(-1);
+            expect(all.type.indexOf('typeB')).to.not.equal(-1);
+            expect(all.mixin.indexOf('mixA')).to.not.equal(-1);
+            expect(all.mixin.indexOf('mixB')).to.not.equal(-1);
+            done();
+        });
     });
 });

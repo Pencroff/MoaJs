@@ -5,12 +5,6 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-//        karma: {
-//            unit: {
-//                configFile: 'karma.conf.js',
-//                background: true
-//            }
-//        },
         requirejs: {
             compile: {
                 options: {
@@ -54,6 +48,38 @@ module.exports = function (grunt) {
                 }
             }
         },
+        concat: {
+            options: {
+                stripBanners: true,
+                banner: '/*********************************************\n' +
+                        '   The MIT License (MIT)\n' +
+                        '   Copyright (c) 2013 - <%= grunt.template.today("yyyy") %> Sergii Danilov\n' +
+                        '   <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                        '*********************************************/\n'
+            },
+            dev: {
+                src: ['moa.dev.js'],
+                dest: 'release/moa.dev-<%=pkg.version%>.js'
+            },
+            min: {
+                src: ['moa.min.js'],
+                dest: 'release/moa.min-<%=pkg.version%>.js'
+            },
+            minmap: {
+                src: ['moa.min.js.map'],
+                dest: 'release/moa.min-<%=pkg.version%>.js.map'
+            }
+        },
+        compress: {
+            main: {
+                options: {
+                    mode: 'gzip'
+                },
+                files: [
+                    {src: ['release/moa.min-<%=pkg.version%>.js'], dest: 'release/moa.min-<%=pkg.version%>.gz.js', ext: '.gz.js'}
+                ]
+            }
+        },
         benchmark: {
 //            all: {
 //                src: ['benchmarks/*.js'],
@@ -70,9 +96,14 @@ module.exports = function (grunt) {
         }
     });
     // Default task(s).
-//    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-compress');
+
     grunt.loadNpmTasks('grunt-benchmark');
-    grunt.registerTask('default', ['requirejs']); //, 'karma:unit:start', 'watch'
+
+    grunt.registerTask('default', ['requirejs']); //'karma:unit:start'
+    /*grunt release*/
+    grunt.registerTask('release', ['requirejs', 'concat', 'compress']); //'karma:unit:start'
 
 };

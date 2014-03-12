@@ -1,6 +1,6 @@
 {
   "name": "MoaJs",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and less then 2kB minified JavaScript code.",
   "main": "moa.js",
   "scripts": {
@@ -37,6 +37,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-requirejs": "^0.4.3",
     "grunt-benchmark": "^0.2.0",
-    "requirejs": "^2.1.11"
+    "requirejs": "^2.1.11",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-compress": "^0.7.0"
   }
 }

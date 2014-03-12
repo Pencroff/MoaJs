@@ -10,7 +10,13 @@ ExtJs syntax for declaration object inheritance, mixins, static methods / proper
 	- `define` - declare new object type / get constructor by type name
 	- `mixin` - declare new mixin type
 	- `getType()` - predefined exemplar method, which return declared type name  
-
+	- `getRegistry()` - return object with arrays of types and mixins
+	```javascript
+	{
+		type: ['base', 'child'],
+		mixin: ['numMix', 'strMix']
+	}
+	```
 
 - **Object declaration**
 
@@ -226,6 +232,11 @@ Using
 
 ## Changelog ##
 
+MoaJs v0.1.2
+
+- `getRegistry` - list available types and mixins
+- Set up release process (version, minification, compression) and save result to `release` folder
+
 MoaJs v0.1.1
 
 - rindomise mixin
@@ -262,6 +273,7 @@ Copyright © 2013-2014 Sergii Danilov, [pencroff.com](http://pencroff.com "pencr
 
 MoaJs may be freely distributed under the MIT license.
 
+___
 
 **Feel free to contact me should you require any futher information.**
 

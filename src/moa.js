@@ -200,6 +200,23 @@
                     throwWrongParamsErr('mixin', 'definition');
                 }
                 mixins[mixType] = definition;
+            },
+            getRegistry: function () {
+                var result,
+                    iterate = function (obj) {
+                        var prop, arr = [];
+                        for (prop in obj) {
+                            if (obj.hasOwnProperty(prop)) {
+                                arr.push(prop);
+                            }
+                        }
+                        return arr;
+                    };
+                result = {
+                    type: iterate(map),
+                    mixin: iterate(mixins)
+                };
+                return result;
             }
         };
     // Return as AMD module or attach to head object
