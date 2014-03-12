@@ -55,6 +55,11 @@ Declaration inheritance and `$base` closure
         };
 	});
 ```
+Delete declaration
+```javascript
+	Moa.define('base', {}); 	// new type declaration
+	Moa.define('base', null); 	// delete type declaration
+```
 
 - **`$base` closure**
 
@@ -163,7 +168,6 @@ var baseCtor, item,
     };
 Moa.mixin('strMix', strMix);
 Moa.define('base', base);
-Moa.define('base', null); // delete exist declaration
 ```
 Using
 ```javascript
