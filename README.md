@@ -128,6 +128,7 @@ Declaration mixins
             }
         };
 	Moa.mixin('numMix', numMix);
+	//Moa.mixin('numMix', null); // Delete mixin declaration
     Moa.mixin('strMix', strMix);
 	Moa.define('base', base);
 ```
@@ -139,6 +140,11 @@ Using mixins
 	// but you already use it
 	item.num.add.call(item); // 22
 	item.str.add.call(item); // '1012' 
+```
+Delete declaration
+```javascript
+	Moa.mixin('mix', function () {}); 	// new mixin declaration
+	Moa.mixin('mix', null); 			// delete mixin declaration
 ```
 
 - **Static methods and mixin declaration**

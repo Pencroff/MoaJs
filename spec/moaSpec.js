@@ -397,6 +397,16 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.add()).to.equal(7);
             expect(item.sub()).to.equal(-1);
             expect(item.mul()).to.equal('a*b=12');
+            Moa.mixin('numMix', null);
+            Moa.define('base', null);
+            expect(function () {
+                // original base object was changed (delete $moa fields)
+                Moa.define('base', {
+                    $mixin: {
+                        nummix: 'numMix'
+                    }
+                });
+            }).to.throw('Mixin type numMix not found');
             done();
         });
         it('Test multiple $mixin implementation', function (done) {

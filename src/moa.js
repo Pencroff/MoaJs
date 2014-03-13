@@ -196,14 +196,17 @@
              * @param definition {Function} implementation of behavior for mixin.
              */
             mixin: function (mixType, definition) {
-                if (typeof definition !== fn) {
-                    throwWrongParamsErr('mixin', 'definition');
+                if (definition !== null) {
+                    if (typeof definition !== fn) {
+                        throwWrongParamsErr('mixin', 'definition');
+                    }
+                    mixins[mixType] = definition;
+                } else {
+                    delete mixins[mixType];
                 }
-                mixins[mixType] = definition;
             },
             getRegistry: function () {
-                var result,
-                    iterate = function (obj) {
+                var iterate = function (obj) {
                         var prop, arr = [];
                         for (prop in obj) {
                             if (obj.hasOwnProperty(prop)) {
@@ -212,11 +215,10 @@
                         }
                         return arr;
                     };
-                result = {
+                return {
                     type: iterate(map),
                     mixin: iterate(mixins)
                 };
-                return result;
             }
         };
     // Return as AMD module or attach to head object

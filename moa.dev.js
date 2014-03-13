@@ -119,20 +119,21 @@
             return mapObj.$ctor;
         },
         mixin: function(mixType, definition) {
-            typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
-            mixins[mixType] = definition;
+            if (null !== definition) {
+                typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
+                mixins[mixType] = definition;
+            } else delete mixins[mixType];
         },
         getRegistry: function() {
-            var result, iterate = function(obj) {
+            var iterate = function(obj) {
                 var prop, arr = [];
                 for (prop in obj) obj.hasOwnProperty(prop) && arr.push(prop);
                 return arr;
             };
-            result = {
+            return {
                 type: iterate(map),
                 mixin: iterate(mixins)
             };
-            return result;
         }
     };
     typeof define !== un ? define("Moa", [], function() {
