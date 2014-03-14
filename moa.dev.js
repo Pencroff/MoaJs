@@ -18,16 +18,18 @@
         var msg = "Wrong parameters in " + method;
         param && (msg = "Wrong parameter " + param + " in " + method);
         throw new Error(msg, "Moa");
-    }, throwWrongType = function(extendType, isMixin) {
-        var type = "Type ";
-        isMixin === !0 && (type = "Mixin type ");
-        throw new Error(type + extendType + " not found", "Moa");
+    }, throwWrongType = function(obj, extendType, isMixin) {
+        var undef, type = "Type ";
+        if (obj === undef) {
+            isMixin === !0 && (type = "Mixin type ");
+            throw new Error(type + extendType + " not found", "Moa");
+        }
     }, addMixins = function($proto, $mixin) {
         var prop, value, MixFn;
         for (prop in $mixin) {
             value = $mixin[prop];
             MixFn = mixins[value];
-            MixFn === undef && throwWrongType(value, !0);
+            throwWrongType(MixFn, value, !0);
             MixFn.call($proto);
             $proto[prop] = new MixFn();
         }
@@ -82,7 +84,7 @@
             switch (len) {
               case 1:
                 mapObj = map[type];
-                mapObj || throwWrongType(type);
+                throwWrongType(mapObj, type);
                 break;
 
               case 2:
@@ -91,7 +93,7 @@
                     baseType = definition().$extend;
                     if (baseType !== undef) {
                         base = map[baseType];
-                        base === undef && throwWrongType(baseType);
+                        throwWrongType(base, baseType);
                         mapObj = build(type, base, definition(base.$base));
                     } else mapObj = build(type, undef, definition(undef));
                     break;
@@ -104,7 +106,7 @@
                     baseType = definition.$extend;
                     if (baseType !== undef) {
                         base = map[baseType];
-                        base === undef && throwWrongType(baseType);
+                        throwWrongType(base, baseType);
                     }
                     mapObj = build(type, base, definition);
                     break;
@@ -148,7 +150,7 @@
         },
         getTypeInfo: function(type) {
             var result, mapObj = map[type];
-            mapObj || throwWrongType(type);
+            throwWrongType(mapObj, type);
             result = extend({}, mapObj);
             delete result.$ctor;
             delete result.$base;

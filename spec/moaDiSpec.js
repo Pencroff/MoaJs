@@ -23,5 +23,28 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.b.getType()).to.equal('typeB');
             done();
         });
+        it('Test ctor injection', function (done) {
+            var item;
+            Moa.define('typeA', {});
+            Moa.define('typeB', {});
+            Moa.define('bigType', {
+                $ctor: function (config) {
+                    this.aa = config.a;
+                    this.bb = config.b;
+                },
+                $di: {
+                    $ctor: {
+                        a: 'typeA',
+                        b: 'typeB'
+                    }
+                }
+            });
+            item = Moa.resolve('bigType');
+            expect(item.aa).to.be.an('object');
+            expect(item.bb).to.be.an('object');
+            expect(item.aa.getType()).to.equal('typeA');
+            expect(item.bb.getType()).to.equal('typeB');
+            done();
+        });
     });
 });
