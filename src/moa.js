@@ -215,10 +215,8 @@
                     di = info.$di;
                 result = new Ctor();
                 for (prop in di) {
-                    if (di.hasOwnProperty(prop)) {
-                        Ctor = Moa.define(di[prop]);
-                        result[prop] = new Ctor();
-                    }
+                    Ctor = Moa.define(di[prop]);
+                    result[prop] = new Ctor();
                 }
                 return result;
             },
@@ -230,9 +228,7 @@
                 var iterate = function (obj) {
                         var prop, arr = [];
                         for (prop in obj) {
-                            if (obj.hasOwnProperty(prop)) {
-                                arr.push(prop);
-                            }
+                            arr.push(prop);
                         }
                         return arr;
                     };

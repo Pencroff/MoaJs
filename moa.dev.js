@@ -129,7 +129,7 @@
         resolve: function(type) {
             var prop, result, Ctor = Moa.define(type), info = Moa.getTypeInfo(type), di = info.$di;
             result = new Ctor();
-            for (prop in di) if (di.hasOwnProperty(prop)) {
+            for (prop in di) {
                 Ctor = Moa.define(di[prop]);
                 result[prop] = new Ctor();
             }
@@ -138,7 +138,7 @@
         getRegistry: function() {
             var iterate = function(obj) {
                 var prop, arr = [];
-                for (prop in obj) obj.hasOwnProperty(prop) && arr.push(prop);
+                for (prop in obj) arr.push(prop);
                 return arr;
             };
             return {
