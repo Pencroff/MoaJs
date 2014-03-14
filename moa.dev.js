@@ -33,7 +33,7 @@
         }
         return $proto;
     }, build = function(type, base, definition) {
-        var basetype, $staticMixin, $single = definition.$single, $static = definition.$static, $mixin = definition.$mixin, $ctor = definition.$ctor, $base = {};
+        var basetype, $staticMixin, $single = definition.$single, $static = definition.$static, $mixin = definition.$mixin, $ctor = definition.$ctor, $di = definition.$di, $base = {};
         $ctor !== undef ? delete definition.$ctor : $ctor = function() {};
         delete definition.$single;
         delete definition.$static;
@@ -49,7 +49,7 @@
         }
         $mixin !== undef && (definition = extend(addMixins({}, $mixin), definition));
         if (base !== undef) {
-            basetype = base.$basetype;
+            basetype = base.$type;
             definition = extend(Object.create(base.$ctor.prototype), definition);
         }
         definition.getType = function() {
@@ -71,6 +71,8 @@
         return {
             $type: type,
             $basetype: basetype,
+            $mixin: $mixin,
+            $di: $di,
             $ctor: $ctor,
             $base: $base
         };
@@ -124,6 +126,15 @@
                 mixins[mixType] = definition;
             } else delete mixins[mixType];
         },
+        resolve: function(type) {
+            var prop, result, Ctor = Moa.define(type), info = Moa.getTypeInfo(type), di = info.$di;
+            result = new Ctor();
+            for (prop in di) if (di.hasOwnProperty(prop)) {
+                Ctor = Moa.define(di[prop]);
+                result[prop] = new Ctor();
+            }
+            return result;
+        },
         getRegistry: function() {
             var iterate = function(obj) {
                 var prop, arr = [];
@@ -134,6 +145,14 @@
                 type: iterate(map),
                 mixin: iterate(mixins)
             };
+        },
+        getTypeInfo: function(type) {
+            var result, mapObj = map[type];
+            mapObj || throwWrongType(type);
+            result = extend({}, mapObj);
+            delete result.$ctor;
+            delete result.$base;
+            return result;
         }
     };
     typeof define !== un ? define("Moa", [], function() {
