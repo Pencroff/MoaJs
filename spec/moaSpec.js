@@ -503,7 +503,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             var all,
                 base = {},
                 child = {
-                    $xtend: 'base'
+                    $extend: 'typeA'
                 },
                 numMix = function () {},
                 strMix = function () {};
@@ -521,6 +521,44 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(all.type.indexOf('typeB')).to.not.equal(-1);
             expect(all.mixin.indexOf('mixA')).to.not.equal(-1);
             expect(all.mixin.indexOf('mixB')).to.not.equal(-1);
+            done();
+        });
+        it('Test get type info', function (done) {
+            var info, Ctor, item,
+                mixinA = function () {},
+                mixinB = function () {},
+                base = {},
+                child = {
+                    $extend: 'base',
+                    $mixin: {
+                        mixA: 'mixinA',
+                        mixB: 'mixinB'
+                    },
+                    $di: {
+                        a: 'base',
+                        b: 'child'
+                    }
+                };
+            Moa.mixin('mixinA', mixinA);
+            Moa.mixin('mixinB', mixinB);
+            Moa.define('base', base);
+            Moa.define('child', child);
+            info = Moa.getTypeInfo('child');
+            expect(info).to.be.an('object');
+            expect(info.$type).to.equal('child');
+            expect(info.$basetype).to.equal('base');
+            expect(info.$mixin).to.be.an('object');
+            expect(info.$mixin.mixA).to.equal('mixinA');
+            expect(info.$mixin.mixB).to.equal('mixinB');
+            expect(info.$di).to.be.an('object');
+            expect(info.$di.a).to.equal('base');
+            expect(info.$di.b).to.equal('child');
+            expect(function () {
+                Moa.getTypeInfo('baseType');
+            }).to.throw('Type baseType not found');
+            Ctor = Moa.define('child');
+            item = new Ctor();
+            expect(item.getType()).to.equal('child');
             done();
         });
     });

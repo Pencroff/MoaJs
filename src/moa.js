@@ -79,6 +79,7 @@
                 $static = definition.$static,
                 $mixin = definition.$mixin,
                 $ctor = definition.$ctor,
+                $di = definition.$di,
                 $base = {};
             if ($ctor !== undef) {
                 delete definition.$ctor;
@@ -101,7 +102,7 @@
                 definition = extend(addMixins({}, $mixin), definition);
             }
             if (base !== undef) {
-                basetype = base.$basetype;
+                basetype = base.$type;
                 definition = extend(Object.create(base.$ctor.prototype), definition);
             }
             definition.getType = function () {
@@ -125,6 +126,8 @@
             return {
                 $type: type,
                 $basetype: basetype,
+                $mixin: $mixin,
+                $di: $di,
                 $ctor: $ctor,
                 $base: $base
             };
@@ -205,6 +208,24 @@
                     delete mixins[mixType];
                 }
             },
+            resolve: function (type) {
+                var prop, result,
+                    Ctor = Moa.define(type),
+                    info = Moa.getTypeInfo(type),
+                    di = info.$di;
+                result = new Ctor();
+                for (prop in di) {
+                    if (di.hasOwnProperty(prop)) {
+                        Ctor = Moa.define(di[prop]);
+                        result[prop] = new Ctor();
+                    }
+                }
+                return result;
+            },
+            /**
+             * Return object with lists of types and mixins
+             * @method getRegistry
+             */
             getRegistry: function () {
                 var iterate = function (obj) {
                         var prop, arr = [];
@@ -219,6 +240,17 @@
                     type: iterate(map),
                     mixin: iterate(mixins)
                 };
+            },
+            getTypeInfo: function (type) {
+                var result,
+                    mapObj = map[type];
+                if (!mapObj) {
+                    throwWrongType(type);
+                }
+                result = extend({}, mapObj);
+                delete result.$ctor;
+                delete result.$base;
+                return result;
             }
         };
     // Return as AMD module or attach to head object
