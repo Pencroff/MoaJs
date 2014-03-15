@@ -133,6 +133,22 @@
                 $base: $base
             };
         },
+        internalResolve = function (conf) {
+            var prop, Ctor, mapObj,
+                result = {};
+            for (prop in conf) {
+                if (prop !== '$ctor') {
+                    mapObj = map[conf[prop]];
+                    if (mapObj) {
+                        Ctor = mapObj.$ctor;
+                        result[prop] = new Ctor();
+                    } else {
+                        result[prop] = conf[prop];
+                    }
+                }
+            }
+            return result;
+        },
         /**
          @class Moa
         */
@@ -203,15 +219,27 @@
                     delete mixins[mixType];
                 }
             },
-            resolve: function (type) {
-                var prop, result,
-                    Ctor = Moa.define(type),
-                    info = Moa.getTypeInfo(type),
-                    di = info.$di;
-                result = new Ctor();
-                for (prop in di) {
-                    Ctor = Moa.define(di[prop]);
-                    result[prop] = new Ctor();
+            resolve: function (type, config) {
+                var prop, result, Ctor, info, ctorParam, itemResolve, di,
+                    len = arguments.length;
+                if (len !== 1 && len !== 2) {
+                    throwWrongParamsErr('resolve');
+                } else {
+                    if (len === 1) {
+                        config = {};
+                    }
+                }
+                Ctor = Moa.define(type);
+                info = Moa.getTypeInfo(type);
+                di = info.$di;
+                if (di.$ctor) {
+                    config = extend(config, di.$ctor);
+                }
+                ctorParam = internalResolve(config);
+                itemResolve = internalResolve(di);
+                result = new Ctor(ctorParam);
+                for (prop in itemResolve) {
+                    result[prop] = itemResolve[prop];
                 }
                 return result;
             },
