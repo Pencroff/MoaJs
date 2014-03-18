@@ -523,6 +523,33 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(all.mixin.indexOf('mixB')).to.not.equal(-1);
             done();
         });
+        it('Test clear registered types / mixins', function (done) {
+            var all,
+                base = {},
+                child = {
+                    $extend: 'typeA'
+                },
+                numMix = function () {},
+                strMix = function () {};
+            Moa.mixin('mixA', numMix);
+            Moa.mixin('mixB', strMix);
+            Moa.define('typeA', base);
+            Moa.define('typeB', child);
+            all = Moa.getRegistry();
+            expect(all).to.be.an('object');
+            expect(all.type).to.be.instanceof(Array);
+            expect(all.mixin).to.be.instanceof(Array);
+            expect(all.type.length).to.not.equal(0);
+            expect(all.mixin.length).to.not.equal(0);
+            Moa.clear();
+            all = Moa.getRegistry();
+            expect(all).to.be.an('object');
+            expect(all.type).to.be.instanceof(Array);
+            expect(all.mixin).to.be.instanceof(Array);
+            expect(all.type.length).to.equal(0);
+            expect(all.mixin.length).to.equal(0);
+            done();
+        });
         it('Test get type info', function (done) {
             var info, Ctor, item,
                 mixinA = function () {},

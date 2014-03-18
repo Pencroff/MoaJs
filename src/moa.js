@@ -252,7 +252,6 @@
                 }
             },
             resolve: function (type, config) {
-
                 var prop, result, mapObj,
                     Ctor, confCtor, confProp,
                     objCtor, objProp, diConf,
@@ -317,6 +316,17 @@
                     result[prop] = objProp[prop];
                 }
                 return result;
+            },
+            clear: function () {
+                var clearObj = function (obj) {
+                    var prop;
+                    for (prop in obj) {
+                        delete obj[prop];
+                    }
+                };
+                clearObj(map);
+                clearObj(mixins);
+                clearObj(di);
             },
             /**
              * Return object with lists of types and mixins

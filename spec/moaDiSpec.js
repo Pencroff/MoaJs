@@ -7,10 +7,63 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
     var expect = chai.expect;
     describe('Test Moa Di implementation', function () {
         it('Test resolving without dependency', function (done) {
-            
+            var itemA, itemB;
+            Moa.define('typeA', {});
+            Moa.define('typeB', {});
+
+            itemA = Moa.resolve('typeA');
+            itemB = Moa.resolve('typeB');
+            expect(itemA).to.be.an('object');
+            expect(itemB).to.be.an('object');
+            expect(itemA.getType()).to.equal('typeA');
+            expect(itemB.getType()).to.equal('typeB');
+
+            // Clear Moa
+            Moa.define('typeA', null);
+            Moa.define('typeB', null);
+            done();
+        });
+        it('Test resolving $current config', function (done) {
+            var itemA, itemB, itemC;
+            Moa.define('typeA', {
+                $di: {
+                    $current: {
+                        type: 'notTypeA', // can not use for $current
+                        instance: 'item', // can not use for $current
+                        lifestyle: 'transient'
+                    }
+                }
+            });
+            Moa.define('typeB', {
+                $di: {
+                    $current: {
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
+                }
+            });
+            Moa.define('typeC', {
+                $di: {
+                    $current: {
+                        instance: 'ctor'
+                    }
+                }
+            });
+
+            itemA = Moa.resolve('typeA');
+            itemB = Moa.resolve('typeB');
+            expect(itemA).to.be.an('object');
+            expect(itemB).to.be.an('object');
+            expect(itemA.getType()).to.equal('typeA');
+            expect(itemB.getType()).to.equal('typeB');
+
+            // Clear Moa
+            Moa.define('typeA', null);
+            Moa.define('typeB', null);
             done();
         });
         it('Test simple property injection', function (done) {
+            done();
             var item, item2;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
@@ -48,6 +101,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test ctor injection', function (done) {
+            done();
             var item, item2;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
@@ -110,6 +164,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test "ctor" func injection', function (done) {
+            done();
             var item, ctorItem;
             done();
             Moa.define('typeA', {});

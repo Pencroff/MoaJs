@@ -98,6 +98,5 @@ define('mixinsSrc/MixSearch', ['Moa'], function (Moa) {
                 throw new Error('Not implemented!', 'MixSearch');
             };
         };
-    Moa.mixin('mixSearch', mix);
     return mix;
 });
