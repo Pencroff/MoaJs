@@ -578,8 +578,8 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(info.$mixin.mixA).to.equal('mixinA');
             expect(info.$mixin.mixB).to.equal('mixinB');
             expect(info.$di).to.be.an('object');
-            expect(info.$di.a).to.equal('base');
-            expect(info.$di.b).to.equal('child');
+            expect(info.$di.a).to.deep.equal({type: 'base', instance: 'item', lifestyle: 'transient'});
+            expect(info.$di.b).to.deep.equal({type: 'child', instance: 'item', lifestyle: 'transient'});
             expect(function () {
                 Moa.getTypeInfo('baseType');
             }).to.throw('Type baseType not found');

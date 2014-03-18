@@ -24,12 +24,17 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test resolving $current config', function (done) {
-            var itemA, itemB, itemC;
+            var itemX, itemA, itemB, CtorC, itemC;
+            Moa.define('typeX', {});
             Moa.define('typeA', {
+                $ctor: function (config) {
+                    this.prop = config.a;
+                },
                 $di: {
                     $current: {
+                        // default behavior
                         type: 'notTypeA', // can not use for $current
-                        instance: 'item', // can not use for $current
+                        instance: 'item',
                         lifestyle: 'transient'
                     }
                 }
@@ -50,12 +55,24 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                 }
             });
 
-            itemA = Moa.resolve('typeA');
+            itemX = Moa.resolve('typeX');
+            itemA = Moa.resolve('typeA', {a: 'some init data'});
             itemB = Moa.resolve('typeB');
+            CtorC = Moa.resolve('typeC');
+            expect(itemX).to.be.an('object');
             expect(itemA).to.be.an('object');
+
             expect(itemB).to.be.an('object');
+            expect(itemB).to.equal(Moa.resolve('typeB'));
+
+            expect(CtorC).to.be.an('function');
+            itemC = new CtorC();
+
+            expect(itemX.getType()).to.equal('typeX');
             expect(itemA.getType()).to.equal('typeA');
+            expect(itemA.prop).to.equal('some init data');
             expect(itemB.getType()).to.equal('typeB');
+            expect(itemC.getType()).to.equal('typeC');
 
             // Clear Moa
             Moa.define('typeA', null);

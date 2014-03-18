@@ -74,6 +74,44 @@
             }
             return $proto;
         },
+        resolveDeclaration = function (type, diConf) {
+            var prop, confValue;
+            diConf = diConf || {};
+            if (!diConf.$current) {
+                diConf.$current = type;
+            }
+            for (prop in diConf) {
+                if (prop === '$ctor') {
+                    diConf[prop] = resolveDeclaration(type, diConf[prop]);
+                } else {
+                    confValue = diConf[prop];
+                    switch (typeof confValue) {
+                    case str:
+                        if (map[confValue]) {
+                            diConf[prop] = {
+                                type: confValue,
+                                instance: 'item',
+                                lifestyle: 'transient'
+                            };
+                        }
+                        break;
+                    case ob:
+                        confValue.type = type;
+                        if (confValue.instance === 'ctor') {
+                            delete confValue.lifestyle;
+                        } else {
+                            confValue.instance = 'item';
+                            if (confValue.lifestyle && confValue.lifestyle !== 'singleton') {
+                                confValue.lifestyle = 'transient';
+                            }
+                        }
+                        break;
+                    default:
+                    }
+                }
+            }
+            return diConf;
+        },
         build = function (type, base, definition) {
             var basetype,
                 $staticMixin,
@@ -125,7 +163,6 @@
                 }());
             }
             $base.$ctor = $ctor;
-            delete di[type];
             return {
                 $type: type,
                 $basetype: basetype,
@@ -156,30 +193,6 @@
                 throwWrongParamsErr('resolve', '$di::' + prop + '::instance');
             }
             return conf;
-        },
-        resolveDeclaration = function (conf) {
-            var prop, mapObj, confValue,
-                result = {};
-            for (prop in conf) {
-                if (prop !== '$ctor') {
-                    confValue = conf[prop];
-                    if (typeof confValue === str) {
-                        confValue = {
-                            type: confValue,
-                            instance: 'item',
-                            lifestyle: 'transient'
-                        };
-                    }
-                    mapObj = map[confValue.type];
-                    if (mapObj) {
-                        confValue = resolveType(confValue, prop, mapObj);
-                        result[prop] = confValue;
-                    } else {
-                        result[prop] = conf[prop];
-                    }
-                }
-            }
-            return result;
         },
         /**
          @class Moa
@@ -229,6 +242,7 @@
                         throwWrongParamsErr('define', 'definition');
                     }
                     map[type] = mapObj;
+                    map[type].$di = resolveDeclaration(type, map[type].$di);
                     break;
                 default:
                     throwWrongParamsErr('define');
@@ -251,71 +265,109 @@
                     delete mixins[mixType];
                 }
             },
-            resolve: function (type, config) {
-                var prop, result, mapObj,
-                    Ctor, confCtor, confProp,
-                    objCtor, objProp, diConf,
-                    len = arguments.length,
-                    resolveObject = function (conf) {
-                        var prop, value,
-                            result = {};
-                        if (conf) {
-                            for (prop in conf) {
-                                value = conf[prop];
-                                switch (value.instance) {
-                                    case 'item':
-                                        if (conf.lifestyle === 'singleton') {
-                                            if (!value.item) {
-                                                value.item = Moa.resolve(conf.type);
-                                            }
-                                            result[prop] = value.item;
-                                        } else {
-                                            result[prop] = Moa.resolve(conf.type);
-                                        }
-                                        break;
-                                    case 'ctor':
-                                        result[prop] = value.ctor;
-                                        break;
-                                    default:
+            resolve: function (type, configObj) {
+                var item, di, current,
+                    mapObj = map[type],
+                    len = arguments.length;
+                if (mapObj) {
+                    if (len !== 1 && len !== 2) {
+                        throwWrongParamsErr('resolve');
+                    }
+                    di = mapObj.$di;
+                    if (di) {
+                        current = di.$current;
+                        if (current) {
+                            switch (current.instance) {
+                            case 'item':
+                                switch (current.lifestyle) {
+                                case 'transient':
+                                    item = new mapObj.$ctor(configObj);
+                                    break;
+                                case 'singleton':
+                                    if (!current.item) {
+                                        current.item = new mapObj.$ctor(configObj);
+                                    }
+                                    item = current.item;
+                                    break;
+                                default:
+                                    throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
                                 }
+                                break;
+                            case 'ctor':
+                                item = mapObj.$ctor;
+                                break;
+                            default:
+                                throwWrongParamsErr('resolve', type + '::$di::$current::instance');
                             }
                         }
-                        return result;
-                    };
-                if (len !== 1 && len !== 2) {
-                    throwWrongParamsErr('resolve');
+                    }
                 } else {
-                    if (len === 1) {
-                        config = {};
-                    }
+                    item = type;
                 }
-                mapObj = map[type];
-                throwWrongType(mapObj, type);
-                diConf = mapObj.$di;
-                if (diConf) {
-                    if (di[type]) {
-                        confCtor = di[type].ctor;
-                        confProp = di[type].prop;
-                    } else {
-                        confCtor = resolveDeclaration(diConf.$ctor);
-                        confProp = resolveDeclaration(diConf);
-                        di[type] = {
-                            ctor: confCtor,
-                            prop: confProp
-                        };
-                    }
-                    objCtor = resolveObject(confCtor);
-                    objProp = resolveObject(confProp);
-                    if (diConf.$ctor) {
-                        config = extend(config, objCtor);
-                    }
-                }
-                Ctor = Moa.define(type);
-                result = new Ctor(config);
-                for (prop in objProp) {
-                    result[prop] = objProp[prop];
-                }
-                return result;
+//                var prop, result, mapObj,
+//                    Ctor, confCtor, confProp,
+//                    objCtor, objProp, diConf,
+//                    len = arguments.length,
+//                    resolveObject = function (conf) {
+//                        var prop, value,
+//                            result = {};
+//                        if (conf) {
+//                            for (prop in conf) {
+//                                value = conf[prop];
+//                                switch (value.instance) {
+//                                    case 'item':
+//                                        if (conf.lifestyle === 'singleton') {
+//                                            if (!value.item) {
+//                                                value.item = Moa.resolve(conf.type);
+//                                            }
+//                                            result[prop] = value.item;
+//                                        } else {
+//                                            result[prop] = Moa.resolve(conf.type);
+//                                        }
+//                                        break;
+//                                    case 'ctor':
+//                                        result[prop] = value.ctor;
+//                                        break;
+//                                    default:
+//                                }
+//                            }
+//                        }
+//                        return result;
+//                    };
+//                if (len !== 1 && len !== 2) {
+//                    throwWrongParamsErr('resolve');
+//                } else {
+//                    if (len === 1) {
+//                        ctorConf = {};
+//                    }
+//                }
+//                mapObj = map[type];
+//                throwWrongType(mapObj, type);
+//                diConf = mapObj.$di;
+//                if (diConf) {
+//                    if (di[type]) {
+//                        confCtor = di[type].ctor;
+//                        confProp = di[type].prop;
+//                    } else {
+//                        confCtor = resolveDeclaration(diConf.$ctor);
+//                        confProp = resolveDeclaration(diConf);
+//                        di[type] = {
+//                            ctor: confCtor,
+//                            prop: confProp
+//                        };
+//                    }
+//                    objCtor = resolveObject(confCtor);
+//                    objProp = resolveObject(confProp);
+//                    if (diConf.$ctor) {
+//                        ctorConf = extend(ctorConf, objCtor);
+//                    }
+//                }
+//                Ctor = Moa.define(type);
+//                result = new Ctor(ctorConf);
+//                for (prop in objProp) {
+//                    result[prop] = objProp[prop];
+//                }
+                return item;
             },
             clear: function () {
                 var clearObj = function (obj) {
@@ -352,6 +404,8 @@
                 result = extend({}, mapObj);
                 delete result.$ctor;
                 delete result.$base;
+                delete result.$di;
+                result.$di = JSON.parse(JSON.stringify(mapObj.$di));
                 return result;
             }
         };
