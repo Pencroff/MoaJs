@@ -6,11 +6,15 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
     'use strict';
     var expect = chai.expect;
     describe('Test Moa Di implementation', function () {
+        it('Test resolving without dependency', function (done) {
+            
+            done();
+        });
         it('Test simple property injection', function (done) {
-            var item;
+            var item, item2;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
-            Moa.define('bigType', {
+            Moa.define('bigTypeA', {
                 $di: {
                     a: 'typeA',
                     b: 'typeB',
@@ -19,7 +23,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     e: false
                 }
             });
-            item = Moa.resolve('bigType');
+            item = Moa.resolve('bigTypeA');
             expect(item.a).to.be.an('object');
             expect(item.b).to.be.an('object');
             expect(item.c).to.be.an('string');
@@ -30,21 +34,24 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.c).to.equal('str');
             expect(item.d).to.equal(3214);
             expect(item.e).to.equal(false);
-
             expect(function () {
                 Moa.resolve();
             }).to.throw('Wrong parameters in resolve');
             expect(function () {
-                Moa.resolve('bigType', {}, true);
+                Moa.resolve('bigTypeA', {}, true);
             }).to.throw('Wrong parameters in resolve');
+
+            item2 = Moa.resolve('bigTypeA');
+            expect(item.a).to.not.equal(item2.a);
+            expect(item.b).to.not.equal(item2.b);
 
             done();
         });
         it('Test ctor injection', function (done) {
-            var item;
+            var item, item2;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
-            Moa.define('bigType', {
+            Moa.define('bigTypeA', {
                 $ctor: function (config) {
                     this.objA = config.objA;
                     this.objB = config.objB;
@@ -77,7 +84,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
 //                    }
 //                }
             });
-            item = Moa.resolve('bigType', {
+            item = Moa.resolve('bigTypeA', {
                 str: 'QWERTY',
                 num: 1403,
                 flag: true,
@@ -95,6 +102,50 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.str).to.equal('QWERTY');
             expect(item.num).to.equal(1403);
             expect(item.flag).to.equal(true);
+
+            item2 = Moa.resolve('bigTypeA');
+            expect(item.objA).to.not.equal(item2.objA);
+            expect(item.objB).to.not.equal(item2.objB);
+
+            done();
+        });
+        it('Test "ctor" func injection', function (done) {
+            var item, ctorItem;
+            done();
+            Moa.define('typeA', {});
+            Moa.define('typeB', {});
+            Moa.define('bigType', {
+                $ctor: function (config) {
+                    this.objA = config.objA;
+                },
+                $di: {
+                    $ctor: {
+                        objA: {
+                            type: 'typeA',
+                            instance: 'ctor'
+                        }
+                    },
+                    objB: {
+                        type: 'typeB',
+                        instance: 'ctor'
+                    }
+                }
+            });
+            item = Moa.resolve('bigType');
+            expect(item.objA).to.be.an('function');
+            expect(item.objB).to.be.an('function');
+            ctorItem = new item.objA();
+            expect(ctorItem.getType()).to.equal('typeA');
+            ctorItem = new item.objB();
+            expect(ctorItem.getType()).to.equal('typeB');
+            done();
+        });
+        it('Test singleton item injection', function (done) {
+
+            done();
+        });
+        it('Test hierarchy injection', function (done) {
+
             done();
         });
     });

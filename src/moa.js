@@ -28,8 +28,10 @@
         fn = 'function',
         ob = 'object',
         un = 'undefined',
+        str = 'string',
         map = {},
         mixins = {},
+        di = {},
         extend = function (target, source) {
             var prop;
             for (prop in source) {
@@ -51,8 +53,7 @@
             throw new Error(msg, 'Moa');
         },
         throwWrongType = function (obj, extendType, isMixin) {
-            var undef,
-                type = 'Type ';
+            var type = 'Type ';
             if (obj === undef) {
                 if (isMixin === true) {
                     type = 'Mixin type ';
@@ -124,6 +125,7 @@
                 }());
             }
             $base.$ctor = $ctor;
+            delete di[type];
             return {
                 $type: type,
                 $basetype: basetype,
@@ -133,15 +135,45 @@
                 $base: $base
             };
         },
-        internalResolve = function (conf) {
-            var prop, Ctor, mapObj,
+        resolveType = function (conf, prop, mapObj) {
+            switch (conf.instance) {
+            case 'item':
+                switch (conf.lifestyle) {
+                case 'transient':
+                    conf.ctor = mapObj.$ctor;
+                    break;
+                case 'singleton':
+                    conf.item = undef;
+                    break;
+                default:
+                    throwWrongParamsErr('resolve', '$di::' + prop + '::lifestyle');
+                }
+                break;
+            case 'ctor':
+                conf.ctor = mapObj.$ctor;
+                break;
+            default:
+                throwWrongParamsErr('resolve', '$di::' + prop + '::instance');
+            }
+            return conf;
+        },
+        resolveDeclaration = function (conf) {
+            var prop, mapObj, confValue,
                 result = {};
             for (prop in conf) {
                 if (prop !== '$ctor') {
-                    mapObj = map[conf[prop]];
+                    confValue = conf[prop];
+                    if (typeof confValue === str) {
+                        confValue = {
+                            type: confValue,
+                            instance: 'item',
+                            lifestyle: 'transient'
+                        };
+                    }
+                    mapObj = map[confValue.type];
                     if (mapObj) {
-                        Ctor = mapObj.$ctor;
-                        result[prop] = new Ctor();
+                        confValue = resolveType(confValue, prop, mapObj);
+                        result[prop] = confValue;
                     } else {
                         result[prop] = conf[prop];
                     }
@@ -220,8 +252,37 @@
                 }
             },
             resolve: function (type, config) {
-                var prop, result, Ctor, info, ctorParam, itemResolve, di,
-                    len = arguments.length;
+
+                var prop, result, mapObj,
+                    Ctor, confCtor, confProp,
+                    objCtor, objProp, diConf,
+                    len = arguments.length,
+                    resolveObject = function (conf) {
+                        var prop, value,
+                            result = {};
+                        if (conf) {
+                            for (prop in conf) {
+                                value = conf[prop];
+                                switch (value.instance) {
+                                    case 'item':
+                                        if (conf.lifestyle === 'singleton') {
+                                            if (!value.item) {
+                                                value.item = Moa.resolve(conf.type);
+                                            }
+                                            result[prop] = value.item;
+                                        } else {
+                                            result[prop] = Moa.resolve(conf.type);
+                                        }
+                                        break;
+                                    case 'ctor':
+                                        result[prop] = value.ctor;
+                                        break;
+                                    default:
+                                }
+                            }
+                        }
+                        return result;
+                    };
                 if (len !== 1 && len !== 2) {
                     throwWrongParamsErr('resolve');
                 } else {
@@ -229,17 +290,31 @@
                         config = {};
                     }
                 }
-                Ctor = Moa.define(type);
-                info = Moa.getTypeInfo(type);
-                di = info.$di;
-                if (di.$ctor) {
-                    config = extend(config, di.$ctor);
+                mapObj = map[type];
+                throwWrongType(mapObj, type);
+                diConf = mapObj.$di;
+                if (diConf) {
+                    if (di[type]) {
+                        confCtor = di[type].ctor;
+                        confProp = di[type].prop;
+                    } else {
+                        confCtor = resolveDeclaration(diConf.$ctor);
+                        confProp = resolveDeclaration(diConf);
+                        di[type] = {
+                            ctor: confCtor,
+                            prop: confProp
+                        };
+                    }
+                    objCtor = resolveObject(confCtor);
+                    objProp = resolveObject(confProp);
+                    if (diConf.$ctor) {
+                        config = extend(config, objCtor);
+                    }
                 }
-                ctorParam = internalResolve(config);
-                itemResolve = internalResolve(di);
-                result = new Ctor(ctorParam);
-                for (prop in itemResolve) {
-                    result[prop] = itemResolve[prop];
+                Ctor = Moa.define(type);
+                result = new Ctor(config);
+                for (prop in objProp) {
+                    result[prop] = objProp[prop];
                 }
                 return result;
             },
