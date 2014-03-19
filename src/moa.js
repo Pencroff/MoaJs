@@ -34,15 +34,17 @@
         di = {},
         extend = function (target, source) {
             var prop;
-            for (prop in source) {
-                if (source.hasOwnProperty(prop)) {
-                    target[prop] = source[prop];
+            if (source) {
+                for (prop in source) {
+                    if (source.hasOwnProperty(prop)) {
+                        target[prop] = source[prop];
+                    }
                 }
+                //Some Object methods are not enumerable on Internet Explorer
+                target.toString = source.toString;
+                target.valueOf = source.valueOf;
+                target.toLocaleString = source.toLocaleString;
             }
-            //Some Object methods are not enumerable on Internet Explorer
-            target.toString = source.toString;
-            target.valueOf = source.valueOf;
-            target.toLocaleString = source.toLocaleString;
             return target;
         },
         throwWrongParamsErr = function (method, param) {
@@ -172,28 +174,6 @@
                 $base: $base
             };
         },
-        resolveType = function (conf, prop, mapObj) {
-            switch (conf.instance) {
-            case 'item':
-                switch (conf.lifestyle) {
-                case 'transient':
-                    conf.ctor = mapObj.$ctor;
-                    break;
-                case 'singleton':
-                    conf.item = undef;
-                    break;
-                default:
-                    throwWrongParamsErr('resolve', '$di::' + prop + '::lifestyle');
-                }
-                break;
-            case 'ctor':
-                conf.ctor = mapObj.$ctor;
-                break;
-            default:
-                throwWrongParamsErr('resolve', '$di::' + prop + '::instance');
-            }
-            return conf;
-        },
         /**
          @class Moa
         */
@@ -266,62 +246,84 @@
                 }
             },
             resolve: function (type, configObj) {
-                var item, di, current,
+                var item, cnt = 0,
                     mapObj = map[type],
                     len = arguments.length,
-                    resolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
-                        var current = declaration.$current,
-                            ctor = declaration.$ctor,
-                            result = {
-                                ctor: null,
-                                ctorParams: null,
-                                itemParams: null
-                            };
+                    createItem = function (cParams, cObj, mObj) {
+                        var item;
+                        if (cParams) {
+                            cParams = extend(cParams, cObj);
+                            item = new mObj.$ctor(cParams);
+                        } else {
+                            item = new mObj.$ctor(cObj);
+                        }
+                        return item;
                     },
-                    resolveListConf = function (objDeclaration, fnResolveObjConf, mp) {
-                        var prop, mpObj,
-                            result = {};
-                        for (prop in objDeclaration) {
-                            mpObj = mp[objDeclaration[prop]];
-                            if (mpObj) {
-                                result[prop] = fnResolveObjConf(mpObj.$di, resolveListConf, mp);
-                            } else {
-                                result[prop] = objDeclaration[prop];
+                    resolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
+                        var ctorObj, propObj, mpObj,
+                            current = declaration.$current,
+                            ctor = declaration.$ctor;
+                        cnt += 1;
+                        if (cnt > 25) {
+                            throw new Error('Loop of recursion', 'moa');
+                        }
+                        console.log('Declaration:');
+                        console.log(declaration);
+                        mpObj = mp[current.type];
+                        switch (current.instance) {
+                        case 'item':
+                            if (ctor) {
+                                ctorObj = fnResolveListConf(ctor, resolveObjConf, mp);
                             }
-                        }
-                    };
-                if (mapObj) {
-                    if (len !== 1 && len !== 2) {
-                        throwWrongParamsErr('resolve');
-                    }
-                    //di = mapObj.$di;
-                    item = resolveObjConf(mapObj.$di, resolveListConf, map, configObj);
-                    current = di.$current;
-                    switch (current.instance) {
-                    case 'item':
-                        if (di.$ctor) {
-
-                        }
-                        switch (current.lifestyle) {
-                        case 'transient':
-                            item = new mapObj.$ctor(configObj);
+                            propObj = fnResolveListConf(declaration, resolveObjConf, mp);
+                            switch (current.lifestyle) {
+                            case 'transient':
+                                item = createItem(ctorParams, ctorObj, mpObj);
+                                break;
+                            case 'singleton':
+                                if (!current.item) {
+                                    current.item = createItem(ctorParams, ctorObj, mpObj);
+                                }
+                                item = current.item;
+                                break;
+                            default:
+                                throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
+                            }
                             break;
-                        case 'singleton':
-                            if (!current.item) {
-                                current.item = new mapObj.$ctor(configObj);
-                            }
-                            item = current.item;
+                        case 'ctor':
+                            item = mpObj.$ctor;
                             break;
                         default:
-                            throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
+                            throwWrongParamsErr('resolve', type + '::$di::$current::instance');
                         }
-                        break;
-                    case 'ctor':
-                        item = mapObj.$ctor;
-                        break;
-                    default:
-                        throwWrongParamsErr('resolve', type + '::$di::$current::instance');
-                    }
+                        if (propObj) {
+                            item = extend(item, propObj);
+                        }
+                        return item;
+                    },
+                    resolveListConf = function (objDeclaration, fnResolveObjConf, mp) {
+                        var prop, objDetail, mpObj,
+                            result = {};
+                        for (prop in objDeclaration) {
+                            console.log('Declaration:');
+                            console.log(prop);
+                            if (prop !== '$current' && prop !== '$ctor') {
+                                objDetail = objDeclaration[prop];
+                                mpObj = mp[objDetail.type];
+                                if (mpObj) {
+                                    result[prop] = fnResolveObjConf(mpObj.$di, resolveListConf, mp);
+                                } else {
+                                    result[prop] = objDeclaration[prop];
+                                }
+                            }
+                        }
+                        return result;
+                    };
+                if (len !== 1 && len !== 2) {
+                    throwWrongParamsErr('resolve');
+                }
+                if (mapObj) {
+                    item = resolveObjConf(mapObj.$di, resolveListConf, map, configObj);
                 } else {
                     item = type;
                 }

@@ -80,7 +80,6 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test simple property injection', function (done) {
-            done();
             var item, item2;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
@@ -118,7 +117,6 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test ctor injection', function (done) {
-            done();
             var item, item2;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
@@ -181,9 +179,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test "ctor" func injection', function (done) {
-            done();
             var item, ctorItem;
-            done();
             Moa.define('typeA', {});
             Moa.define('typeB', {});
             Moa.define('bigType', {
@@ -203,6 +199,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     }
                 }
             });
+            console.log('Error');
             item = Moa.resolve('bigType');
             expect(item.objA).to.be.an('function');
             expect(item.objB).to.be.an('function');
