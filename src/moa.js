@@ -268,38 +268,59 @@
             resolve: function (type, configObj) {
                 var item, di, current,
                     mapObj = map[type],
-                    len = arguments.length;
+                    len = arguments.length,
+                    resolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
+                        var current = declaration.$current,
+                            ctor = declaration.$ctor,
+                            result = {
+                                ctor: null,
+                                ctorParams: null,
+                                itemParams: null
+                            };
+                    },
+                    resolveListConf = function (objDeclaration, fnResolveObjConf, mp) {
+                        var prop, mpObj,
+                            result = {};
+                        for (prop in objDeclaration) {
+                            mpObj = mp[objDeclaration[prop]];
+                            if (mpObj) {
+                                result[prop] = fnResolveObjConf(mpObj.$di, resolveListConf, mp);
+                            } else {
+                                result[prop] = objDeclaration[prop];
+                            }
+                        }
+                    };
                 if (mapObj) {
                     if (len !== 1 && len !== 2) {
                         throwWrongParamsErr('resolve');
                     }
-                    di = mapObj.$di;
-                    if (di) {
-                        current = di.$current;
-                        if (current) {
-                            switch (current.instance) {
-                            case 'item':
-                                switch (current.lifestyle) {
-                                case 'transient':
-                                    item = new mapObj.$ctor(configObj);
-                                    break;
-                                case 'singleton':
-                                    if (!current.item) {
-                                        current.item = new mapObj.$ctor(configObj);
-                                    }
-                                    item = current.item;
-                                    break;
-                                default:
-                                    throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
-                                }
-                                break;
-                            case 'ctor':
-                                item = mapObj.$ctor;
-                                break;
-                            default:
-                                throwWrongParamsErr('resolve', type + '::$di::$current::instance');
-                            }
+                    //di = mapObj.$di;
+                    item = resolveObjConf(mapObj.$di, resolveListConf, map, configObj);
+                    current = di.$current;
+                    switch (current.instance) {
+                    case 'item':
+                        if (di.$ctor) {
+
                         }
+                        switch (current.lifestyle) {
+                        case 'transient':
+                            item = new mapObj.$ctor(configObj);
+                            break;
+                        case 'singleton':
+                            if (!current.item) {
+                                current.item = new mapObj.$ctor(configObj);
+                            }
+                            item = current.item;
+                            break;
+                        default:
+                            throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
+                        }
+                        break;
+                    case 'ctor':
+                        item = mapObj.$ctor;
+                        break;
+                    default:
+                        throwWrongParamsErr('resolve', type + '::$di::$current::instance');
                     }
                 } else {
                     item = type;
