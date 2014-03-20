@@ -31,7 +31,7 @@
         str = 'string',
         map = {},
         mixins = {},
-        depthRecursion = 15,
+        depthRecursion = 64,
         extend = function (target, source) {
             var prop;
             if (source) {
@@ -75,50 +75,6 @@
                 $proto[prop] = new MixFn();
             }
             return $proto;
-        },
-        resolveDeclaration = function (type, diConf) {
-            var prop, confValue;
-            diConf = diConf || {};
-            if (!diConf.$current) {
-                diConf.$current = type;
-            }
-            for (prop in diConf) {
-                if (prop === '$ctor') {
-                    diConf[prop] = resolveDeclaration(type, diConf[prop]);
-                    delete diConf[prop].$current;
-                } else {
-                    confValue = diConf[prop];
-                    switch (typeof confValue) {
-                    case str:
-                        if (map[confValue]) {
-                            diConf[prop] = {
-                                type: confValue,
-                                instance: 'item',
-                                lifestyle: 'transient'
-                            };
-                        }
-                        break;
-                    case ob:
-                        if (prop === '$current') {
-                            confValue.type = type;
-                        }
-                        if (!confValue.type) {
-                            throwWrongParamsErr('define', '$di -> type');
-                        }
-                        if (confValue.instance === 'ctor') {
-                            delete confValue.lifestyle;
-                        } else {
-                            confValue.instance = 'item';
-                            if (confValue.lifestyle && confValue.lifestyle !== 'singleton') {
-                                confValue.lifestyle = 'transient';
-                            }
-                        }
-                        break;
-                    default:
-                    }
-                }
-            }
-            return diConf;
         },
         build = function (type, base, definition) {
             var basetype,
@@ -180,6 +136,56 @@
                 $base: $base
             };
         },
+        resolveDeclaration = function (type, diConfiguration) {
+            var configurationProperty, configurationValue, typeObj;
+            diConfiguration = diConfiguration || {};
+            if (!diConfiguration.$current) {
+                diConfiguration.$current = type;
+            }
+            for (configurationProperty in diConfiguration) {
+                if (configurationProperty === '$ctor') {
+                    configurationValue = resolveDeclaration(type, diConfiguration[configurationProperty]);
+                    delete configurationValue.$current;
+                } else {
+                    configurationValue = diConfiguration[configurationProperty];
+                    switch (typeof configurationValue) {
+                    case str:
+                        if (configurationProperty === '$current') {
+                            configurationValue = {
+                                type: configurationValue,
+                                instance: 'item',
+                                lifestyle: 'transient'
+                            };
+                        } else {
+                            typeObj = map[configurationValue];
+                            if (typeObj) {
+                                configurationValue = typeObj.$di.$current;
+                            }
+                        }
+                        break;
+                    case ob:
+                        if (configurationProperty === '$current') {
+                            configurationValue.type = type;
+                        }
+                        if (!configurationValue.type) {
+                            throwWrongParamsErr('define', '$di -> type');
+                        }
+                        if (configurationValue.instance === 'ctor') {
+                            delete configurationValue.lifestyle;
+                        } else {
+                            configurationValue.instance = 'item';
+                            if (configurationValue.lifestyle && configurationValue.lifestyle !== 'singleton') {
+                                configurationValue.lifestyle = 'transient';
+                            }
+                        }
+                        break;
+                    default:
+                    }
+                }
+                diConfiguration[configurationProperty] = configurationValue;
+            }
+            return diConfiguration;
+        },
         /**
          @class Moa
         */
@@ -228,7 +234,7 @@
                         throwWrongParamsErr('define', 'definition');
                     }
                     map[type] = mapObj;
-                    map[type].$di = resolveDeclaration(type, map[type].$di);
+                    map[type].$di = resolveDeclaration(type, mapObj.$di);
                     break;
                 default:
                     throwWrongParamsErr('define');
@@ -265,7 +271,7 @@
                         }
                         return item;
                     },
-                    resolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
+                    fnResolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
                         var ctorObj, propObj, mpObj,
                             current = declaration.$current,
                             ctor = declaration.$ctor;
@@ -273,13 +279,16 @@
                         if (cnt > depthRecursion) {
                             throw new Error('Loop of recursion', 'moa');
                         }
+                        if (!current) {
+                            current = declaration;
+                        }
                         mpObj = mp[current.type];
                         switch (current.instance) {
                         case 'item':
                             if (ctor) {
-                                ctorObj = fnResolveListConf(ctor, resolveObjConf, mp);
+                                ctorObj = fnResolveListConf(ctor, fnResolveObjConf, mp);
                             }
-                            propObj = fnResolveListConf(declaration, resolveObjConf, mp);
+                            propObj = fnResolveListConf(declaration, fnResolveObjConf, mp);
                             switch (current.lifestyle) {
                             case 'transient':
                                 item = createItem(ctorParams, ctorObj, mpObj);
@@ -305,15 +314,19 @@
                         }
                         return item;
                     },
-                    resolveListConf = function (objDeclaration, fnResolveObjConf, mp) {
-                        var prop, objDetail, mpObj,
+                    fnResolveListConf = function (objDeclaration, fnResolveObjConf, mp) {
+                        var prop, propValue, mpObj,
                             result = {};
                         for (prop in objDeclaration) {
                             if (prop !== '$current' && prop !== '$ctor') {
-                                objDetail = objDeclaration[prop];
-                                mpObj = mp[objDetail.type];
-                                if (mpObj) {
-                                    result[prop] = fnResolveObjConf(mpObj.$di, resolveListConf, mp);
+                                propValue = objDeclaration[prop];
+                                if (typeof propValue === 'object') {
+                                    mpObj = mp[propValue.type];
+                                    if (mpObj) {    //mpObj.$di
+                                        result[prop] = fnResolveObjConf(propValue, fnResolveListConf, mp);
+                                    } else {
+                                        result[prop] = objDeclaration[prop];
+                                    }
                                 } else {
                                     result[prop] = objDeclaration[prop];
                                 }
@@ -325,7 +338,7 @@
                     throwWrongParamsErr('resolve');
                 }
                 if (mapObj) {
-                    item = resolveObjConf(mapObj.$di, resolveListConf, map, configObj);
+                    item = fnResolveObjConf(mapObj.$di, fnResolveListConf, map, configObj);
                 } else {
                     item = type;
                 }

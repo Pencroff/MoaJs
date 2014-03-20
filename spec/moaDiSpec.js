@@ -80,7 +80,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test simple property injection', function (done) {
-            var item, item2;
+            var item, item2, di;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
             Moa.define('bigTypeA', {
@@ -91,6 +91,27 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     d: 3214,
                     e: false
                 }
+            });
+            di = Moa.getTypeInfo('bigTypeA').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'bigTypeA',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                a: {
+                    type: 'typeA',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                b: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                c: 'str',
+                d: 3214,
+                e: false
             });
             item = Moa.resolve('bigTypeA');
             expect(item.a).to.be.an('object');
