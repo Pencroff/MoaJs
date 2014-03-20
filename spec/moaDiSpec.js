@@ -179,7 +179,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test "ctor" func injection', function (done) {
-            var item, ctorItem;
+            var item, ctorItem, di;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
             Moa.define('bigType', {
@@ -199,7 +199,24 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     }
                 }
             });
-            console.log('Error');
+            di = Moa.getTypeInfo('bigType').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'bigType',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                $ctor: {
+                    objA: {
+                        type: 'typeA',
+                        instance: 'ctor'
+                    }
+                },
+                objB: {
+                    type: 'typeB',
+                    instance: 'ctor'
+                }
+            });
             item = Moa.resolve('bigType');
             expect(item.objA).to.be.an('function');
             expect(item.objB).to.be.an('function');

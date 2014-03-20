@@ -31,7 +31,7 @@
         str = 'string',
         map = {},
         mixins = {},
-        di = {},
+        depthRecursion = 15,
         extend = function (target, source) {
             var prop;
             if (source) {
@@ -85,6 +85,7 @@
             for (prop in diConf) {
                 if (prop === '$ctor') {
                     diConf[prop] = resolveDeclaration(type, diConf[prop]);
+                    delete diConf[prop].$current;
                 } else {
                     confValue = diConf[prop];
                     switch (typeof confValue) {
@@ -98,7 +99,12 @@
                         }
                         break;
                     case ob:
-                        confValue.type = type;
+                        if (prop === '$current') {
+                            confValue.type = type;
+                        }
+                        if (!confValue.type) {
+                            throwWrongParamsErr('define', '$di -> type');
+                        }
                         if (confValue.instance === 'ctor') {
                             delete confValue.lifestyle;
                         } else {
@@ -264,11 +270,9 @@
                             current = declaration.$current,
                             ctor = declaration.$ctor;
                         cnt += 1;
-                        if (cnt > 25) {
+                        if (cnt > depthRecursion) {
                             throw new Error('Loop of recursion', 'moa');
                         }
-                        console.log('Declaration:');
-                        console.log(declaration);
                         mpObj = mp[current.type];
                         switch (current.instance) {
                         case 'item':
@@ -305,8 +309,6 @@
                         var prop, objDetail, mpObj,
                             result = {};
                         for (prop in objDeclaration) {
-                            console.log('Declaration:');
-                            console.log(prop);
                             if (prop !== '$current' && prop !== '$ctor') {
                                 objDetail = objDeclaration[prop];
                                 mpObj = mp[objDetail.type];
@@ -327,69 +329,6 @@
                 } else {
                     item = type;
                 }
-//                var prop, result, mapObj,
-//                    Ctor, confCtor, confProp,
-//                    objCtor, objProp, diConf,
-//                    len = arguments.length,
-//                    resolveObject = function (conf) {
-//                        var prop, value,
-//                            result = {};
-//                        if (conf) {
-//                            for (prop in conf) {
-//                                value = conf[prop];
-//                                switch (value.instance) {
-//                                    case 'item':
-//                                        if (conf.lifestyle === 'singleton') {
-//                                            if (!value.item) {
-//                                                value.item = Moa.resolve(conf.type);
-//                                            }
-//                                            result[prop] = value.item;
-//                                        } else {
-//                                            result[prop] = Moa.resolve(conf.type);
-//                                        }
-//                                        break;
-//                                    case 'ctor':
-//                                        result[prop] = value.ctor;
-//                                        break;
-//                                    default:
-//                                }
-//                            }
-//                        }
-//                        return result;
-//                    };
-//                if (len !== 1 && len !== 2) {
-//                    throwWrongParamsErr('resolve');
-//                } else {
-//                    if (len === 1) {
-//                        ctorConf = {};
-//                    }
-//                }
-//                mapObj = map[type];
-//                throwWrongType(mapObj, type);
-//                diConf = mapObj.$di;
-//                if (diConf) {
-//                    if (di[type]) {
-//                        confCtor = di[type].ctor;
-//                        confProp = di[type].prop;
-//                    } else {
-//                        confCtor = resolveDeclaration(diConf.$ctor);
-//                        confProp = resolveDeclaration(diConf);
-//                        di[type] = {
-//                            ctor: confCtor,
-//                            prop: confProp
-//                        };
-//                    }
-//                    objCtor = resolveObject(confCtor);
-//                    objProp = resolveObject(confProp);
-//                    if (diConf.$ctor) {
-//                        ctorConf = extend(ctorConf, objCtor);
-//                    }
-//                }
-//                Ctor = Moa.define(type);
-//                result = new Ctor(ctorConf);
-//                for (prop in objProp) {
-//                    result[prop] = objProp[prop];
-//                }
                 return item;
             },
             clear: function () {
@@ -401,7 +340,6 @@
                 };
                 clearObj(map);
                 clearObj(mixins);
-                clearObj(di);
             },
             /**
              * Return object with lists of types and mixins
