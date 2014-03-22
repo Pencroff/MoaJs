@@ -7,7 +7,7 @@
             return new F();
         };
     }());
-    var undef, fn = "function", ob = "object", un = "undefined", str = "string", map = {}, mixins = {}, depthRecursion = 64, extend = function(target, source) {
+    var undef, fn = "function", ob = "object", un = "undefined", str = "string", map = {}, mixins = {}, extend = function(target, source) {
         var prop;
         if (source) {
             for (prop in source) source.hasOwnProperty(prop) && (target[prop] = source[prop]);
@@ -104,10 +104,9 @@
 
                   case ob:
                     "$current" === configurationProperty && (configurationValue.type = type);
-                    configurationValue.type || throwWrongParamsErr("define", "$di -> type");
-                    if ("ctor" === configurationValue.instance) delete configurationValue.lifestyle; else {
-                        configurationValue.instance = "item";
-                        configurationValue.lifestyle && "singleton" !== configurationValue.lifestyle && (configurationValue.lifestyle = "transient");
+                    if (configurationValue.type) if ("ctor" === configurationValue.instance) delete configurationValue.lifestyle; else {
+                        configurationValue.instance || (configurationValue.instance = "item");
+                        configurationValue.lifestyle || (configurationValue.lifestyle = "transient");
                     }
                 }
             }
@@ -115,6 +114,14 @@
         }
         return diConfiguration;
     }, Moa = {
+        clear: function() {
+            var clearObj = function(obj) {
+                var prop;
+                for (prop in obj) delete obj[prop];
+            };
+            clearObj(map);
+            clearObj(mixins);
+        },
         define: function(type, definition) {
             var mapObj, baseType, base, len = arguments.length;
             switch (len) {
@@ -159,14 +166,8 @@
             }
             return mapObj.$ctor;
         },
-        mixin: function(mixType, definition) {
-            if (null !== definition) {
-                typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
-                mixins[mixType] = definition;
-            } else delete mixins[mixType];
-        },
         resolve: function(type, configObj) {
-            var item, cnt = 0, mapObj = map[type], len = arguments.length, createItem = function(cParams, cObj, mObj) {
+            var item, mapObj = map[type], len = arguments.length, createItem = function(mObj, cParams, cObj) {
                 var item;
                 if (cParams) {
                     cParams = extend(cParams, cObj);
@@ -174,24 +175,29 @@
                 } else item = new mObj.$ctor(cObj);
                 return item;
             }, fnResolveObjConf = function(declaration, fnResolveListConf, mp, ctorParams) {
-                var ctorObj, propObj, mpObj, current = declaration.$current, ctor = declaration.$ctor, prop = declaration;
-                cnt += 1;
-                if (cnt > depthRecursion) throw new Error("Loop of recursion", "moa");
-                current || (current = declaration);
-                mpObj = mp[current.type];
-                ctor || (ctor = mpObj.$di.$ctor);
-                prop === current && (prop = mpObj.$di);
+                var resolvedObj, ctorDiObj, propDiObj, ctorDiConf, propDiConf, current = declaration.$current;
+                if (current) {
+                    resolvedObj = mp[current.type];
+                    ctorDiConf = declaration.$ctor;
+                    propDiConf = declaration;
+                } else {
+                    current = declaration;
+                    resolvedObj = mp[current.type];
+                    if (!resolvedObj) return declaration;
+                    ctorDiConf = resolvedObj.$di.$ctor;
+                    propDiConf = resolvedObj.$di;
+                }
                 switch (current.instance) {
                   case "item":
-                    ctor && (ctorObj = fnResolveListConf(ctor, fnResolveObjConf, mp));
-                    propObj = fnResolveListConf(prop, fnResolveObjConf, mp);
+                    ctorDiConf && (ctorDiObj = fnResolveListConf(ctorDiConf, fnResolveObjConf, mp));
+                    propDiObj = fnResolveListConf(propDiConf, fnResolveObjConf, mp);
                     switch (current.lifestyle) {
                       case "transient":
-                        item = createItem(ctorParams, ctorObj, mpObj);
+                        item = createItem(resolvedObj, ctorParams, ctorDiObj);
                         break;
 
                       case "singleton":
-                        current.item || (current.item = createItem(ctorParams, ctorObj, mpObj));
+                        current.item || (current.item = createItem(resolvedObj, ctorParams, ctorDiObj));
                         item = current.item;
                         break;
 
@@ -201,36 +207,32 @@
                     break;
 
                   case "ctor":
-                    item = mpObj.$ctor;
+                    item = resolvedObj.$ctor;
                     break;
 
                   default:
                     throwWrongParamsErr("resolve", type + "::$di::$current::instance");
                 }
-                propObj && (item = extend(item, propObj));
+                propDiObj && (item = extend(item, propDiObj));
                 return item;
             }, fnResolveListConf = function(objDeclaration, fnResolveObjConf, mp) {
-                var prop, propValue, mpObj, result = {};
+                var prop, propValue, result = {};
                 for (prop in objDeclaration) if ("$current" !== prop && "$ctor" !== prop) {
                     propValue = objDeclaration[prop];
-                    if ("object" == typeof propValue) {
-                        mpObj = mp[propValue.type];
-                        result[prop] = mpObj ? fnResolveObjConf(propValue, fnResolveListConf, mp) : objDeclaration[prop];
-                    } else result[prop] = objDeclaration[prop];
+                    result[prop] = "object" == typeof propValue ? fnResolveObjConf(propValue, fnResolveListConf, mp) : propValue;
                 }
                 return result;
             };
             1 !== len && 2 !== len && throwWrongParamsErr("resolve");
-            item = mapObj ? fnResolveObjConf(mapObj.$di, fnResolveListConf, map, configObj) : type;
+            throwWrongType(mapObj, type);
+            item = fnResolveObjConf(mapObj.$di, fnResolveListConf, map, configObj);
             return item;
         },
-        clear: function() {
-            var clearObj = function(obj) {
-                var prop;
-                for (prop in obj) delete obj[prop];
-            };
-            clearObj(map);
-            clearObj(mixins);
+        mixin: function(mixType, definition) {
+            if (null !== definition) {
+                typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
+                mixins[mixType] = definition;
+            } else delete mixins[mixType];
         },
         getRegistry: function() {
             var iterate = function(obj) {

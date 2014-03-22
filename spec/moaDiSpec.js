@@ -80,7 +80,11 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test simple property injection', function (done) {
-            var item, item2, di;
+            var item, item2, di,
+                obj = {
+                    name: 'Object',
+                    age: 10
+                };
             Moa.define('typeA', {});
             Moa.define('typeB', {});
             Moa.define('bigTypeA', {
@@ -89,7 +93,8 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     b: 'typeB',
                     c: 'str',
                     d: 3214,
-                    e: false
+                    e: false,
+                    f: obj
                 }
             });
             di = Moa.getTypeInfo('bigTypeA').$di;
@@ -111,7 +116,11 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                 },
                 c: 'str',
                 d: 3214,
-                e: false
+                e: false,
+                f: {
+                    name: 'Object',
+                    age: 10
+                }
             });
             item = Moa.resolve('bigTypeA');
             expect(item.a).to.be.an('object');
@@ -124,6 +133,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.c).to.equal('str');
             expect(item.d).to.equal(3214);
             expect(item.e).to.equal(false);
+            expect(item.f).to.equal(obj);
             expect(function () {
                 Moa.resolve();
             }).to.throw('Wrong parameters in resolve');
@@ -156,23 +166,6 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                         objB: 'typeB'
                     }
                 }
-//                $di example
-//                $di: {
-//                    //bindMixin: true, // false
-//                    $ctor: {
-//                        objA: 'typeA', // default instance: 'item' and lifestyle: 'transient'
-//                        objB: {
-//                            type: 'typeB',
-//                            instance: 'item',
-//                            lifestyle: 'transient' //'singleton'
-//                        },
-//                        fnD: {
-//                            type: 'typeD',
-//                            instance: 'ctor'
-//                            // lifestyle is not used for 'ctor' instance
-//                        }
-//                    }
-//                }
             });
             item = Moa.resolve('bigTypeA', {
                 str: 'QWERTY',
@@ -450,6 +443,62 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.objD).to.equal(item2.objD);
             expect(item.objD.objA).to.equal(item2.objD.objA);
             expect(item.objD.objB).to.equal(item2.objD.objB);
+            done();
+        });
+        it('Test wrong di configuration', function (done) {
+            var di;
+            Moa.define('typeA', {});
+            Moa.define('typeB', {
+                $di: {
+                    a: {
+                        type: 'typeA',
+                        instance: 'notItem'
+                    }
+                }
+            });
+            Moa.define('typeC', {
+                $di: {
+                    a: {
+                        type: 'typeA',
+                        lifestyle: 'infinitely'
+                    }
+                }
+            });
+            di = Moa.getTypeInfo('typeB').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                a: {
+                    type: 'typeA',
+                    instance: 'notItem',
+                    lifestyle: 'transient'
+                }
+            });
+            di = Moa.getTypeInfo('typeC').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeC',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                a: {
+                    type: 'typeA',
+                    instance: 'item',
+                    lifestyle: 'infinitely'
+                }
+            });
+            expect(function () {
+                Moa.resolve('typeB');
+            }).to.throw('Wrong parameter typeB::$di::$current::instance in resolve');
+            expect(function () {
+                Moa.resolve('typeC');
+            }).to.throw('Wrong parameter typeC::$di::$current::lifestyle in resolve');
+            expect(function () {
+                Moa.resolve('typeABC');
+            }).to.throw('Type typeABC not found');
             done();
         });
     });

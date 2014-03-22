@@ -85,6 +85,10 @@ module.exports = function (grunt) {
 //                src: ['benchmarks/*.js'],
 //                dest: 'benchmarks/result.csv'
 //            },
+            /*grunt benchmark:benchMoa*/
+            benchMoa: {
+                src: ['benchmarks/benchMoa.js']
+            },
             /*grunt benchmark:benchMixSearch*/
             benchMixSearch: {
                 src: ['items/mixins/benchmarks/benchMixSearch.js']

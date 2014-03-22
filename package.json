@@ -14,7 +14,13 @@
     "JavaScript",
     "inheritance",
     "mixins",
-    "static"
+    "static",
+    "static mixins",
+    "service locator",
+    "ioc container",
+    "inversion of control container",
+    "di",
+    "dependency injection"
   ],
   "author": "Pencroff",
   "license": "MIT",
@@ -30,6 +36,7 @@
     "karma-requirejs": "~0.1.0",
     "karma-coffee-preprocessor": "~0.1.0",
     "karma-phantomjs-launcher": "~0.1.0",
+    "karma-coverage": "^0.2.1",
     "karma": "~0.10.2",
     "grunt-karma": "~0.6.1",
     "mocha": "~1.12.0",
