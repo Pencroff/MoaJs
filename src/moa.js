@@ -274,7 +274,8 @@
                     fnResolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
                         var ctorObj, propObj, mpObj,
                             current = declaration.$current,
-                            ctor = declaration.$ctor;
+                            ctor = declaration.$ctor,
+                            prop = declaration;
                         cnt += 1;
                         if (cnt > depthRecursion) {
                             throw new Error('Loop of recursion', 'moa');
@@ -283,12 +284,18 @@
                             current = declaration;
                         }
                         mpObj = mp[current.type];
+                        if (!ctor) {
+                            ctor = mpObj.$di.$ctor;
+                        }
+                        if (prop === current) {
+                            prop = mpObj.$di;
+                        }
                         switch (current.instance) {
                         case 'item':
                             if (ctor) {
                                 ctorObj = fnResolveListConf(ctor, fnResolveObjConf, mp);
                             }
-                            propObj = fnResolveListConf(declaration, fnResolveObjConf, mp);
+                            propObj = fnResolveListConf(prop, fnResolveObjConf, mp);
                             switch (current.lifestyle) {
                             case 'transient':
                                 item = createItem(ctorParams, ctorObj, mpObj);
@@ -322,7 +329,7 @@
                                 propValue = objDeclaration[prop];
                                 if (typeof propValue === 'object') {
                                     mpObj = mp[propValue.type];
-                                    if (mpObj) {    //mpObj.$di
+                                    if (mpObj) {
                                         result[prop] = fnResolveObjConf(propValue, fnResolveListConf, mp);
                                     } else {
                                         result[prop] = objDeclaration[prop];

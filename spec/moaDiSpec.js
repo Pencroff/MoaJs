@@ -248,11 +248,208 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test singleton item injection', function (done) {
-
+            var item, item2, di;
+            Moa.define('typeA', {
+                $di: {
+                    $current: {
+                        lifestyle: 'singleton'
+                    }
+                }
+            });
+            Moa.define('typeB', {
+                $di: {
+                    $current: {
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
+                }
+            });
+            Moa.define('bigType', {
+                $ctor: function (config) {
+                    this.objA = config.objA;
+                },
+                $di: {
+                    $ctor: {
+                        objA: 'typeA'
+                    },
+                    objB: 'typeB'
+                }
+            });
+            di = Moa.getTypeInfo('bigType').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'bigType',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                $ctor: {
+                    objA: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
+                },
+                objB: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                }
+            });
+            item = Moa.resolve('bigType');
+            item2 = Moa.resolve('bigType');
+            expect(item).to.not.equal(item2);
+            expect(item.objA).to.equal(item2.objA);
+            expect(item.objB).to.equal(item2.objB);
             done();
         });
         it('Test hierarchy injection', function (done) {
+            var item, item2, di;
+            Moa.define('typeA', {
+                $di: {
+                    $current: {
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    }
+                }
+            });
+            Moa.define('typeB', {
+                $di: {
+                    $current: {
+                        lifestyle: 'singleton'
+                    }
+                }
+            });
+            Moa.define('typeC', {
+                $ctor: function (config) {
+                    this.objA = config.objA;
+                },
+                $di: {
+                    $current: {
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    $ctor: {
+                        objA: 'typeA'
+                    },
+                    objB: 'typeB'
+                }
+            });
+            Moa.define('typeD', {
+                $di: {
+                    $current: {
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    },
+                    objA: {
+                        type: 'typeA',
+                        lifestyle: 'singleton'
+                    },
+                    objB: 'typeB'
+                }
+            });
+            Moa.define('typeE', {
+                $di: {
+                    $current: {
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    objA: 'typeA',
+                    objB: 'typeB',
+                    objC: 'typeC',
+                    objD: 'typeD'
+                }
+            });
 
+            di = Moa.getTypeInfo('typeA').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeA',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                }
+            });
+            di = Moa.getTypeInfo('typeB').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                }
+            });
+            di = Moa.getTypeInfo('typeC').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeC',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                $ctor: {
+                    objA: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    }
+                },
+                objB: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                }
+            });
+            di = Moa.getTypeInfo('typeD').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeD',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                },
+                objA: {
+                    type: 'typeA',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                },
+                objB: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                }
+            });
+            di = Moa.getTypeInfo('typeE').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'typeE',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                objA: {
+                    type: 'typeA',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                objB: {
+                    type: 'typeB',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                },
+                objC: {
+                    type: 'typeC',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                objD: {
+                    type: 'typeD',
+                    instance: 'item',
+                    lifestyle: 'singleton'
+                }
+            });
+            item = Moa.resolve('typeE');
+            item2 = Moa.resolve('typeE');
+            expect(item).to.not.equal(item2);
+            expect(item).to.deep.equal(item2);
+            expect(item.objB).to.equal(item2.objB);
+            expect(item.objD).to.equal(item2.objD);
+            expect(item.objD.objA).to.equal(item2.objD.objA);
+            expect(item.objD.objB).to.equal(item2.objD.objB);
             done();
         });
     });
