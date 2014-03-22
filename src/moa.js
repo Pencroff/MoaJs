@@ -332,10 +332,10 @@
                                     if (mpObj) {
                                         result[prop] = fnResolveObjConf(propValue, fnResolveListConf, mp);
                                     } else {
-                                        result[prop] = objDeclaration[prop];
+                                        result[prop] = propValue;
                                     }
                                 } else {
-                                    result[prop] = objDeclaration[prop];
+                                    result[prop] = propValue;
                                 }
                             }
                         }
