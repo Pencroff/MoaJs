@@ -19,12 +19,12 @@ requirejs.config({
     //are loaded relative to the top-level JS file.
     nodeRequire: require,
     paths: {
-        'Moa': '../moa.min'
+        'Moa': '../src/moa'
     }
 });
 var Moa = requirejs('Moa'),
     item = {
-        manualResolving: function () {
+        manualResolvingProperty: function () {
             'use strict';
             var CtorA = Moa.define('typeA'),
                 CtorB = Moa.define('typeB.2'),
@@ -36,7 +36,7 @@ var Moa = requirejs('Moa'),
             itemType.c = CtorC;
             return itemType;
         },
-        iocResolving: function () {
+        iocResolvingProperty: function () {
             'use strict';
             return Moa.resolve('Type');
         }
@@ -57,7 +57,7 @@ Moa.define('typeB.2', {
 Moa.define('typeC', {
     $di: {
         $current: {
-            item: 'ctor'
+            instance: 'ctor'
         }
     }
 });
@@ -75,11 +75,11 @@ module.exports = {
     tests: {
         'Manual property resolving': function () {
             'use strict';
-            var i = item.manualResolving();
+            var i = item.manualResolvingProperty();
         },
         'Moa IoC resolving': function () {
             'use strict';
-            var i = item.iocResolving();
+            var i = item.iocResolvingProperty();
         }
     }
 };

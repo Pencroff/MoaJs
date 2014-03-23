@@ -25,10 +25,6 @@
         }());
     }
     var undef,
-        fn = 'function',
-        ob = 'object',
-        un = 'undefined',
-        str = 'string',
         map = {},
         mixins = {},
         extend = function (target, source) {
@@ -148,7 +144,7 @@
                 } else {
                     configurationValue = diConfiguration[configurationProperty];
                     switch (typeof configurationValue) {
-                    case str:
+                    case 'string':
                         if (configurationProperty === '$current') {
                             configurationValue = {
                                 type: configurationValue,
@@ -162,7 +158,7 @@
                             }
                         }
                         break;
-                    case ob:
+                    case 'object':
                         if (configurationProperty === '$current') {
                             configurationValue.type = type;
                         }
@@ -217,7 +213,7 @@
                     break;
                 case 2:
                     switch (typeof definition) {
-                    case fn:
+                    case 'function':
                         baseType = definition().$extend;
                         if (baseType !== undef) {
                             base = map[baseType];
@@ -227,7 +223,7 @@
                             mapObj = build(type, undef, definition(undef));
                         }
                         break;
-                    case ob:
+                    case 'object':
                         if (definition !== null) {
                             baseType = definition.$extend;
                             if (baseType !== undef) {
@@ -269,8 +265,10 @@
                     fnResolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
                         var resolvedObj, ctorDiObj, propDiObj, ctorDiConf, propDiConf,
                             current = declaration.$current;
-//                      if you have problem with IoC, just uncomment 3 rows bellow
-//                      and second row in 'resolve' function
+/*================================================================================
+                        if you have problem with IoC, just uncomment 3 rows bellow
+                        and second row in 'resolve' function
+ ================================================================================*/
 
 //                        cntRecursion += 1;
 //                        if (cntRecursion > depthRecursion) {
@@ -291,30 +289,30 @@
                             }
                         }
                         switch (current.instance) {
-                            case 'item':
-                                if (ctorDiConf) {
-                                    ctorDiObj = fnResolveListConf(ctorDiConf, fnResolveObjConf, mp);
-                                }
-                                propDiObj = fnResolveListConf(propDiConf, fnResolveObjConf, mp);
-                                switch (current.lifestyle) {
-                                    case 'transient':
-                                        item = createItem(resolvedObj, ctorParams, ctorDiObj);
-                                        break;
-                                    case 'singleton':
-                                        if (!current.item) {
-                                            current.item = createItem(resolvedObj, ctorParams, ctorDiObj);
-                                        }
-                                        item = current.item;
-                                        break;
-                                    default:
-                                        throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
-                                }
+                        case 'item':
+                            if (ctorDiConf) {
+                                ctorDiObj = fnResolveListConf(ctorDiConf, fnResolveObjConf, mp);
+                            }
+                            propDiObj = fnResolveListConf(propDiConf, fnResolveObjConf, mp);
+                            switch (current.lifestyle) {
+                            case 'transient':
+                                item = createItem(resolvedObj, ctorParams, ctorDiObj);
                                 break;
-                            case 'ctor':
-                                item = resolvedObj.$ctor;
+                            case 'singleton':
+                                if (!current.item) {
+                                    current.item = createItem(resolvedObj, ctorParams, ctorDiObj);
+                                }
+                                item = current.item;
                                 break;
                             default:
-                                throwWrongParamsErr('resolve', type + '::$di::$current::instance');
+                                throwWrongParamsErr('resolve', type + '::$di::$current::lifestyle');
+                            }
+                            break;
+                        case 'ctor':
+                            item = resolvedObj.$ctor;
+                            break;
+                        default:
+                            throwWrongParamsErr('resolve', type + '::$di::$current::instance');
                         }
                         if (propDiObj) {
                             item = extend(item, propDiObj);
@@ -351,7 +349,7 @@
              */
             mixin: function (mixType, definition) {
                 if (definition !== null) {
-                    if (typeof definition !== fn) {
+                    if (typeof definition !== 'function') {
                         throwWrongParamsErr('mixin', 'definition');
                     }
                     mixins[mixType] = definition;
@@ -389,9 +387,9 @@
             }
         };
     // Return as AMD module or attach to head object
-    if (typeof define !== un) {
+    if (typeof define !== 'undefined') {
         define([], function () { return Moa; });
-    } else if (typeof window !== un) {
+    } else if (typeof window !== 'undefined') {
         window.Moa = Moa;
     } else {
         module.exports = Moa;

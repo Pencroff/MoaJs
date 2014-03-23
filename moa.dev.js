@@ -7,7 +7,7 @@
             return new F();
         };
     }());
-    var undef, fn = "function", ob = "object", un = "undefined", str = "string", map = {}, mixins = {}, extend = function(target, source) {
+    var undef, map = {}, mixins = {}, extend = function(target, source) {
         var prop;
         if (source) {
             for (prop in source) source.hasOwnProperty(prop) && (target[prop] = source[prop]);
@@ -91,7 +91,7 @@
             } else {
                 configurationValue = diConfiguration[configurationProperty];
                 switch (typeof configurationValue) {
-                  case str:
+                  case "string":
                     if ("$current" === configurationProperty) configurationValue = {
                         type: configurationValue,
                         instance: "item",
@@ -102,7 +102,7 @@
                     }
                     break;
 
-                  case ob:
+                  case "object":
                     "$current" === configurationProperty && (configurationValue.type = type);
                     if (configurationValue.type) if ("ctor" === configurationValue.instance) delete configurationValue.lifestyle; else {
                         configurationValue.instance || (configurationValue.instance = "item");
@@ -132,7 +132,7 @@
 
               case 2:
                 switch (typeof definition) {
-                  case fn:
+                  case "function":
                     baseType = definition().$extend;
                     if (baseType !== undef) {
                         base = map[baseType];
@@ -141,7 +141,7 @@
                     } else mapObj = build(type, undef, definition(undef));
                     break;
 
-                  case ob:
+                  case "object":
                     if (null === definition) {
                         delete map[type];
                         return undef;
@@ -230,7 +230,7 @@
         },
         mixin: function(mixType, definition) {
             if (null !== definition) {
-                typeof definition !== fn && throwWrongParamsErr("mixin", "definition");
+                "function" != typeof definition && throwWrongParamsErr("mixin", "definition");
                 mixins[mixType] = definition;
             } else delete mixins[mixType];
         },
@@ -256,7 +256,7 @@
             return result;
         }
     };
-    typeof define !== un ? define("Moa", [], function() {
+    "undefined" != typeof define ? define("Moa", [], function() {
         return Moa;
-    }) : typeof window !== un ? window.Moa = Moa : module.exports = Moa;
+    }) : "undefined" != typeof window ? window.Moa = Moa : module.exports = Moa;
 }();

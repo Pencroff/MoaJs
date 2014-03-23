@@ -196,6 +196,13 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             var item, ctorItem, di;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
+            Moa.define('typeC', {
+                $di: {
+                    $current: {
+                        instance: 'ctor'
+                    }
+                }
+            });
             Moa.define('bigType', {
                 $ctor: function (config) {
                     this.objA = config.objA;
@@ -210,7 +217,8 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     objB: {
                         type: 'typeB',
                         instance: 'ctor'
-                    }
+                    },
+                    c: 'typeC'
                 }
             });
             di = Moa.getTypeInfo('bigType').$di;
@@ -229,15 +237,22 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                 objB: {
                     type: 'typeB',
                     instance: 'ctor'
+                },
+                c: {
+                    type: 'typeC',
+                    instance: 'ctor'
                 }
             });
             item = Moa.resolve('bigType');
             expect(item.objA).to.be.an('function');
             expect(item.objB).to.be.an('function');
+            expect(item.c).to.be.an('function');
             ctorItem = new item.objA();
             expect(ctorItem.getType()).to.equal('typeA');
             ctorItem = new item.objB();
             expect(ctorItem.getType()).to.equal('typeB');
+            ctorItem = new item.c();
+            expect(ctorItem.getType()).to.equal('typeC');
             done();
         });
         it('Test singleton item injection', function (done) {
@@ -499,6 +514,61 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(function () {
                 Moa.resolve('typeABC');
             }).to.throw('Type typeABC not found');
+            done();
+        });
+    });
+    describe('Test Moa Di for benchmarks', function () {
+        it('Test property implementation', function (done) {
+            var iManual, iIoc,
+                item = {
+                    manualResolvingProperty: function () {
+                        var CtorA = Moa.define('typeA'),
+                            CtorB = Moa.define('typeB.2'),
+                            CtorC = Moa.define('typeC'),
+                            Ctor = Moa.define('Type'),
+                            itemType = new Ctor();
+                        itemType.a = new CtorA();
+                        itemType.b = CtorB.getInstance();
+                        itemType.c = CtorC;
+                        return itemType;
+                    },
+                    iocResolvingProperty: function () {
+                        return Moa.resolve('Type');
+                    }
+                };
+            Moa.clear();
+
+            Moa.define('typeA', {});
+            Moa.define('typeB.1', {
+                $di: {
+                    $current: {
+                        lifetime: 'singleton'
+                    }
+                }
+            });
+            Moa.define('typeB.2', {
+                $single: true
+            });
+            Moa.define('typeC', {
+                $di: {
+                    $current: {
+                        instance: 'ctor'
+                    }
+                }
+            });
+            Moa.define('Type', {
+                $di: {
+                    a: 'typeA',
+                    b: 'typeB.1',
+                    c: 'typeC'
+                }
+            });
+            iManual = item.manualResolvingProperty();
+            iIoc = item.iocResolvingProperty();
+            expect(iManual.a.getType()).to.equal(iIoc.a.getType());
+            expect(iManual.b.getType()).to.equal('typeB.2');
+            expect(iIoc.b.getType()).to.equal('typeB.1');
+            expect(new iManual.c().getType()).to.equal(new iIoc.c().getType());
             done();
         });
     });
