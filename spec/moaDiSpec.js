@@ -104,22 +104,24 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     instance: 'item',
                     lifestyle: 'transient'
                 },
-                a: {
-                    type: 'typeA',
-                    instance: 'item',
-                    lifestyle: 'transient'
-                },
-                b: {
-                    type: 'typeB',
-                    instance: 'item',
-                    lifestyle: 'transient'
-                },
-                c: 'str',
-                d: 3214,
-                e: false,
-                f: {
-                    name: 'Object',
-                    age: 10
+                $prop: {
+                    a: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    b: {
+                        type: 'typeB',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    c: 'str',
+                    d: 3214,
+                    e: false,
+                    f: {
+                        name: 'Object',
+                        age: 10
+                    }
                 }
             });
             item = Moa.resolve('bigTypeA');
@@ -148,7 +150,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
         it('Test ctor injection', function (done) {
-            var item, item2;
+            var item, item2, di;
             Moa.define('typeA', {});
             Moa.define('typeB', {});
             Moa.define('bigTypeA', {
@@ -164,6 +166,26 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     $ctor: {
                         objA: 'typeA',
                         objB: 'typeB'
+                    }
+                }
+            });
+            di = Moa.getTypeInfo('bigTypeA').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'bigTypeA',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                $ctor: {
+                    objA: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    objB: {
+                        type: 'typeB',
+                        instance: 'item',
+                        lifestyle: 'transient'
                     }
                 }
             });
@@ -234,13 +256,15 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                         instance: 'ctor'
                     }
                 },
-                objB: {
-                    type: 'typeB',
-                    instance: 'ctor'
-                },
-                c: {
-                    type: 'typeC',
-                    instance: 'ctor'
+                $prop: {
+                    objB: {
+                        type: 'typeB',
+                        instance: 'ctor'
+                    },
+                    c: {
+                        type: 'typeC',
+                        instance: 'ctor'
+                    }
                 }
             });
             item = Moa.resolve('bigType');
@@ -297,10 +321,12 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                         lifestyle: 'singleton'
                     }
                 },
-                objB: {
-                    type: 'typeB',
-                    instance: 'item',
-                    lifestyle: 'singleton'
+                $prop: {
+                    objB: {
+                        type: 'typeB',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
                 }
             });
             item = Moa.resolve('bigType');
@@ -398,10 +424,12 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                         lifestyle: 'transient'
                     }
                 },
-                objB: {
-                    type: 'typeB',
-                    instance: 'item',
-                    lifestyle: 'singleton'
+                $prop: {
+                    objB: {
+                        type: 'typeB',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
                 }
             });
             di = Moa.getTypeInfo('typeD').$di;
@@ -411,15 +439,17 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     instance: 'item',
                     lifestyle: 'singleton'
                 },
-                objA: {
-                    type: 'typeA',
-                    instance: 'item',
-                    lifestyle: 'singleton'
-                },
-                objB: {
-                    type: 'typeB',
-                    instance: 'item',
-                    lifestyle: 'singleton'
+                $prop: {
+                    objA: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    },
+                    objB: {
+                        type: 'typeB',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
                 }
             });
             di = Moa.getTypeInfo('typeE').$di;
@@ -429,25 +459,27 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     instance: 'item',
                     lifestyle: 'transient'
                 },
-                objA: {
-                    type: 'typeA',
-                    instance: 'item',
-                    lifestyle: 'transient'
-                },
-                objB: {
-                    type: 'typeB',
-                    instance: 'item',
-                    lifestyle: 'singleton'
-                },
-                objC: {
-                    type: 'typeC',
-                    instance: 'item',
-                    lifestyle: 'transient'
-                },
-                objD: {
-                    type: 'typeD',
-                    instance: 'item',
-                    lifestyle: 'singleton'
+                $prop: {
+                    objA: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    objB: {
+                        type: 'typeB',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    },
+                    objC: {
+                        type: 'typeC',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    objD: {
+                        type: 'typeD',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    }
                 }
             });
             item = Moa.resolve('typeE');
@@ -486,10 +518,12 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     instance: 'item',
                     lifestyle: 'transient'
                 },
-                a: {
-                    type: 'typeA',
-                    instance: 'notItem',
-                    lifestyle: 'transient'
+                $prop: {
+                    a: {
+                        type: 'typeA',
+                        instance: 'notItem',
+                        lifestyle: 'transient'
+                    }
                 }
             });
             di = Moa.getTypeInfo('typeC').$di;
@@ -499,10 +533,12 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     instance: 'item',
                     lifestyle: 'transient'
                 },
-                a: {
-                    type: 'typeA',
-                    instance: 'item',
-                    lifestyle: 'infinitely'
+                $prop: {
+                    a: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'infinitely'
+                    }
                 }
             });
             expect(function () {

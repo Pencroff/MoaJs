@@ -584,12 +584,14 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     instance: 'item',
                     lifestyle: 'transient'
                 },
-                a: {
-                    type: 'base',
-                    instance: 'item',
-                    lifestyle: 'transient'
-                },
-                b: 'child' // can not resolve the same type
+                $prop: {
+                    a: {
+                        type: 'base',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    b: 'child' // can not resolve the same type
+                }
             });
             expect(function () {
                 Moa.getTypeInfo('baseType');

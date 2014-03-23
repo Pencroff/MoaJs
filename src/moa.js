@@ -42,6 +42,15 @@
             }
             return target;
         },
+        fastExtend = function (target, source) {
+            var prop;
+            if (source) {
+                for (prop in source) {
+                    target[prop] = source[prop];
+                }
+            }
+            return target;
+        },
         throwWrongParamsErr = function (method, param) {
             var msg = 'Wrong parameters in ' + method;
             if (param) {
@@ -131,37 +140,60 @@
                 $base: $base
             };
         },
-        resolveDeclaration = function (type, diConfiguration) {
-            var configurationProperty, configurationValue, typeObj;
+        resolveDeclaration = function (type, diConfiguration, owner) {
+            var configurationProperty, configurationValue, configurationValueType,
+                typeObj, propFlag = false;
             diConfiguration = diConfiguration || {};
             if (!diConfiguration.$current) {
                 diConfiguration.$current = type;
             }
             for (configurationProperty in diConfiguration) {
-                if (configurationProperty === '$ctor') {
-                    configurationValue = resolveDeclaration(type, diConfiguration[configurationProperty]);
-                    delete configurationValue.$current;
-                } else {
-                    configurationValue = diConfiguration[configurationProperty];
-                    switch (typeof configurationValue) {
+                configurationValue = diConfiguration[configurationProperty];
+                configurationValueType = typeof configurationValue;
+                switch (configurationProperty) {
+                case '$current':
+                    switch (configurationValueType) {
                     case 'string':
-                        if (configurationProperty === '$current') {
-                            configurationValue = {
-                                type: configurationValue,
-                                instance: 'item',
-                                lifestyle: 'transient'
-                            };
-                        } else {
-                            typeObj = map[configurationValue];
-                            if (typeObj) {
-                                configurationValue = typeObj.$di.$current;
-                            }
+                        configurationValue = {
+                            type: configurationValue,
+                            instance: 'item',
+                            lifestyle: 'transient'
+                        };
+                        break;
+                    case 'object':
+                        configurationValue.type = type;
+                        if (!configurationValue.instance) {
+                            configurationValue.instance = 'item';
+                        }
+                        if (!configurationValue.lifestyle && configurationValue.instance !== 'ctor') {
+                            configurationValue.lifestyle = 'transient';
+                        }
+                        break;
+                    default:
+                    }
+                    break;
+                case '$ctor':
+                    configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+                    delete configurationValue.$current;
+                    break;
+//                case '$proto':
+//                    configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+//                    delete configurationValue.$current;
+//                    break;
+                case '$prop':
+                    configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+                    delete configurationValue.$current;
+                    break;
+                default:
+                    propFlag = true;
+                    switch (configurationValueType) {
+                    case 'string':
+                        typeObj = map[configurationValue];
+                        if (typeObj) {
+                            configurationValue = typeObj.$di.$current;
                         }
                         break;
                     case 'object':
-                        if (configurationProperty === '$current') {
-                            configurationValue.type = type;
-                        }
                         if (configurationValue.type) {
                             if (configurationValue.instance === 'ctor') {
                                 delete configurationValue.lifestyle;
@@ -178,7 +210,16 @@
                     default:
                     }
                 }
-                diConfiguration[configurationProperty] = configurationValue;
+                if (owner || !propFlag) {
+                    diConfiguration[configurationProperty] = configurationValue;
+                } else {
+                    propFlag = false;
+                    if (!diConfiguration.$prop) {
+                        diConfiguration.$prop = {};
+                    }
+                    diConfiguration.$prop[configurationProperty] = configurationValue;
+                    delete diConfiguration[configurationProperty];
+                }
             }
             return diConfiguration;
         },
@@ -252,55 +293,63 @@
                     //depthRecursion = 64, cntRecursion = 0,
                     mapObj = map[type],
                     len = arguments.length,
-                    createItem = function (mObj, cParams, cObj) {
-                        var item;
-                        if (cParams) {
-                            cParams = extend(cParams, cObj);
-                            item = new mObj.$ctor(cParams);
-                        } else {
-                            item = new mObj.$ctor(cObj);
+                    fnResolveListConf = function (target, config, fnResolveObjConf) {
+                        var prop, propValue;
+                        for (prop in config) {
+                            propValue = config[prop];
+                            if (typeof propValue === 'object') {
+                                target[prop] = fnResolveObjConf(propValue, fnResolveListConf);
+                            } else {
+                                target[prop] = propValue;
+                            }
+                        }
+                        return target;
+                    },
+                    createItem = function (declaration, obj, fnResolveObjConf, cParams) {
+                        var item, conf;
+                        cParams = cParams || {};
+                        conf = declaration.$ctor;
+                        if (conf) {
+                            cParams = fnResolveListConf(cParams, conf, fnResolveObjConf);
+                        }
+                        item = new obj.$ctor(cParams);
+                        conf = declaration.$prop;
+                        if (conf) {
+                            item = fnResolveListConf(item, conf, fnResolveObjConf);
                         }
                         return item;
                     },
-                    fnResolveObjConf = function (declaration, fnResolveListConf, mp, ctorParams) {
-                        var resolvedObj, ctorDiObj, propDiObj, ctorDiConf, propDiConf,
+                    fnResolveObjConf = function (declaration, ctorParams) {
+                        var resolvedObj,
                             current = declaration.$current;
-/*================================================================================
+                        /*==========================================================
                         if you have problem with IoC, just uncomment 3 rows bellow
                         and second row in 'resolve' function
- ================================================================================*/
-
+                        =========================================================*/
 //                        cntRecursion += 1;
 //                        if (cntRecursion > depthRecursion) {
 //                            throw new Error('Loop of recursion', 'moa');
 //                        }
                         if (current) {
-                            resolvedObj = mp[current.type];
-                            ctorDiConf = declaration.$ctor;
-                            propDiConf = declaration;
+                            resolvedObj = map[current.type];
                         } else {
                             current = declaration;
-                            resolvedObj = mp[current.type];
+                            resolvedObj = map[current.type];
                             if (resolvedObj) {
-                                ctorDiConf = resolvedObj.$di.$ctor;
-                                propDiConf = resolvedObj.$di;
+                                declaration = resolvedObj.$di;
                             } else {
                                 return declaration;
                             }
                         }
                         switch (current.instance) {
                         case 'item':
-                            if (ctorDiConf) {
-                                ctorDiObj = fnResolveListConf(ctorDiConf, fnResolveObjConf, mp);
-                            }
-                            propDiObj = fnResolveListConf(propDiConf, fnResolveObjConf, mp);
                             switch (current.lifestyle) {
                             case 'transient':
-                                item = createItem(resolvedObj, ctorParams, ctorDiObj);
+                                item = createItem(declaration, resolvedObj, fnResolveObjConf, ctorParams);
                                 break;
                             case 'singleton':
                                 if (!current.item) {
-                                    current.item = createItem(resolvedObj, ctorParams, ctorDiObj);
+                                    current.item = createItem(declaration, resolvedObj, fnResolveObjConf, ctorParams);
                                 }
                                 item = current.item;
                                 break;
@@ -314,31 +363,13 @@
                         default:
                             throwWrongParamsErr('resolve', type + '::$di::$current::instance');
                         }
-                        if (propDiObj) {
-                            item = extend(item, propDiObj);
-                        }
                         return item;
-                    },
-                    fnResolveListConf = function (objDeclaration, fnResolveObjConf, mp) {
-                        var prop, propValue, mpObj,
-                            result = {};
-                        for (prop in objDeclaration) {
-                            if (prop !== '$current' && prop !== '$ctor') {
-                                propValue = objDeclaration[prop];
-                                if (typeof propValue === 'object') {
-                                    result[prop] = fnResolveObjConf(propValue, fnResolveListConf, mp);
-                                } else {
-                                    result[prop] = propValue;
-                                }
-                            }
-                        }
-                        return result;
                     };
                 if (len !== 1 && len !== 2) {
                     throwWrongParamsErr('resolve');
                 }
                 throwWrongType(mapObj, type);
-                item = fnResolveObjConf(mapObj.$di, fnResolveListConf, map, configObj);
+                item = fnResolveObjConf(mapObj.$di, configObj);
                 return item;
             },
             /**

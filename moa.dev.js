@@ -80,37 +80,62 @@
             $ctor: $ctor,
             $base: $base
         };
-    }, resolveDeclaration = function(type, diConfiguration) {
-        var configurationProperty, configurationValue, typeObj;
+    }, resolveDeclaration = function(type, diConfiguration, owner) {
+        var configurationProperty, configurationValue, configurationValueType, typeObj, propFlag = !1;
         diConfiguration = diConfiguration || {};
         diConfiguration.$current || (diConfiguration.$current = type);
         for (configurationProperty in diConfiguration) {
-            if ("$ctor" === configurationProperty) {
-                configurationValue = resolveDeclaration(type, diConfiguration[configurationProperty]);
-                delete configurationValue.$current;
-            } else {
-                configurationValue = diConfiguration[configurationProperty];
-                switch (typeof configurationValue) {
+            configurationValue = diConfiguration[configurationProperty];
+            configurationValueType = typeof configurationValue;
+            switch (configurationProperty) {
+              case "$current":
+                switch (configurationValueType) {
                   case "string":
-                    if ("$current" === configurationProperty) configurationValue = {
+                    configurationValue = {
                         type: configurationValue,
                         instance: "item",
                         lifestyle: "transient"
-                    }; else {
-                        typeObj = map[configurationValue];
-                        typeObj && (configurationValue = typeObj.$di.$current);
-                    }
+                    };
                     break;
 
                   case "object":
-                    "$current" === configurationProperty && (configurationValue.type = type);
+                    configurationValue.type = type;
+                    configurationValue.instance || (configurationValue.instance = "item");
+                    configurationValue.lifestyle || "ctor" === configurationValue.instance || (configurationValue.lifestyle = "transient");
+                }
+                break;
+
+              case "$ctor":
+                configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+                delete configurationValue.$current;
+                break;
+
+              case "$prop":
+                configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+                delete configurationValue.$current;
+                break;
+
+              default:
+                propFlag = !0;
+                switch (configurationValueType) {
+                  case "string":
+                    typeObj = map[configurationValue];
+                    typeObj && (configurationValue = typeObj.$di.$current);
+                    break;
+
+                  case "object":
                     if (configurationValue.type) if ("ctor" === configurationValue.instance) delete configurationValue.lifestyle; else {
                         configurationValue.instance || (configurationValue.instance = "item");
                         configurationValue.lifestyle || (configurationValue.lifestyle = "transient");
                     }
                 }
             }
-            diConfiguration[configurationProperty] = configurationValue;
+            if (owner || !propFlag) diConfiguration[configurationProperty] = configurationValue; else {
+                propFlag = !1;
+                diConfiguration.$prop || (diConfiguration.$prop = {});
+                diConfiguration.$prop[configurationProperty] = configurationValue;
+                delete diConfiguration[configurationProperty];
+            }
         }
         return diConfiguration;
     }, Moa = {
@@ -167,37 +192,39 @@
             return mapObj.$ctor;
         },
         resolve: function(type, configObj) {
-            var item, mapObj = map[type], len = arguments.length, createItem = function(mObj, cParams, cObj) {
-                var item;
-                if (cParams) {
-                    cParams = extend(cParams, cObj);
-                    item = new mObj.$ctor(cParams);
-                } else item = new mObj.$ctor(cObj);
+            var item, mapObj = map[type], len = arguments.length, fnResolveListConf = function(target, config, fnResolveObjConf) {
+                var prop, propValue;
+                for (prop in config) {
+                    propValue = config[prop];
+                    target[prop] = "object" == typeof propValue ? fnResolveObjConf(propValue, fnResolveListConf) : propValue;
+                }
+                return target;
+            }, createItem = function(declaration, obj, fnResolveObjConf, cParams) {
+                var item, conf;
+                cParams = cParams || {};
+                conf = declaration.$ctor;
+                conf && (cParams = fnResolveListConf(cParams, conf, fnResolveObjConf));
+                item = new obj.$ctor(cParams);
+                conf = declaration.$prop;
+                conf && (item = fnResolveListConf(item, conf, fnResolveObjConf));
                 return item;
-            }, fnResolveObjConf = function(declaration, fnResolveListConf, mp, ctorParams) {
-                var resolvedObj, ctorDiObj, propDiObj, ctorDiConf, propDiConf, current = declaration.$current;
-                if (current) {
-                    resolvedObj = mp[current.type];
-                    ctorDiConf = declaration.$ctor;
-                    propDiConf = declaration;
-                } else {
+            }, fnResolveObjConf = function(declaration, ctorParams) {
+                var resolvedObj, current = declaration.$current;
+                if (current) resolvedObj = map[current.type]; else {
                     current = declaration;
-                    resolvedObj = mp[current.type];
+                    resolvedObj = map[current.type];
                     if (!resolvedObj) return declaration;
-                    ctorDiConf = resolvedObj.$di.$ctor;
-                    propDiConf = resolvedObj.$di;
+                    declaration = resolvedObj.$di;
                 }
                 switch (current.instance) {
                   case "item":
-                    ctorDiConf && (ctorDiObj = fnResolveListConf(ctorDiConf, fnResolveObjConf, mp));
-                    propDiObj = fnResolveListConf(propDiConf, fnResolveObjConf, mp);
                     switch (current.lifestyle) {
                       case "transient":
-                        item = createItem(resolvedObj, ctorParams, ctorDiObj);
+                        item = createItem(declaration, resolvedObj, fnResolveObjConf, ctorParams);
                         break;
 
                       case "singleton":
-                        current.item || (current.item = createItem(resolvedObj, ctorParams, ctorDiObj));
+                        current.item || (current.item = createItem(declaration, resolvedObj, fnResolveObjConf, ctorParams));
                         item = current.item;
                         break;
 
@@ -213,19 +240,11 @@
                   default:
                     throwWrongParamsErr("resolve", type + "::$di::$current::instance");
                 }
-                propDiObj && (item = extend(item, propDiObj));
                 return item;
-            }, fnResolveListConf = function(objDeclaration, fnResolveObjConf, mp) {
-                var prop, propValue, result = {};
-                for (prop in objDeclaration) if ("$current" !== prop && "$ctor" !== prop) {
-                    propValue = objDeclaration[prop];
-                    result[prop] = "object" == typeof propValue ? fnResolveObjConf(propValue, fnResolveListConf, mp) : propValue;
-                }
-                return result;
             };
             1 !== len && 2 !== len && throwWrongParamsErr("resolve");
             throwWrongType(mapObj, type);
-            item = fnResolveObjConf(mapObj.$di, fnResolveListConf, map, configObj);
+            item = fnResolveObjConf(mapObj.$di, configObj);
             return item;
         },
         mixin: function(mixType, definition) {
