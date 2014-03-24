@@ -368,6 +368,5 @@ define('mixinsSrc/MixSort', ['Moa'], function (Moa) {
                 return colection;
             };
         };
-    Moa.mixin('mixSort', mix);
     return mix;
 });

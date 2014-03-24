@@ -13,6 +13,5 @@ define('mixinsSrc/MixRandom', ['Moa'], function (Moa) {
                 return Math.floor((Math.random() * (max - min + 1)) + min);
             };
         };
-    Moa.mixin('mixRandom', mix);
     return mix;
 });

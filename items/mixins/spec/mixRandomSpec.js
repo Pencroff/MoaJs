@@ -2,10 +2,14 @@
  * Created by Pencroff on 22.11.13.
  */
 /*global define:true, describe:true, it:true*/
-define(['Moa', 'chai', 'sinon', 'mixinsSrc/MixRandom'], function (Moa, chai, sinon) {
+define(['Moa', 'chai', 'sinon', 'mixinsSrc/MixRandom'], function (Moa, chai, sinon, mix) {
     'use strict';
     var expect = chai.expect;
     describe('Test Algorithm Mixin', function () {
+        it('Init mixin for tests', function (done) {
+            Moa.mixin('mixRandom', mix);
+            done();
+        });
         it('Test Random Mixin - getRnd', function (done) {
             var base = {
                     $mixin: {

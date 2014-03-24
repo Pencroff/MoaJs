@@ -397,6 +397,16 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(item.add()).to.equal(7);
             expect(item.sub()).to.equal(-1);
             expect(item.mul()).to.equal('a*b=12');
+            Moa.mixin('numMix', null);
+            Moa.define('base', null);
+            expect(function () {
+                // original base object was changed (delete $moa fields)
+                Moa.define('base', {
+                    $mixin: {
+                        nummix: 'numMix'
+                    }
+                });
+            }).to.throw('Mixin type numMix not found');
             done();
         });
         it('Test multiple $mixin implementation', function (done) {
@@ -493,7 +503,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             var all,
                 base = {},
                 child = {
-                    $xtend: 'base'
+                    $extend: 'typeA'
                 },
                 numMix = function () {},
                 strMix = function () {};
@@ -511,6 +521,84 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             expect(all.type.indexOf('typeB')).to.not.equal(-1);
             expect(all.mixin.indexOf('mixA')).to.not.equal(-1);
             expect(all.mixin.indexOf('mixB')).to.not.equal(-1);
+            done();
+        });
+        it('Test clear registered types / mixins', function (done) {
+            var all,
+                base = {},
+                child = {
+                    $extend: 'typeA'
+                },
+                numMix = function () {},
+                strMix = function () {};
+            Moa.mixin('mixA', numMix);
+            Moa.mixin('mixB', strMix);
+            Moa.define('typeA', base);
+            Moa.define('typeB', child);
+            all = Moa.getRegistry();
+            expect(all).to.be.an('object');
+            expect(all.type).to.be.instanceof(Array);
+            expect(all.mixin).to.be.instanceof(Array);
+            expect(all.type.length).to.not.equal(0);
+            expect(all.mixin.length).to.not.equal(0);
+            Moa.clear();
+            all = Moa.getRegistry();
+            expect(all).to.be.an('object');
+            expect(all.type).to.be.instanceof(Array);
+            expect(all.mixin).to.be.instanceof(Array);
+            expect(all.type.length).to.equal(0);
+            expect(all.mixin.length).to.equal(0);
+            done();
+        });
+        it('Test get type info', function (done) {
+            var info, Ctor, item,
+                mixinA = function () {},
+                mixinB = function () {},
+                base = {},
+                child = {
+                    $extend: 'base',
+                    $mixin: {
+                        mixA: 'mixinA',
+                        mixB: 'mixinB'
+                    },
+                    $di: {
+                        a: 'base',
+                        b: 'child'
+                    }
+                };
+            Moa.mixin('mixinA', mixinA);
+            Moa.mixin('mixinB', mixinB);
+            Moa.define('base', base);
+            Moa.define('child', child);
+            info = Moa.getTypeInfo('child');
+            expect(info).to.be.an('object');
+            expect(info.$type).to.equal('child');
+            expect(info.$basetype).to.equal('base');
+            expect(info.$mixin).to.be.an('object');
+            expect(info.$mixin.mixA).to.equal('mixinA');
+            expect(info.$mixin.mixB).to.equal('mixinB');
+            expect(info.$di).to.be.an('object');
+            expect(info.$di).to.deep.equal({
+                $current: {
+                    type: 'child',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                $prop: {
+                    a: {
+                        type: 'base',
+                        instance: 'item',
+                        lifestyle: 'transient'
+                    },
+                    b: 'child' // can not resolve the same type
+                }
+            });
+            expect(function () {
+                Moa.getTypeInfo('baseType');
+            }).to.throw('Type baseType not found');
+            Ctor = Moa.define('child');
+            item = new Ctor();
+            expect(item.getType()).to.equal('child');
             done();
         });
     });

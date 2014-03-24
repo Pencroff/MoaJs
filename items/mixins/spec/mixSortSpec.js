@@ -2,20 +2,24 @@
  * Created by Pencroff on 08.12.13.
  */
 /*global define:true, describe:true, it:true*/
-define(['Moa', 'chai', 'mixinsSrc/MixSort'], function (Moa, chai) {
+define(['Moa', 'chai', 'mixinsSrc/MixSort'], function (Moa, chai, mix) {
     'use strict';
     var expect = chai.expect;
     describe('Test Sort Mixin', function () {
         var expectArraySort = function (a) {
-            var len, i;
-            len = a.length;
-            for (i = 1; i < len; i += 1) {
-                expect(a[i] >= a[i - 1]).to.equal(true);
-            }
-        },
+                var len, i;
+                len = a.length;
+                for (i = 1; i < len; i += 1) {
+                    expect(a[i] >= a[i - 1]).to.equal(true);
+                }
+            },
             compare = function (a, b) {
                 return a - b;
             };
+        it('Init mixin for tests', function (done) {
+            Moa.mixin('mixSort', mix);
+            done();
+        });
         it('Test Swap array elements', function (done) {
             var base = {
                     $mixin: {

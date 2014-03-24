@@ -1,3 +1,8 @@
+/*********************************************
+   The MIT License (MIT)
+   Copyright (c) 2013 - 2014 Sergii Danilov
+   MoaJs - v0.1.3 - 2014-03-23
+*********************************************/
 !function() {
     Object.create || (Object.create = function() {
         function F() {}

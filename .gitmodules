@@ -1,0 +1,3 @@
+[submodule "MoaJs.wiki"]
+	path = MoaJs.wiki
+	url = git@github.com:Pencroff/MoaJs.wiki.git
