@@ -56,11 +56,11 @@
 
     var i, len = 10000000;
     for (i = 0; i < len; i += 1) {
-        a = objResolving.manualResolvingProperty();
+        a = objResolving.manualProperty();
     }
     console.dir(a);
     for (i = 0; i < len; i += 1) {
-        b = objResolving.iocResolvingProperty();
+        b = objResolving.iocProperty();
     }
     console.dir(b);
 

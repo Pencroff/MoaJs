@@ -557,7 +557,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
         it('Test property implementation', function (done) {
             var iManual, iIoc,
                 item = {
-                    manualResolvingProperty: function () {
+                    manualProperty: function () {
                         var CtorA = Moa.define('typeA'),
                             CtorB = Moa.define('typeB.2'),
                             CtorC = Moa.define('typeC'),
@@ -568,7 +568,7 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                         itemType.c = CtorC;
                         return itemType;
                     },
-                    iocResolvingProperty: function () {
+                    iocProperty: function () {
                         return Moa.resolve('Type');
                     }
                 };
@@ -599,8 +599,8 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
                     c: 'typeC'
                 }
             });
-            iManual = item.manualResolvingProperty();
-            iIoc = item.iocResolvingProperty();
+            iManual = item.manualProperty();
+            iIoc = item.iocProperty();
             expect(iManual.a.getType()).to.equal(iIoc.a.getType());
             expect(iManual.b.getType()).to.equal('typeB.2');
             expect(iIoc.b.getType()).to.equal('typeB.1');

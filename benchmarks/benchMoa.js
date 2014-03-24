@@ -23,63 +23,140 @@ requirejs.config({
     }
 });
 var Moa = requirejs('Moa'),
-    item = {
-        manualResolvingProperty: function () {
+    diTest = {
+        manualTransient: function () {
             'use strict';
-            var CtorA = Moa.define('typeA'),
-                CtorB = Moa.define('typeB.2'),
-                CtorC = Moa.define('typeC'),
-                Ctor = Moa.define('Type'),
-                itemType = new Ctor();
-            itemType.a = new CtorA();
-            itemType.b = CtorB.getInstance();
-            itemType.c = CtorC;
+            var Ctor = Moa.define('transientType');
+            return new Ctor();
+        },
+        iocTransient: function () {
+            'use strict';
+            return Moa.resolve('transientType');
+        },
+        manualSingleton: function () {
+            'use strict';
+            var Ctor = Moa.define('singletonType');
+            return Ctor.getInstance();
+        },
+        iocSingleton: function () {
+            'use strict';
+            return Moa.resolve('singletonDiType');
+        },
+        manualConstructor: function () {
+            'use strict';
+            var TransientCtor = Moa.define('transientType'),
+                Singleton = Moa.define('singletonType'),
+                conf = {
+                    transient: new TransientCtor(),
+                    single:  Singleton.getInstance()
+                },
+                Ctor = Moa.define('ctorType');
+            return new Ctor(conf);
+        },
+        iocConstractor: function () {
+            'use strict';
+            return Moa.resolve('ctorType');
+        },
+        manualProperty: function () {
+            'use strict';
+            var Transient = Moa.define('transientType'),
+                Single = Moa.define('singletonType'),
+                Constructor = Moa.define('typeCtor'),
+                CtorType = Moa.define('propType'),
+                itemType = new CtorType();
+            itemType.transient = new Transient();
+            itemType.single = Single.getInstance();
+            itemType.fnConstructor = Constructor;
             return itemType;
         },
-        iocResolvingProperty: function () {
+        iocProperty: function () {
             'use strict';
-            return Moa.resolve('Type');
+            return Moa.resolve('propType');
         }
     };
 Moa.clear();
-
-Moa.define('typeA', {});
-Moa.define('typeB.1', {
+Moa.define('transientType', {
+    $di: {
+        $current: {
+            type: 'transientType',
+            instance: 'item',
+            lifestyle: 'transient'
+        }
+    }
+});
+Moa.define('singletonDiType', {
     $di: {
         $current: {
             lifetime: 'singleton'
         }
     }
 });
-Moa.define('typeB.2', {
+Moa.define('singletonType', {
     $single: true
 });
-Moa.define('typeC', {
+Moa.define('typeCtor', {
     $di: {
         $current: {
             instance: 'ctor'
         }
     }
 });
-Moa.define('Type', {
+Moa.define('ctorType', {
+    $ctor: function (conf) {
+        this.transient = conf.transient;
+        this.single = conf.single;
+    },
     $di: {
-        a: 'typeA',
-        b: 'typeB.1',
-        c: 'typeC'
+        $ctor: {
+            transient: 'transientType',
+            single: 'singletonDiType'
+        }
     }
 });
+Moa.define('propType', {
+    $di: {
+        transient: 'transientType',
+        single: 'singletonDiType',
+        fnConstructor: 'typeCtor'
+    }
+});
+
 
 // A test suite
 module.exports = {
     name: 'DI benchmark',
     tests: {
+        'Manual transient resolving': function () {
+            'use strict';
+            var i = diTest.manualTransient();
+        },
+        'MoaJs IoC transient resolving': function () {
+            'use strict';
+            var i = diTest.iocTransient();
+        },
+        'Manual singleton resolving': function () {
+            'use strict';
+            var i = diTest.manualSingleton();
+        },
+        'MoaJs IoC singleton resolving': function () {
+            'use strict';
+            var i = diTest.iocSingleton();
+        },
+        'Manual constructor resolving': function () {
+            'use strict';
+            var i = diTest.manualConstructor();
+        },
+        'MoaJs IoC constructor resolving': function () {
+            'use strict';
+            var i = diTest.iocConstractor();
+        },
         'Manual property resolving': function () {
             'use strict';
-            var i = item.manualResolvingProperty();
+            var i = diTest.manualProperty();
         },
-        'Moa IoC resolving': function () {
+        'MoaJs IoC property resolving': function () {
             'use strict';
-            var i = item.iocResolvingProperty();
+            var i = diTest.iocProperty();
         }
     }
 };
