@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Moajs : Implementation object inheritance, static methods and properties, mixins in JavaScript" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Moajs</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Pencroff/MoaJs">View on GitHub</a>
+
+          <h1 id="project_title">Moajs</h1>
+          <h2 id="project_tagline">Implementation object inheritance, static methods and properties, mixins in JavaScript</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Pencroff/MoaJs/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Pencroff/MoaJs/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="-moajs-" class="anchor" href="#-moajs-"><span class="octicon octicon-link"></span></a><img src="https://raw.github.com/Pencroff/MoaJs/master/extras/moa-logo-web.png" alt="MoaJs" title="MoaJs"> MoaJs </h1>
+
+<p>ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration out of the box and near 2kB minified JavaScript code and 1kB gzip. You can see <strong>current</strong> version MoaJs in root and <strong>release</strong> version in <code>release</code> folder.</p>
+
+<h2>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<ul>
+<li>
+<p><strong>MoaJs API</strong></p>
+
+<ul>
+<li>
+<code>define</code> - declare new object type / get constructor by type name</li>
+<li>
+<code>mixin</code> - declare new mixin type</li>
+<li>
+<code>getType()</code> - predefined exemplar method, which return declared type name<br>
+</li>
+<li>
+<code>getRegistry()</code> - return object with arrays of types and mixins</li>
+</ul>
+<div class="highlight highlight-javascript"><pre><span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="p">[</span><span class="s1">'base'</span><span class="p">,</span> <span class="s1">'child'</span><span class="p">],</span>
+    <span class="nx">mixin</span><span class="o">:</span> <span class="p">[</span><span class="s1">'numMix'</span><span class="p">,</span> <span class="s1">'strMix'</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+<li><p><strong>Object declaration</strong></p></li>
+</ul><p>Declaration without <code>$base</code> closure</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="c1">// Moa.define($name, $object)</span>
+    <span class="c1">// $name - type name</span>
+    <span class="c1">// $object - object with declaration fields and methods</span>
+    <span class="c1">// $ctor - object constructor </span>
+    <span class="kd">var</span> <span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'baseObj'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>Declaration inheritance and <code>$base</code> closure</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="c1">// Moa.define($name, $function)</span>
+    <span class="c1">// $name - type name</span>
+    <span class="c1">// $function - function with declaration fields and methods,</span>
+    <span class="c1">//              has $base parameter, for parrent implementation</span>
+    <span class="kd">var</span> <span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'child'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$base</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// $base - containe reference to 'baseObj'</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">$extend</span><span class="o">:</span> <span class="s1">'baseObj'</span><span class="p">,</span>
+            <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span>
+                <span class="nx">$base</span><span class="p">.</span><span class="nx">$ctor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">name</span><span class="p">);</span>
+            <span class="p">},</span>
+            <span class="nx">getAge</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">age</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>Delete declaration</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">,</span> <span class="p">{});</span>     <span class="c1">// new type declaration</span>
+    <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>   <span class="c1">// delete type declaration</span>
+</pre></div>
+
+<ul>
+<li><strong><code>$base</code> closure</strong></li>
+</ul><p>Declaration</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">childItem</span><span class="p">,</span>
+        <span class="nx">base</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$base</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// $base - undefined</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+                <span class="p">},</span>
+                <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">}),</span>
+        <span class="nx">child</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'child'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$base</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// $base - reference to 'base' type</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">$extend</span><span class="o">:</span> <span class="s1">'base'</span><span class="p">,</span>
+                <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span>
+                    <span class="nx">$base</span><span class="p">.</span><span class="nx">$ctor</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">name</span><span class="p">);</span>
+                <span class="p">},</span>
+                <span class="c1">// override base implementation</span>
+                <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="s1">'Child: '</span> <span class="o">+</span> <span class="nx">$base</span><span class="p">.</span><span class="nx">getName</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                <span class="p">},</span>
+                <span class="nx">getAge</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">age</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">});</span>
+</pre></div>
+
+<p>Using</p>
+
+<pre><code>    childItem = new child('Pet', 7);
+    childItem.getName(); // 'Child: Pet'
+    childItem.getAge();  // 7
+</code></pre>
+
+<ul>
+<li><strong>Mixins</strong></li>
+</ul><p>Declaration mixins</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">BaseConstructor</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span>
+        <span class="nx">numMix</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span><span class="p">);</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+        <span class="nx">strMix</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+            <span class="p">};</span>
+        <span class="p">},</span>
+        <span class="nx">base</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">b</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+            <span class="p">},</span>
+            <span class="nx">$mixin</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">num</span><span class="o">:</span> <span class="s1">'numMix'</span><span class="p">,</span>
+                <span class="nx">str</span><span class="o">:</span> <span class="s1">'strMix'</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="nx">Moa</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="s1">'numMix'</span><span class="p">,</span> <span class="nx">numMix</span><span class="p">);</span>
+    <span class="c1">//Moa.mixin('numMix', null); // Delete mixin declaration</span>
+    <span class="nx">Moa</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="s1">'strMix'</span><span class="p">,</span> <span class="nx">strMix</span><span class="p">);</span>
+    <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">,</span> <span class="nx">base</span><span class="p">);</span>
+</pre></div>
+
+<p>Using mixins</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="nx">BaseConstructor</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">);</span>
+    <span class="nx">item</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BaseConstructor</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
+    <span class="nx">item</span><span class="p">.</span><span class="nx">add</span><span class="p">();</span> <span class="c1">// '1012' - last 'str' mixin override 'num' mixin</span>
+    <span class="c1">// but you already use it</span>
+    <span class="nx">item</span><span class="p">.</span><span class="nx">num</span><span class="p">.</span><span class="nx">add</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span> <span class="c1">// 22</span>
+    <span class="nx">item</span><span class="p">.</span><span class="nx">str</span><span class="p">.</span><span class="nx">add</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span> <span class="c1">// '1012' </span>
+</pre></div>
+
+<p>Delete declaration</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="nx">Moa</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="s1">'mix'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{});</span>   <span class="c1">// new mixin declaration</span>
+    <span class="nx">Moa</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="s1">'mix'</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>             <span class="c1">// delete mixin declaration</span>
+</pre></div>
+
+<ul>
+<li><strong>Static methods and mixin declaration</strong></li>
+</ul><p>Declaration</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">baseCtor</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span>
+    <span class="nx">strMix</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+    <span class="nx">base</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="p">},</span>
+        <span class="nx">$static</span><span class="o">:</span> <span class="p">{</span>
+            <span class="c1">// Also you can declare static mixins in usual way</span>
+            <span class="nx">$mixin</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">str</span><span class="o">:</span> <span class="s1">'strMix'</span>
+            <span class="p">},</span>
+            <span class="nx">getMsg</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="s1">'Static!'</span><span class="p">;</span>
+            <span class="p">},</span>
+            <span class="nx">a</span><span class="o">:</span> <span class="mi">15</span><span class="p">,</span>
+            <span class="nx">b</span><span class="o">:</span> <span class="mi">17</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="nx">Moa</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="s1">'strMix'</span><span class="p">,</span> <span class="nx">strMix</span><span class="p">);</span>
+<span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">,</span> <span class="nx">base</span><span class="p">);</span>
+</pre></div>
+
+<p>Using</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="nx">baseCtor</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'base'</span><span class="p">);</span>
+    <span class="nx">baseCtor</span><span class="p">.</span><span class="nx">getMsg</span><span class="p">();</span> <span class="c1">// 'Static!' - static method</span>
+    <span class="nx">baseCtor</span><span class="p">.</span><span class="nx">add</span><span class="p">();</span> <span class="c1">// '15' + '17' =&gt; '1517' - static mixin</span>
+    <span class="nx">Ctor</span><span class="p">.</span><span class="nx">str</span><span class="p">.</span><span class="nx">add</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">Ctor</span><span class="p">);</span> <span class="c1">// '1517'</span>
+</pre></div>
+
+<ul>
+<li><strong>Singleton</strong></li>
+</ul><p>Declaration</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">itemA</span><span class="p">,</span> <span class="nx">itemB</span><span class="p">,</span> <span class="nx">ItemC</span><span class="p">,</span>
+    <span class="nx">singeltonConstructor</span> <span class="o">=</span> <span class="nx">Moa</span><span class="p">.</span><span class="nx">define</span><span class="p">(</span><span class="s1">'singleExample'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">$single</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">$ctor</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">'Moa'</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>Using</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="c1">// Unfortunately it can not have constructor parameters</span>
+    <span class="nx">itemA</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">singeltonConstructor</span><span class="p">();</span>
+    <span class="nx">itemB</span> <span class="o">=</span> <span class="nx">singeltonConstructor</span><span class="p">();</span>
+    <span class="nx">itemC</span> <span class="o">=</span> <span class="nx">singeltonConstructor</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">();</span>
+    <span class="c1">// itemA equal itemB equal itemC</span>
+</pre></div>
+
+<h2>
+<a name="items" class="anchor" href="#items"><span class="octicon octicon-link"></span></a>Items</h2>
+
+<h3>
+<a name="mixins" class="anchor" href="#mixins"><span class="octicon octicon-link"></span></a>Mixins</h3>
+
+<ul>
+<li>
+<strong>Randomise mixin</strong>
+
+<ul>
+<li>rnd from 0 to range</li>
+<li>rnd in range min - max</li>
+</ul>
+</li>
+<li>
+<strong>Search mixin</strong>
+
+<ul>
+<li>linear search (equal, less, greater)</li>
+<li>binary search (equal, greater)</li>
+</ul>
+</li>
+<li>
+<strong>Sort mixin</strong>
+
+<ul>
+<li>swap elements</li>
+<li>qsort</li>
+<li>comb sort</li>
+<li>gnome sort</li>
+<li>shaker sort</li>
+<li>insert sort</li>
+<li>binary insert sort</li>
+<li>merge sort</li>
+<li>hybrid merge sort with insert sort</li>
+<li>one array merge sort</li>
+<li>selection sort</li>
+</ul>
+</li>
+<li>
+<p><strong>Throw Error mixin</strong></p>
+
+<p><em>Generate error if not right condition</em></p>
+
+<ul>
+<li>undefined error</li>
+<li>indexOf error</li>
+<li>notInRange error</li>
+<li>notInstanceOf error</li>
+<li>notObj error</li>
+<li>notFn error</li>
+<li>notStr error</li>
+<li>notEqual error</li>
+</ul>
+</li>
+</ul><h2>
+<a name="changelog" class="anchor" href="#changelog"><span class="octicon octicon-link"></span></a>Changelog</h2>
+
+<p>MoaJs v0.1.3 - in process</p>
+
+<ul>
+<li>IoC implementation</li>
+<li>delete mixins <code>Moa.mixixn('mix', null)</code>
+</li>
+</ul><p>MoaJs v0.1.2</p>
+
+<ul>
+<li>
+<code>getRegistry</code> - list available types and mixins</li>
+<li>Set up release process (version, minification, compression) and save result to <code>release</code> folder</li>
+</ul><p>MoaJs v0.1.1</p>
+
+<ul>
+<li>rindomise mixin</li>
+<li>search mixin</li>
+<li>sort mixin</li>
+<li>throw error mixin</li>
+<li>
+<a href="https://www.npmjs.org/package/grunt-benchmark">grunt-benchmark</a> for testing performance</li>
+</ul><p>MoaJs v0.1.0</p>
+
+<ul>
+<li>declare object in ExtJs syntax and get it by type name</li>
+<li>object inheritance with $extend by type name</li>
+<li>using $base closure for executin parent constructor or methods</li>
+<li>static methods</li>
+<li>simple 'singleton' declaration</li>
+<li>mixins</li>
+<li>static mixins</li>
+<li>support client side (AMD / direct reference)</li>
+<li>support CommonJs declaration</li>
+</ul><h2>
+<a name="performance" class="anchor" href="#performance"><span class="octicon octicon-link"></span></a>Performance</h2>
+
+<p><a href="http://jsperf.com/moo-resig-ender-my/31">Link to jsperf.com</a></p>
+
+<h2>
+<a name="sources-of-inspirations" class="anchor" href="#sources-of-inspirations"><span class="octicon octicon-link"></span></a>Sources of inspirations</h2>
+
+<ul>
+<li><a href="http://webreflection.blogspot.ie/2010/02/javascript-override-patterns.html" title="JavaScript Override Patterns">JavaScript Override Patterns</a></li>
+<li><a href="http://jiem.github.io/my-class/" title="my.class.js">my.class.js</a></li>
+<li><a href="https://github.com/tekool/objs/" title="Objs">Objs</a></li>
+<li><a href="http://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/" title="A fresh look at JavaScript Mixins">A fresh look at JavaScript Mixins</a></li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright © 2013-2014 Sergii Danilov, <a href="http://pencroff.com" title="pencroff.com">pencroff.com</a></p>
+
+<p>MoaJs may be freely distributed under the MIT license.</p>
+
+<hr><p><strong>Feel free to contact me should you require any futher information.</strong></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Moajs maintained by <a href="https://github.com/Pencroff">Pencroff</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
