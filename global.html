@@ -37,24 +37,14 @@
 				</li>
 				
 				<li class="dropdown">
-					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
 						class="caret"></b></a>
 
 					<ul class="dropdown-menu ">
 						
 						<li>
-							<a href="Moa.html">Moa</a>
+							<a href="global.html#clear">clear</a>
 						</li>
-						
-
-					</ul>
-				</li>
-				
-				<li class="dropdown">
-					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
-						class="caret"></b></a>
-
-					<ul class="dropdown-menu ">
 						
 						<li>
 							<a href="global.html#define">define</a>
@@ -65,7 +55,15 @@
 						</li>
 						
 						<li>
+							<a href="global.html#getTypeInfo">getTypeInfo</a>
+						</li>
+						
+						<li>
 							<a href="global.html#mixin">mixin</a>
+						</li>
+						
+						<li>
+							<a href="global.html#resolve">resolve</a>
 						</li>
 						
 
@@ -154,6 +152,75 @@
         <dl>
             
 <dt>
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Clear all defined types and mixins</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-223">line 223</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="define"><span class="type-signature"></span>define<span class="signature">(type, definition)</span><span class="type-signature"> &rarr; {function}</span></h4>
     
     
@@ -212,7 +279,7 @@
 
             
 
-            <td class="description last"><p>name of object type</p></td>
+            <td class="description last"><p>name of type</p></td>
         </tr>
 
 	
@@ -225,7 +292,7 @@
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">object</span>
 |
 
 <span class="param-type">function</span>
@@ -238,7 +305,8 @@
 
             
 
-            <td class="description last"><p>implementation of behavior for current type of object. If it is null - delete declared object</p></td>
+            <td class="description last"><p>implementation of behavior for current type of object.
+If it is null - delete declared object</p></td>
         </tr>
 
 	
@@ -270,7 +338,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-240">line 240</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-237">line 237</a>
     </li></ul></dd>
     
 
@@ -321,7 +389,7 @@
         
             
 <dt>
-    <h4 class="name" id="getRegistry"><span class="type-signature"></span>getRegistry<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getRegistry"><span class="type-signature"></span>getRegistry<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -329,7 +397,7 @@
     
     
     <div class="description">
-        <p>Return object with lists of types and mixins</p>
+        <p>Get all available types and mixins</p>
     </div>
     
 
@@ -362,7 +430,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-391">line 391</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-469">line 469</a>
     </li></ul></dd>
     
 
@@ -383,7 +451,184 @@
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>object with arrays declared types and mixins</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">object</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{  type: ['type1', 'type2', ...],  mixin: ['mixin1', 'mixin2', ...]}</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getTypeInfo"><span class="type-signature"></span>getTypeInfo<span class="signature">(type)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get internal information about type</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>name of type</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-492">line 492</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>object with information about type,
+base type, applied mixins and configuration for dependency injection</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">object</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{     $type: 'child',     $basetype: 'base',     $mixin: {         mixA: 'mixinA',         mixB: 'mixinB'     },     $di: {         $current: {             type: 'child',             instance: 'item',             lifestyle: 'transient'         },         $prop: {             a: {                 type: 'base',                 instance: 'item',                 lifestyle: 'transient'             },             b: 'child'         }     } }</pre>
+
+
     
 </dd>
 
@@ -398,7 +643,7 @@
     
     
     <div class="description">
-        <p>Declare new mixin type</p>
+        <p>Declare new mixin</p>
     </div>
     
 
@@ -471,7 +716,8 @@
 
             
 
-            <td class="description last"><p>implementation of behavior for mixin.</p></td>
+            <td class="description last"><p>implementation of behavior for mixin.
+If it is null - delete declared mixin</p></td>
         </tr>
 
 	
@@ -503,7 +749,118 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-375">line 375</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-377">line 377</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    <ul>
+            <li>
+
+    <div class="param-desc">
+    
+        Wrong parameter definition in mixin
+    
+    </div>
+
+</li>
+        
+            <li>
+
+    <div class="param-desc">
+    
+        Mixin type SOMEMIXIN not found
+    
+    </div>
+
+</li>
+        </ul>
+    
+    
+    
+    
+        <h5>Examples</h5>
+        
+        <p class="code-caption"><div class="well well-small">Declaration</div></p>
+    
+    <pre class="sunlight-highlight-javascript">var numMix = function () {     this.add = function () {         return (this.a + this.b);     };     this.sub = function () {        return (this.a - this.b);     };     this.mul = function () {         return (this.a * this.b);     }; }; Moa.mixin('numMix', numMix); </pre>
+
+        <p class="code-caption"><div class="well well-small">Using</div></p>
+    
+    <pre class="sunlight-highlight-javascript"> var item, Ctor,     base = {     $ctor: function (a, b) {         this.a = a;         this.b = b;     },     $mixin: {         nummix: 'numMix'     },     mul: function () {         return 'a*b=' + this.nummix.mul.call(this);     } }; Ctor = Moa.define('base', base); item = new Ctor(3, 4); item.add(); // 7 item.mul(); // 'a*b=12' </pre>
+
+        <p class="code-caption"><div class="well well-small">Multiple mixins example</div></p>
+    
+    <pre class="sunlight-highlight-javascript"> var Ctor, item,     base = {         $ctor: function (a, b) {             this.a = a;             this.b = b;         },         $mixin: {             num: 'numMix',             str: 'strMix'         }     },     numMix = function () {         this.add = function () {             return (this.a + this.b);         };     },     strMix = function () {         this.add = function () {             return (this.a.toString() + this.b.toString());         };     }; Moa.mixin('numMix', numMix); Moa.mixin('strMix', strMix); Ctor = Moa.define('base', base); item = new Ctor(10, 12); item.add(); // '1012' item.num.add.call(item); // 22 item.str.add.call(item); //'1012' </pre>
+
+        <p class="code-caption"><div class="well well-small">Static mixin declaration</div></p>
+    
+    <pre class="sunlight-highlight-javascript"> var base = {     $mixin: {         num: 'numMix'     },     $static: {         $mixin: {             str: 'strMix'         }     } }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Resolve new instance of type with field and constructor injection</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-289">line 289</a>
     </li></ul></dd>
     
 
@@ -554,7 +911,7 @@
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Fri Apr 04 2014 16:53:51 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Sat Apr 05 2014 23:18:59 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
