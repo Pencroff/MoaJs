@@ -7,8 +7,13 @@
  */
 /*global define:true, module:true*/
 /**
- Prototype inheritance and extensions in JavaScript
- @module Moa
+ * @module Moa
+ *
+ * @desc MoaJs micro library for easiest implementation of prototype inheritance,
+ * closure for base prototype, mixins, static methods and mixins,
+ * simple declaration for singleton behavior of type in JavaScript.
+ * MoaJs contains IoC container for resolving declared types as
+ * field or constructor injection to instance
  */
 (function () {
     "use strict";
@@ -39,15 +44,6 @@
                 target.toString = source.toString;
                 target.valueOf = source.valueOf;
                 target.toLocaleString = source.toLocaleString;
-            }
-            return target;
-        },
-        fastExtend = function (target, source) {
-            var prop;
-            if (source) {
-                for (prop in source) {
-                    target[prop] = source[prop];
-                }
             }
             return target;
         },
@@ -223,10 +219,11 @@
             }
             return diConfiguration;
         },
-        /**
-         @class Moa
-        */
         Moa = {
+            /**
+             * Clear all defined types and mixins
+             * @method clear
+             */
             clear: function () {
                 var clearObj = function (obj) {
                     var prop;
@@ -240,8 +237,9 @@
             /**
              * Define new or inherited type
              * @method define
-             * @param type {string} name of object type
-             * @param definition {(Object|function)} implementation of behavior for current type of object. If it is null - delete declared object
+             * @param {string} type - name of type
+             * @param {(object|function)} definition - implementation of behavior for current type of object.
+             * If it is null - delete declared object
              * @return {function} constructor of defined object type
              */
             define: function (type, definition) {
@@ -288,6 +286,10 @@
                 }
                 return mapObj.$ctor;
             },
+            /**
+             * Resolve new instance of type with field and constructor injection
+             * @method resolve
+             */
             resolve: function (type, configObj) {
                 var item,
                     //depthRecursion = 64, cntRecursion = 0,
@@ -373,10 +375,86 @@
                 return item;
             },
             /**
-             * Declare new mixin type
+             * Declare new mixin
              * @method mixin
-             * @param mixType {string} name of mixin type
-             * @param definition {Function} implementation of behavior for mixin.
+             * @param {string} mixType - name of mixin type
+             * @param {function} definition - implementation of behavior for mixin.
+             * If it is null - delete declared mixin
+             *
+             * @throws Wrong parameter definition in mixin
+             * @throws Mixin type SOMEMIXIN not found
+             *
+             * @example <caption>Declaration</caption>
+             * var numMix = function () {
+             *      this.add = function () {
+             *          return (this.a + this.b);
+             *      };
+             *      this.sub = function () {
+             *         return (this.a - this.b);
+             *      };
+             *      this.mul = function () {
+             *          return (this.a * this.b);
+             *      };
+             *  };
+             *  Moa.mixin('numMix', numMix);
+             *  @example <caption>Using</caption>
+             *  var item, Ctor,
+             *      base = {
+             *      $ctor: function (a, b) {
+             *          this.a = a;
+             *          this.b = b;
+             *      },
+             *      $mixin: {
+             *          nummix: 'numMix'
+             *      },
+             *      mul: function () {
+             *          return 'a*b=' + this.nummix.mul.call(this);
+             *      }
+             *  };
+             *  Ctor = Moa.define('base', base);
+             *  item = new Ctor(3, 4);
+             *  item.add(); // 7
+             *  item.mul(); // 'a*b=12'
+             *  @example <caption>Multiple mixins example</caption>
+             *  var Ctor, item,
+             *      base = {
+             *          $ctor: function (a, b) {
+             *              this.a = a;
+             *              this.b = b;
+             *          },
+             *          $mixin: {
+             *              num: 'numMix',
+             *              str: 'strMix'
+             *          }
+             *      },
+             *      numMix = function () {
+             *          this.add = function () {
+             *              return (this.a + this.b);
+             *          };
+             *      },
+             *      strMix = function () {
+             *          this.add = function () {
+             *              return (this.a.toString() + this.b.toString());
+             *          };
+             *      };
+             *  Moa.mixin('numMix', numMix);
+             *  Moa.mixin('strMix', strMix);
+             *  Ctor = Moa.define('base', base);
+             *  item = new Ctor(10, 12);
+             *  item.add(); // '1012'
+             *  item.num.add.call(item); // 22
+             *  item.str.add.call(item); //'1012'
+             *  @example <caption>Static mixin declaration</caption>
+             *  var base = {
+             *      $mixin: {
+             *          num: 'numMix'
+             *      },
+             *      $static: {
+             *          $mixin: {
+             *              str: 'strMix'
+             *          }
+             *      }
+             *  }
              */
             mixin: function (mixType, definition) {
                 if (definition !== null) {
@@ -389,8 +467,14 @@
                 }
             },
             /**
-             * Return object with lists of types and mixins
+             * Get all available types and mixins
              * @method getRegistry
+             * @return {object} object with arrays declared types and mixins
+             * @example
+             * {
+             *   type: ['type1', 'type2', ...],
+             *   mixin: ['mixin1', 'mixin2', ...]
+             * }
              */
             getRegistry: function () {
                 var iterate = function (obj) {
@@ -405,6 +489,37 @@
                     mixin: iterate(mixins)
                 };
             },
+            /**
+             * Get internal information about type
+             * @method getTypeInfo
+             * @param {string} type - name of type
+             * @return {object} object with information about type,
+             * base type, applied mixins and configuration for dependency injection
+             * @example
+             * {
+             *      $type: 'child',
+             *      $basetype: 'base',
+             *      $mixin: {
+             *          mixA: 'mixinA',
+             *          mixB: 'mixinB'
+             *      },
+             *      $di: {
+             *          $current: {
+             *              type: 'child',
+             *              instance: 'item',
+             *              lifestyle: 'transient'
+             *          },
+             *          $prop: {
+             *              a: {
+             *                  type: 'base',
+             *                  instance: 'item',
+             *                  lifestyle: 'transient'
+             *              },
+             *              b: 'child'
+             *          }
+             *      }
+             *  }
+             */
             getTypeInfo: function (type) {
                 var result,
                     mapObj = map[type];
