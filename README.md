@@ -89,6 +89,7 @@ MoaJs v0.1.0
 ## Performance ##
 
 [Link to jsperf.com](http://jsperf.com/moo-resig-ender-my/31)
+
 [Performance IoC](http://jsperf.com/moajs-ioc)
 
 ## Sources of inspirations ##
