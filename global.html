@@ -15,7 +15,11 @@
 	
 </head>
 
+<<<<<<< gh-pages
 <body>
+=======
+<body style = "padding-top: 40px;">
+>>>>>>> local
 <div class="container-fluid">
 	<div class="navbar navbar-fixed-top ">
 		<div class="navbar-inner">
@@ -300,10 +304,17 @@
             <td class="type">
             
                 
+<<<<<<< gh-pages
 <span class="param-type">object</span>
 |
 
 <span class="param-type">function</span>
+=======
+<span class="param-type"><a href="global.html#DeclarationConf">DeclarationConf</a></span>
+|
+
+<span class="param-type"><a href="global.html#DeclarationFn">DeclarationFn</a></span>
+>>>>>>> local
 
 
             
@@ -323,7 +334,11 @@
 
             
 
+<<<<<<< gh-pages
             <td class="description last"><p>implementation of behavior for current type of object.
+=======
+            <td class="description last"><p>see <a href="global.html#DeclarationConf">DeclarationConf</a> or <a href="global.html#DeclarationFn">DeclarationFn</a>.
+>>>>>>> local
 If it is null - delete declared object</p></td>
         </tr>
 
@@ -356,7 +371,11 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-237">line 237</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-239">line 239</a>
+>>>>>>> local
     </li></ul></dd>
     
 
@@ -402,6 +421,49 @@ If it is null - delete declared object</p></td>
         
     
     
+<<<<<<< gh-pages
+=======
+        <h5>Examples</h5>
+        
+        <p class="code-caption">Declaration without <code>$base</code> closure</p>
+    
+    <pre class="sunlight-highlight-javascript">var constructor = Moa.define('baseObj', {     $ctor: function (name) {             this.name = name;         },     getName: function() {         return this.name;     } });</pre>
+
+        <p class="code-caption">Declaration inheritance and <code>$base</code> closure</p>
+    
+    <pre class="sunlight-highlight-javascript">var constructor = Moa.define('child', function ($base) {    // $base - containe reference to prototype of 'baseObj'    return {        $extend: 'baseObj',        $ctor: function (name, age) {            this.age = age;            $base.$ctor.call(this, name);        },        getAge: function () {            return this.age;        }    };});</pre>
+
+        <p class="code-caption">Delete type declaration</p>
+    
+    <pre class="sunlight-highlight-javascript">Moa.define('base', {});     // new type declarationMoa.define('base', null);   // delete type declaration</pre>
+
+        <p class="code-caption">Declaration <code>$base</code> closure</p>
+    
+    <pre class="sunlight-highlight-javascript">var childItem,    base = Moa.define('base', function ($base) {       // $base - undefined       return {           $ctor: function (name) {               this.name = name;           },           getName: function() {               return this.name;           }       };    }),    child = Moa.define('child', function ($base) {       // $base - reference to 'base' type       return {           $extend: 'base',           $ctor: function (name, age) {               this.age = age;               $base.$ctor.call(this, name);           },           // override base implementation           getName: function() {               return 'Child: ' + $base.getName.call(this);           },           getAge: function () {               return this.age;           }       };   });</pre>
+
+        <p class="code-caption">Using instance</p>
+    
+    <pre class="sunlight-highlight-javascript">childItem = new child('Pet', 7);childItem.getName(); // 'Child: Pet'childItem.getAge();  // 7</pre>
+
+        <p class="code-caption">Declaration static methods</p>
+    
+    <pre class="sunlight-highlight-javascript">var baseCtor, item,    strMix = function () {        this.add = function () {            return (this.a.toString() + this.b.toString());        };    }    base = {        $ctor: function () {        },        $static: {            // Also you can declare static mixins in usual way            $mixin: {                str: 'strMix'            },            getMsg: function () {                return 'Static!';            },            a: 15,            b: 17        }    };Moa.mixin('strMix', strMix);Moa.define('base', base);</pre>
+
+        <p class="code-caption">Using static methods</p>
+    
+    <pre class="sunlight-highlight-javascript">baseCtor = Moa.define('base');baseCtor.getMsg(); // 'Static!' - static methodbaseCtor.add(); // '15' + '17' => '1517' - static mixinCtor.str.add.call(Ctor); // '1517'</pre>
+
+        <p class="code-caption">Declaration singleton</p>
+    
+    <pre class="sunlight-highlight-javascript">var itemA, itemB, ItemC,    singeltonConstructor = Moa.define('singleExample', {        $single: true,        $ctor: function () {            this.name = 'Moa';        },        getName: function () {            return this.name;        }    })</pre>
+
+        <p class="code-caption">Using singleton</p>
+    
+    <pre class="sunlight-highlight-javascript">// Unfortunately it can not have constructor parametersitemA = new singeltonConstructor();itemB = singeltonConstructor();itemC = singeltonConstructor.getInstance();// itemA equal itemB equal itemC</pre>
+
+
+    
+>>>>>>> local
 </dd>
 
         
@@ -448,7 +510,11 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-490">line 490</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-656">line 656</a>
+>>>>>>> local
     </li></ul></dd>
     
 
@@ -595,7 +661,11 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-513">line 513</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-679">line 679</a>
+>>>>>>> local
     </li></ul></dd>
     
 
@@ -661,7 +731,11 @@ base type, applied mixins and configuration for dependency injection</p>
     
     
     <div class="description">
+<<<<<<< gh-pages
         <p>Declare new mixin</p>
+=======
+        <p>Declare mixin</p>
+>>>>>>> local
     </div>
     
 
@@ -767,7 +841,11 @@ If it is null - delete declared mixin</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-398">line 398</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-557">line 557</a>
+>>>>>>> local
     </li></ul></dd>
     
 
@@ -814,6 +892,7 @@ If it is null - delete declared mixin</p></td>
     
         <h5>Examples</h5>
         
+<<<<<<< gh-pages
         <p class="code-caption"><div class="well well-small">Declaration</div></p>
     
     <pre class="sunlight-highlight-javascript">var numMix = function () {     this.add = function () {         return (this.a + this.b);     };     this.sub = function () {        return (this.a - this.b);     };     this.mul = function () {         return (this.a * this.b);     }; }; Moa.mixin('numMix', numMix); </pre>
@@ -829,6 +908,27 @@ If it is null - delete declared mixin</p></td>
         <p class="code-caption"><div class="well well-small">Static mixin declaration</div></p>
     
     <pre class="sunlight-highlight-javascript"> var base = {     $mixin: {         num: 'numMix'     },     $static: {         $mixin: {             str: 'strMix'         }     } }</pre>
+=======
+        <p class="code-caption">Declaration mixin</p>
+    
+    <pre class="sunlight-highlight-javascript">var numMix = function () {     this.add = function () {         return (this.a + this.b);     };     this.sub = function () {        return (this.a - this.b);     };     this.mul = function () {         return (this.a * this.b);     };};Moa.mixin('numMix', numMix);</pre>
+
+        <p class="code-caption">Using mixin</p>
+    
+    <pre class="sunlight-highlight-javascript">var item, Ctor,    base = {    $ctor: function (a, b) {        this.a = a;        this.b = b;    },    $mixin: {        nummix: 'numMix'    },    mul: function () {        return 'a*b=' + this.nummix.mul.call(this);    }};Ctor = Moa.define('base', base);item = new Ctor(3, 4);item.add(); // 7item.mul(); // 'a*b=12'</pre>
+
+        <p class="code-caption">Multiple mixins example</p>
+    
+    <pre class="sunlight-highlight-javascript">var Ctor, item,    base = {        $ctor: function (a, b) {            this.a = a;            this.b = b;        },        $mixin: {            num: 'numMix',            str: 'strMix'        }    },    numMix = function () {        this.add = function () {            return (this.a + this.b);        };    },    strMix = function () {        this.add = function () {            return (this.a.toString() + this.b.toString());        };    };Moa.mixin('numMix', numMix);Moa.mixin('strMix', strMix);Ctor = Moa.define('base', base);item = new Ctor(10, 12);item.add(); // '1012'item.num.add.call(item); // 22item.str.add.call(item); //'1012'</pre>
+
+        <p class="code-caption">Delete mixin declaration</p>
+    
+    <pre class="sunlight-highlight-javascript">Moa.mixin('mix', function () {});    // new mixin declarationMoa.mixin('mix', null);    // delete mixin declaration</pre>
+
+        <p class="code-caption">Static mixin declaration</p>
+    
+    <pre class="sunlight-highlight-javascript">var base = {    $mixin: {        num: 'numMix'    },    $static: {        $mixin: {            str: 'strMix'        }    }}</pre>
+>>>>>>> local
 
 
     
@@ -971,7 +1071,11 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-293">line 293</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-422">line 422</a>
+>>>>>>> local
     </li></ul></dd>
     
 
@@ -1028,6 +1132,456 @@ Resolving logic based on $di configuration of type declaration.</p>
         <dl>
                 
 <dt>
+<<<<<<< gh-pages
+    <h4 class="name" id="DiConf">DiConf</h4>
+=======
+    <h4 class="name" id="DeclarationConf">DeclarationConf</h4>
+>>>>>>> local
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+<<<<<<< gh-pages
+        <p>Configuration of dependency injection. Used as $di parameter in type declaration.</p>
+=======
+        <p>Declaration configuration for type</p>
+>>>>>>> local
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+        <h5 class="subsection-title">Properties:</h5>
+
+        <dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+<<<<<<< gh-pages
+=======
+		<th>Argument</th>
+		
+>>>>>>> local
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+<<<<<<< gh-pages
+                <td class="name"><code>$current</code></td>
+=======
+                <td class="name"><code>$ctor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>constructor of type</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$extend</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>inheritable type name</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$di</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#DiConf">DiConf</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>configuration for IoC container</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$mixin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>literal with mixins declaration</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$static</code></td>
+>>>>>>> local
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+<<<<<<< gh-pages
+
+            
+
+            <td class="description last"><p>Set default injection behavior for declared type</p></td>
+=======
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>literal with properties and function that applied to constructor</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$single</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>setup type as singleton</p></td>
+>>>>>>> local
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-291">line 291</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-237">line 237</a>
+>>>>>>> local
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+</dd>
+
+            
+                
+<dt>
+<<<<<<< gh-pages
+=======
+    <h4 class="name" id="DeclarationFn"><span class="type-signature"></span>DeclarationFn<span class="signature">($base)</span><span class="type-signature"> &rarr; {<a href="global.html#DeclarationConf">DeclarationConf</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Declaration configuration for type</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>$base</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>prototype of inheritable type with $base.$ctor - constructor of inheritable type</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-238">line 238</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>object that uses $base closure for access to inheritable type implementation constructor and methods</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="global.html#DeclarationConf">DeclarationConf</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+            
+                
+<dt>
     <h4 class="name" id="DiConf">DiConf</h4>
     
     
@@ -1069,6 +1623,8 @@ Resolving logic based on $di configuration of type declaration.</p>
 		<th>Type</th>
 
 		
+		<th>Argument</th>
+		
 
 		
 
@@ -1094,10 +1650,140 @@ Resolving logic based on $di configuration of type declaration.</p>
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Set default injection behavior for declared type</p></td>
+            <td class="description last"><p>set default injection behavior for declared type</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$ctor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>literal declare types that inject to constructor</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$prop</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>literal declare types that inject to instance properties</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>$proto</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>literal declare types that inject to prototype of instance properties</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code></code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>properties that injected as instance properties. All string values try to resolve as declared types</p></td>
         </tr>
 
 	
@@ -1126,7 +1812,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-291">line 291</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-421">line 421</a>
     </li></ul></dd>
     
 
@@ -1139,11 +1825,18 @@ Resolving logic based on $di configuration of type declaration.</p>
 
     
     
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{    $ctor: {        fieldA: {            type: 'typeA',            instance: 'item',            lifestyle: 'transient'        },        field: 'typeB'   // try to resolve as 'typeB' otherwise use as a string    },    $prop: {        propA: 'typeA'   // resolved like fieldA to instance field    },    $proto: {        protoProp: {     // resolve constructor of 'typeB' to instance prototype            type: 'typeB',            instance: 'ctor' // if instance is 'item' it has lifestyle as 'singleton'        }    },    propC: {             // resolve the same instance of 'typeC' for every instance in $prop literal        type: 'typeA',        instance: 'item',        lifestyle: 'singleton'    },    prop: 2315           // copy number field to resolved instance}</pre>
+
+
+    
 </dd>
 
             
                 
 <dt>
+>>>>>>> local
     <h4 class="name" id="InjectionConf">InjectionConf</h4>
     
     
@@ -1238,7 +1931,11 @@ Not available for $current in <a href="global.html#DiConf">DiConf</a></p></td>
             
 
             <td class="description last"><p>Injected instance.
+<<<<<<< gh-pages
 Values: 'item' or 'ctor'.</p></td>
+=======
+Values: 'item' or 'ctor'. Default value: 'item'.</p></td>
+>>>>>>> local
         </tr>
 
 	
@@ -1262,7 +1959,11 @@ Values: 'item' or 'ctor'.</p></td>
             
 
             <td class="description last"><p>Life style for 'item' instance. Not used for 'ctor'.
+<<<<<<< gh-pages
 Values: 'transient' or 'singleton'</p></td>
+=======
+Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
+>>>>>>> local
         </tr>
 
 	
@@ -1291,7 +1992,11 @@ Values: 'transient' or 'singleton'</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
+<<<<<<< gh-pages
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-289">line 289</a>
+=======
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-420">line 420</a>
+>>>>>>> local
     </li></ul></dd>
     
 
@@ -1330,7 +2035,11 @@ Values: 'transient' or 'singleton'</p></td>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
+<<<<<<< gh-pages
 		on Sun Apr 06 2014 11:27:55 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+=======
+		on Mon Apr 07 2014 00:33:31 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+>>>>>>> local
 		</span>
 				</footer>
 			</div>
