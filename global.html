@@ -221,7 +221,7 @@
         
             
 <dt>
-    <h4 class="name" id="define"><span class="type-signature"></span>define<span class="signature">(type, definition)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id="define"><span class="type-signature"></span>define<span class="signature">(type, <span class="optional">definition</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
     
     
 </dt>
@@ -251,6 +251,8 @@
 		<th>Type</th>
 
 		
+		<th>Argument</th>
+		
 
 		
 
@@ -275,6 +277,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -301,6 +311,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -430,7 +450,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-469">line 469</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-490">line 490</a>
     </li></ul></dd>
     
 
@@ -577,7 +597,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-492">line 492</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-513">line 513</a>
     </li></ul></dd>
     
 
@@ -749,7 +769,7 @@ If it is null - delete declared mixin</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-377">line 377</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-398">line 398</a>
     </li></ul></dd>
     
 
@@ -819,7 +839,7 @@ If it is null - delete declared mixin</p></td>
         
             
 <dt>
-    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve<span class="signature">(type, <span class="optional">paramsObj</span>)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
     
 </dt>
@@ -827,7 +847,8 @@ If it is null - delete declared mixin</p></td>
     
     
     <div class="description">
-        <p>Resolve new instance of type with field and constructor injection</p>
+        <p>Resolve new instance of type with field and constructor injection.
+Resolving logic based on $di configuration of type declaration.</p>
     </div>
     
 
@@ -836,9 +857,421 @@ If it is null - delete declared mixin</p></td>
     
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>name of type</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>paramsObj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>constructor parameter for resolved type</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
     
     
 <dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-293">line 293</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>instance of type</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">object</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        <dl>
+                
+<dt>
+    <h4 class="name" id="DiConf">DiConf</h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Configuration of dependency injection. Used as $di parameter in type declaration.</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+        <h5 class="subsection-title">Properties:</h5>
+
+        <dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>$current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Set default injection behavior for declared type</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-291">line 291</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <h4 class="name" id="InjectionConf">InjectionConf</h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Declaration of dependency injection behavior</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+        <h5 class="subsection-title">Properties:</h5>
+
+        <dl>
+
+<table class="props table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>name of type for injection.
+Not available for $current in <a href="global.html#DiConf">DiConf</a></p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>instance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Injected instance.
+Values: 'item' or 'ctor'.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>lifestyle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Life style for 'item' instance. Not used for 'ctor'.
+Values: 'transient' or 'singleton'</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+</dl>
+
     
 
     
@@ -873,21 +1306,9 @@ If it is null - delete declared mixin</p></td>
 
     
     
-
-    
-
-    
-    
-    
-    
-    
-    
-    
 </dd>
 
-        </dl>
-    
-
+            </dl>
     
 
     
@@ -911,7 +1332,7 @@ If it is null - delete declared mixin</p></td>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Sat Apr 05 2014 23:18:59 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Sun Apr 06 2014 11:08:35 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
