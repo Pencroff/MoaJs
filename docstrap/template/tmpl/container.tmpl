@@ -17,13 +17,15 @@
 <section>
 
 <header>
-    <h2><?js if (doc.ancestors && doc.ancestors.length) { ?>
-        <span class="ancestors"><?js= doc.ancestors.join('') ?></span>
+    <?js if (doc.ancestors || doc.variation) { ?>
+        <h2><?js if (doc.ancestors && doc.ancestors.length) { ?>
+            <span class="ancestors"><?js= doc.ancestors.join('') ?></span>
+        <?js } ?>
+        <?js= doc.name ?>
+        <?js if (doc.variation) { ?>
+            <sup class="variation"><?js= doc.variation ?></sup>
+        <?js } ?></h2>
     <?js } ?>
-    <?js= doc.name ?>
-    <?js if (doc.variation) { ?>
-        <sup class="variation"><?js= doc.variation ?></sup>
-    <?js } ?></h2>
     <?js if (doc.classdesc) { ?>
         <div class="class-description"><?js= doc.classdesc ?></div>
     <?js } ?>
