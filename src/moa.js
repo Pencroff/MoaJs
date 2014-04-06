@@ -238,7 +238,7 @@
              * Define new or inherited type
              * @method define
              * @param {string} type - name of type
-             * @param {(object|function)} definition - implementation of behavior for current type of object.
+             * @param {(object|function)} [definition] - implementation of behavior for current type of object.
              * If it is null - delete declared object
              * @return {function} constructor of defined object type
              */
@@ -287,10 +287,31 @@
                 return mapObj.$ctor;
             },
             /**
-             * Resolve new instance of type with field and constructor injection
-             * @method resolve
+             * Declaration of dependency injection behavior
+             * @typedef {object} InjectionConf
+             * @property {string} type - name of type for injection.
+             * Not available for $current in {@link DiConf}
+             * @property {string} instance - Injected instance.
+             * Values: 'item' or 'ctor'.
+             * @property {string} lifestyle - Life style for 'item' instance. Not used for 'ctor'.
+             * Values: 'transient' or 'singleton'
              */
-            resolve: function (type, configObj) {
+
+            /**
+             * Configuration of dependency injection. Used as $di parameter in type declaration.
+             * @typedef {object} DiConf
+             * @property {object} $current - Set default injection behavior for declared type
+             */
+
+            /**
+             * Resolve new instance of type with field and constructor injection.
+             * Resolving logic based on $di configuration of type declaration.
+             * @method resolve
+             * @param {string} type - name of type
+             * @param {object} [paramsObj] - constructor parameter for resolved type
+             * @return {object} instance of type
+             */
+            resolve: function (type, paramsObj) {
                 var item,
                     //depthRecursion = 64, cntRecursion = 0,
                     mapObj = map[type],
@@ -371,7 +392,7 @@
                     throwWrongParamsErr('resolve');
                 }
                 throwWrongType(mapObj, type);
-                item = fnResolveObjConf(mapObj.$di, configObj);
+                item = fnResolveObjConf(mapObj.$di, paramsObj);
                 return item;
             },
             /**
