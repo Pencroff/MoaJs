@@ -235,12 +235,143 @@
                 clearObj(mixins);
             },
             /**
+             * Declaration configuration for type
+             * @typedef {object} DeclarationConf
+             * @property {function} [$ctor] - constructor of type
+             * @property {string} [$extend] - inheritable type name
+             * @property {DiConf} [$di] - configuration for IoC container
+             * @property {object} [$mixin] - literal with mixins declaration
+             * @property {object} [$static] - literal with properties and function that applied to constructor
+             * @property {boolean} [$single] - setup type as singleton
+             */
+            /**
+             * Declaration configuration for type
+             * @typedef {function} DeclarationFn
+             * @param {object} $base - prototype of inheritable type with $base.$ctor - constructor of inheritable type
+             * @return {DeclarationConf} object that uses $base closure for access to inheritable type implementation constructor and methods
+             */
+            /**
              * Define new or inherited type
              * @method define
              * @param {string} type - name of type
-             * @param {(object|function)} [definition] - implementation of behavior for current type of object.
+             * @param {(DeclarationConf|DeclarationFn)} [definition] - see {@link DeclarationConf} or {@link DeclarationFn}.
              * If it is null - delete declared object
              * @return {function} constructor of defined object type
+             *
+             * @example <caption>Declaration without <code>$base</code> closure</caption>
+             * var constructor = Moa.define('baseObj', {
+             *      $ctor: function (name) {
+             *              this.name = name;
+             *          },
+             *      getName: function() {
+             *          return this.name;
+             *      }
+             *  });
+             *
+             * @example <caption>Declaration inheritance and <code>$base</code> closure</caption>
+             * var constructor = Moa.define('child', function ($base) {
+             *     // $base - containe reference to prototype of 'baseObj'
+             *     return {
+             *         $extend: 'baseObj',
+             *         $ctor: function (name, age) {
+             *             this.age = age;
+             *             $base.$ctor.call(this, name);
+             *         },
+             *         getAge: function () {
+             *             return this.age;
+             *         }
+             *     };
+             * });
+             *
+             * @example <caption>Delete type declaration</caption>
+             * Moa.define('base', {});     // new type declaration
+             * Moa.define('base', null);   // delete type declaration
+             *
+             * @example <caption>Declaration <code>$base</code> closure</caption>
+             * var childItem,
+             *     base = Moa.define('base', function ($base) {
+             *        // $base - undefined
+             *        return {
+             *            $ctor: function (name) {
+             *                this.name = name;
+             *            },
+             *            getName: function() {
+             *                return this.name;
+             *            }
+             *        };
+             *     }),
+             *     child = Moa.define('child', function ($base) {
+             *        // $base - reference to 'base' type
+             *        return {
+             *            $extend: 'base',
+             *            $ctor: function (name, age) {
+             *                this.age = age;
+             *                $base.$ctor.call(this, name);
+             *            },
+             *            // override base implementation
+             *            getName: function() {
+             *                return 'Child: ' + $base.getName.call(this);
+             *            },
+             *            getAge: function () {
+             *                return this.age;
+             *            }
+             *        };
+             *    });
+             *
+             * @example <caption>Using instance</caption>
+             * childItem = new child('Pet', 7);
+             * childItem.getName(); // 'Child: Pet'
+             * childItem.getAge();  // 7
+             *
+             * @example <caption>Declaration static methods</caption>
+             * var baseCtor, item,
+             *     strMix = function () {
+             *         this.add = function () {
+             *             return (this.a.toString() + this.b.toString());
+             *         };
+             *     }
+             *     base = {
+             *         $ctor: function () {
+             *         },
+             *         $static: {
+             *             // Also you can declare static mixins in usual way
+             *             $mixin: {
+             *                 str: 'strMix'
+             *             },
+             *             getMsg: function () {
+             *                 return 'Static!';
+             *             },
+             *             a: 15,
+             *             b: 17
+             *         }
+             *     };
+             * Moa.mixin('strMix', strMix);
+             * Moa.define('base', base);
+             *
+             * @example <caption>Using static methods</caption>
+             * baseCtor = Moa.define('base');
+             * baseCtor.getMsg(); // 'Static!' - static method
+             * baseCtor.add(); // '15' + '17' => '1517' - static mixin
+             * Ctor.str.add.call(Ctor); // '1517'
+             *
+             * @example <caption>Declaration singleton</caption>
+             * var itemA, itemB, ItemC,
+             *     singeltonConstructor = Moa.define('singleExample', {
+             *         $single: true,
+             *         $ctor: function () {
+             *             this.name = 'Moa';
+             *         },
+             *         getName: function () {
+             *             return this.name;
+             *         }
+             *     })
+             *
+             * @example <caption>Using singleton</caption>
+             * // Unfortunately it can not have constructor parameters
+             * itemA = new singeltonConstructor();
+             * itemB = singeltonConstructor();
+             * itemC = singeltonConstructor.getInstance();
+             * // itemA equal itemB equal itemC
              */
             define: function (type, definition) {
                 var mapObj, baseType, base,
@@ -292,17 +423,45 @@
              * @property {string} type - name of type for injection.
              * Not available for $current in {@link DiConf}
              * @property {string} instance - Injected instance.
-             * Values: 'item' or 'ctor'.
+             * Values: 'item' or 'ctor'. Default value: 'item'.
              * @property {string} lifestyle - Life style for 'item' instance. Not used for 'ctor'.
-             * Values: 'transient' or 'singleton'
+             * Values: 'transient' or 'singleton'. Default value: 'transient'.
              */
-
             /**
              * Configuration of dependency injection. Used as $di parameter in type declaration.
              * @typedef {object} DiConf
-             * @property {object} $current - Set default injection behavior for declared type
+             * @property {object} [$current] - set default injection behavior for declared type
+             * @property {object} [$ctor] - literal declare types that inject to constructor
+             * @property {object} [$prop] - literal declare types that inject to instance properties
+             * @property {object} [$proto] - literal declare types that inject to prototype of instance properties
+             * @property {*} - properties that injected as instance properties. All string values try to resolve as declared types
+             * @example
+             * {
+             *     $ctor: {
+             *         fieldA: {
+             *             type: 'typeA',
+             *             instance: 'item',
+             *             lifestyle: 'transient'
+             *         },
+             *         field: 'typeB'   // try to resolve as 'typeB' otherwise use as a string
+             *     },
+             *     $prop: {
+             *         propA: 'typeA'   // resolved like fieldA to instance field
+             *     },
+             *     $proto: {
+             *         protoProp: {     // resolve constructor of 'typeB' to instance prototype
+             *             type: 'typeB',
+             *             instance: 'ctor' // if instance is 'item' it has lifestyle as 'singleton'
+             *         }
+             *     },
+             *     propC: {             // resolve the same instance of 'typeC' for every instance in $prop literal
+             *         type: 'typeA',
+             *         instance: 'item',
+             *         lifestyle: 'singleton'
+             *     },
+             *     prop: 2315           // copy number field to resolved instance
+             * }
              */
-
             /**
              * Resolve new instance of type with field and constructor injection.
              * Resolving logic based on $di configuration of type declaration.
@@ -396,7 +555,7 @@
                 return item;
             },
             /**
-             * Declare new mixin
+             * Declare mixin
              * @method mixin
              * @param {string} mixType - name of mixin type
              * @param {function} definition - implementation of behavior for mixin.
@@ -405,7 +564,7 @@
              * @throws Wrong parameter definition in mixin
              * @throws Mixin type SOMEMIXIN not found
              *
-             * @example <caption>Declaration</caption>
+             * @example <caption>Declaration mixin</caption>
              * var numMix = function () {
              *      this.add = function () {
              *          return (this.a + this.b);
@@ -416,66 +575,73 @@
              *      this.mul = function () {
              *          return (this.a * this.b);
              *      };
-             *  };
-             *  Moa.mixin('numMix', numMix);
-             *  @example <caption>Using</caption>
-             *  var item, Ctor,
-             *      base = {
-             *      $ctor: function (a, b) {
-             *          this.a = a;
-             *          this.b = b;
-             *      },
-             *      $mixin: {
-             *          nummix: 'numMix'
-             *      },
-             *      mul: function () {
-             *          return 'a*b=' + this.nummix.mul.call(this);
-             *      }
-             *  };
-             *  Ctor = Moa.define('base', base);
-             *  item = new Ctor(3, 4);
-             *  item.add(); // 7
-             *  item.mul(); // 'a*b=12'
-             *  @example <caption>Multiple mixins example</caption>
-             *  var Ctor, item,
-             *      base = {
-             *          $ctor: function (a, b) {
-             *              this.a = a;
-             *              this.b = b;
-             *          },
-             *          $mixin: {
-             *              num: 'numMix',
-             *              str: 'strMix'
-             *          }
-             *      },
-             *      numMix = function () {
-             *          this.add = function () {
-             *              return (this.a + this.b);
-             *          };
-             *      },
-             *      strMix = function () {
-             *          this.add = function () {
-             *              return (this.a.toString() + this.b.toString());
-             *          };
-             *      };
-             *  Moa.mixin('numMix', numMix);
-             *  Moa.mixin('strMix', strMix);
-             *  Ctor = Moa.define('base', base);
-             *  item = new Ctor(10, 12);
-             *  item.add(); // '1012'
-             *  item.num.add.call(item); // 22
-             *  item.str.add.call(item); //'1012'
-             *  @example <caption>Static mixin declaration</caption>
-             *  var base = {
-             *      $mixin: {
-             *          num: 'numMix'
-             *      },
-             *      $static: {
-             *          $mixin: {
-             *              str: 'strMix'
-             *          }
-             *      }
-             *  }
+             * };
+             * Moa.mixin('numMix', numMix);
+             *
+             * @example <caption>Using mixin</caption>
+             * var item, Ctor,
+             *     base = {
+             *     $ctor: function (a, b) {
+             *         this.a = a;
+             *         this.b = b;
+             *     },
+             *     $mixin: {
+             *         nummix: 'numMix'
+             *     },
+             *     mul: function () {
+             *         return 'a*b=' + this.nummix.mul.call(this);
+             *     }
+             * };
+             * Ctor = Moa.define('base', base);
+             * item = new Ctor(3, 4);
+             * item.add(); // 7
+             * item.mul(); // 'a*b=12'
+             *
+             * @example <caption>Multiple mixins example</caption>
+             * var Ctor, item,
+             *     base = {
+             *         $ctor: function (a, b) {
+             *             this.a = a;
+             *             this.b = b;
+             *         },
+             *         $mixin: {
+             *             num: 'numMix',
+             *             str: 'strMix'
+             *         }
+             *     },
+             *     numMix = function () {
+             *         this.add = function () {
+             *             return (this.a + this.b);
+             *         };
+             *     },
+             *     strMix = function () {
+             *         this.add = function () {
+             *             return (this.a.toString() + this.b.toString());
+             *         };
+             *     };
+             * Moa.mixin('numMix', numMix);
+             * Moa.mixin('strMix', strMix);
+             * Ctor = Moa.define('base', base);
+             * item = new Ctor(10, 12);
+             * item.add(); // '1012'
+             * item.num.add.call(item); // 22
+             * item.str.add.call(item); //'1012'
+             *
+             * @example <caption>Delete mixin declaration</caption>
+             * Moa.mixin('mix', function () {});    // new mixin declaration
+             * Moa.mixin('mix', null);    // delete mixin declaration
+             *
+             * @example <caption>Static mixin declaration</caption>
+             * var base = {
+             *     $mixin: {
+             *         num: 'numMix'
+             *     },
+             *     $static: {
+             *         $mixin: {
+             *             str: 'strMix'
+             *         }
+             *     }
+             * }
              */
             mixin: function (mixType, definition) {
                 if (definition !== null) {
