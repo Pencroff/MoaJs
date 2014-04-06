@@ -15,11 +15,7 @@
 	
 </head>
 
-<<<<<<< gh-pages
-<body>
-=======
 <body style = "padding-top: 40px;">
->>>>>>> local
 <div class="container-fluid">
 	<div class="navbar navbar-fixed-top ">
 		<div class="navbar-inner">
@@ -304,17 +300,10 @@
             <td class="type">
             
                 
-<<<<<<< gh-pages
-<span class="param-type">object</span>
-|
-
-<span class="param-type">function</span>
-=======
 <span class="param-type"><a href="global.html#DeclarationConf">DeclarationConf</a></span>
 |
 
 <span class="param-type"><a href="global.html#DeclarationFn">DeclarationFn</a></span>
->>>>>>> local
 
 
             
@@ -334,11 +323,7 @@
 
             
 
-<<<<<<< gh-pages
-            <td class="description last"><p>implementation of behavior for current type of object.
-=======
             <td class="description last"><p>see <a href="global.html#DeclarationConf">DeclarationConf</a> or <a href="global.html#DeclarationFn">DeclarationFn</a>.
->>>>>>> local
 If it is null - delete declared object</p></td>
         </tr>
 
@@ -371,11 +356,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-237">line 237</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-239">line 239</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -421,8 +402,6 @@ If it is null - delete declared object</p></td>
         
     
     
-<<<<<<< gh-pages
-=======
         <h5>Examples</h5>
         
         <p class="code-caption">Declaration without <code>$base</code> closure</p>
@@ -463,7 +442,6 @@ If it is null - delete declared object</p></td>
 
 
     
->>>>>>> local
 </dd>
 
         
@@ -510,11 +488,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-490">line 490</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-656">line 656</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -661,11 +635,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-513">line 513</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-679">line 679</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -731,11 +701,7 @@ base type, applied mixins and configuration for dependency injection</p>
     
     
     <div class="description">
-<<<<<<< gh-pages
-        <p>Declare new mixin</p>
-=======
         <p>Declare mixin</p>
->>>>>>> local
     </div>
     
 
@@ -841,11 +807,7 @@ If it is null - delete declared mixin</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-398">line 398</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-557">line 557</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -892,23 +854,6 @@ If it is null - delete declared mixin</p></td>
     
         <h5>Examples</h5>
         
-<<<<<<< gh-pages
-        <p class="code-caption"><div class="well well-small">Declaration</div></p>
-    
-    <pre class="sunlight-highlight-javascript">var numMix = function () {     this.add = function () {         return (this.a + this.b);     };     this.sub = function () {        return (this.a - this.b);     };     this.mul = function () {         return (this.a * this.b);     }; }; Moa.mixin('numMix', numMix); </pre>
-
-        <p class="code-caption"><div class="well well-small">Using</div></p>
-    
-    <pre class="sunlight-highlight-javascript"> var item, Ctor,     base = {     $ctor: function (a, b) {         this.a = a;         this.b = b;     },     $mixin: {         nummix: 'numMix'     },     mul: function () {         return 'a*b=' + this.nummix.mul.call(this);     } }; Ctor = Moa.define('base', base); item = new Ctor(3, 4); item.add(); // 7 item.mul(); // 'a*b=12' </pre>
-
-        <p class="code-caption"><div class="well well-small">Multiple mixins example</div></p>
-    
-    <pre class="sunlight-highlight-javascript"> var Ctor, item,     base = {         $ctor: function (a, b) {             this.a = a;             this.b = b;         },         $mixin: {             num: 'numMix',             str: 'strMix'         }     },     numMix = function () {         this.add = function () {             return (this.a + this.b);         };     },     strMix = function () {         this.add = function () {             return (this.a.toString() + this.b.toString());         };     }; Moa.mixin('numMix', numMix); Moa.mixin('strMix', strMix); Ctor = Moa.define('base', base); item = new Ctor(10, 12); item.add(); // '1012' item.num.add.call(item); // 22 item.str.add.call(item); //'1012' </pre>
-
-        <p class="code-caption"><div class="well well-small">Static mixin declaration</div></p>
-    
-    <pre class="sunlight-highlight-javascript"> var base = {     $mixin: {         num: 'numMix'     },     $static: {         $mixin: {             str: 'strMix'         }     } }</pre>
-=======
         <p class="code-caption">Declaration mixin</p>
     
     <pre class="sunlight-highlight-javascript">var numMix = function () {     this.add = function () {         return (this.a + this.b);     };     this.sub = function () {        return (this.a - this.b);     };     this.mul = function () {         return (this.a * this.b);     };};Moa.mixin('numMix', numMix);</pre>
@@ -928,7 +873,6 @@ If it is null - delete declared mixin</p></td>
         <p class="code-caption">Static mixin declaration</p>
     
     <pre class="sunlight-highlight-javascript">var base = {    $mixin: {        num: 'numMix'    },    $static: {        $mixin: {            str: 'strMix'        }    }}</pre>
->>>>>>> local
 
 
     
@@ -1071,11 +1015,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-293">line 293</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-422">line 422</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -1132,22 +1072,14 @@ Resolving logic based on $di configuration of type declaration.</p>
         <dl>
                 
 <dt>
-<<<<<<< gh-pages
-    <h4 class="name" id="DiConf">DiConf</h4>
-=======
     <h4 class="name" id="DeclarationConf">DeclarationConf</h4>
->>>>>>> local
     
     
 </dt>
 <dd>
     
     <div class="description">
-<<<<<<< gh-pages
-        <p>Configuration of dependency injection. Used as $di parameter in type declaration.</p>
-=======
         <p>Declaration configuration for type</p>
->>>>>>> local
     </div>
     
     
@@ -1181,11 +1113,8 @@ Resolving logic based on $di configuration of type declaration.</p>
 		<th>Type</th>
 
 		
-<<<<<<< gh-pages
-=======
 		<th>Argument</th>
 		
->>>>>>> local
 
 		
 
@@ -1198,9 +1127,6 @@ Resolving logic based on $di configuration of type declaration.</p>
 
         <tr>
             
-<<<<<<< gh-pages
-                <td class="name"><code>$current</code></td>
-=======
                 <td class="name"><code>$ctor</code></td>
             
 
@@ -1326,7 +1252,6 @@ Resolving logic based on $di configuration of type declaration.</p>
         <tr>
             
                 <td class="name"><code>$static</code></td>
->>>>>>> local
             
 
             <td class="type">
@@ -1339,12 +1264,6 @@ Resolving logic based on $di configuration of type declaration.</p>
             </td>
 
             
-<<<<<<< gh-pages
-
-            
-
-            <td class="description last"><p>Set default injection behavior for declared type</p></td>
-=======
                 <td class="attributes">
                 
                     &lt;optional><br>
@@ -1388,7 +1307,6 @@ Resolving logic based on $di configuration of type declaration.</p>
             
 
             <td class="description last"><p>setup type as singleton</p></td>
->>>>>>> local
         </tr>
 
 	
@@ -1417,11 +1335,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-291">line 291</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-237">line 237</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -1439,8 +1353,6 @@ Resolving logic based on $di configuration of type declaration.</p>
             
                 
 <dt>
-<<<<<<< gh-pages
-=======
     <h4 class="name" id="DeclarationFn"><span class="type-signature"></span>DeclarationFn<span class="signature">($base)</span><span class="type-signature"> &rarr; {<a href="global.html#DeclarationConf">DeclarationConf</a>}</span></h4>
     
     
@@ -1836,7 +1748,6 @@ Resolving logic based on $di configuration of type declaration.</p>
             
                 
 <dt>
->>>>>>> local
     <h4 class="name" id="InjectionConf">InjectionConf</h4>
     
     
@@ -1931,11 +1842,7 @@ Not available for $current in <a href="global.html#DiConf">DiConf</a></p></td>
             
 
             <td class="description last"><p>Injected instance.
-<<<<<<< gh-pages
-Values: 'item' or 'ctor'.</p></td>
-=======
 Values: 'item' or 'ctor'. Default value: 'item'.</p></td>
->>>>>>> local
         </tr>
 
 	
@@ -1959,11 +1866,7 @@ Values: 'item' or 'ctor'. Default value: 'item'.</p></td>
             
 
             <td class="description last"><p>Life style for 'item' instance. Not used for 'ctor'.
-<<<<<<< gh-pages
-Values: 'transient' or 'singleton'</p></td>
-=======
 Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
->>>>>>> local
         </tr>
 
 	
@@ -1992,11 +1895,7 @@ Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-<<<<<<< gh-pages
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-289">line 289</a>
-=======
         <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-420">line 420</a>
->>>>>>> local
     </li></ul></dd>
     
 
@@ -2035,11 +1934,7 @@ Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-<<<<<<< gh-pages
-		on Sun Apr 06 2014 11:27:55 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
-=======
-		on Mon Apr 07 2014 00:33:31 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
->>>>>>> local
+		on Mon Apr 07 2014 00:41:50 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>

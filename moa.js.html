@@ -343,11 +343,7 @@
              * Define new or inherited type
              * @method define
              * @param {string} type - name of type
-<<<<<<< gh-pages
-             * @param {(object|function)} [definition] - implementation of behavior for current type of object.
-=======
              * @param {(DeclarationConf|DeclarationFn)} [definition] - see {@link DeclarationConf} or {@link DeclarationFn}.
->>>>>>> local
              * If it is null - delete declared object
              * @return {function} constructor of defined object type
              *
@@ -516,19 +512,6 @@
              * @property {string} type - name of type for injection.
              * Not available for $current in {@link DiConf}
              * @property {string} instance - Injected instance.
-<<<<<<< gh-pages
-             * Values: 'item' or 'ctor'.
-             * @property {string} lifestyle - Life style for 'item' instance. Not used for 'ctor'.
-             * Values: 'transient' or 'singleton'
-             */
-
-            /**
-             * Configuration of dependency injection. Used as $di parameter in type declaration.
-             * @typedef {object} DiConf
-             * @property {object} $current - Set default injection behavior for declared type
-             */
-
-=======
              * Values: 'item' or 'ctor'. Default value: 'item'.
              * @property {string} lifestyle - Life style for 'item' instance. Not used for 'ctor'.
              * Values: 'transient' or 'singleton'. Default value: 'transient'.
@@ -568,7 +551,6 @@
              *     prop: 2315           // copy number field to resolved instance
              * }
              */
->>>>>>> local
             /**
              * Resolve new instance of type with field and constructor injection.
              * Resolving logic based on $di configuration of type declaration.
@@ -662,11 +644,7 @@
                 return item;
             },
             /**
-<<<<<<< gh-pages
-             * Declare new mixin
-=======
              * Declare mixin
->>>>>>> local
              * @method mixin
              * @param {string} mixType - name of mixin type
              * @param {function} definition - implementation of behavior for mixin.
@@ -675,11 +653,7 @@
              * @throws Wrong parameter definition in mixin
              * @throws Mixin type SOMEMIXIN not found
              *
-<<<<<<< gh-pages
-             * @example &lt;caption>Declaration&lt;/caption>
-=======
              * @example &lt;caption>Declaration mixin&lt;/caption>
->>>>>>> local
              * var numMix = function () {
              *      this.add = function () {
              *          return (this.a + this.b);
@@ -690,68 +664,6 @@
              *      this.mul = function () {
              *          return (this.a * this.b);
              *      };
-<<<<<<< gh-pages
-             *  };
-             *  Moa.mixin('numMix', numMix);
-             *  @example &lt;caption>Using&lt;/caption>
-             *  var item, Ctor,
-             *      base = {
-             *      $ctor: function (a, b) {
-             *          this.a = a;
-             *          this.b = b;
-             *      },
-             *      $mixin: {
-             *          nummix: 'numMix'
-             *      },
-             *      mul: function () {
-             *          return 'a*b=' + this.nummix.mul.call(this);
-             *      }
-             *  };
-             *  Ctor = Moa.define('base', base);
-             *  item = new Ctor(3, 4);
-             *  item.add(); // 7
-             *  item.mul(); // 'a*b=12'
-             *  @example &lt;caption>Multiple mixins example&lt;/caption>
-             *  var Ctor, item,
-             *      base = {
-             *          $ctor: function (a, b) {
-             *              this.a = a;
-             *              this.b = b;
-             *          },
-             *          $mixin: {
-             *              num: 'numMix',
-             *              str: 'strMix'
-             *          }
-             *      },
-             *      numMix = function () {
-             *          this.add = function () {
-             *              return (this.a + this.b);
-             *          };
-             *      },
-             *      strMix = function () {
-             *          this.add = function () {
-             *              return (this.a.toString() + this.b.toString());
-             *          };
-             *      };
-             *  Moa.mixin('numMix', numMix);
-             *  Moa.mixin('strMix', strMix);
-             *  Ctor = Moa.define('base', base);
-             *  item = new Ctor(10, 12);
-             *  item.add(); // '1012'
-             *  item.num.add.call(item); // 22
-             *  item.str.add.call(item); //'1012'
-             *  @example &lt;caption>Static mixin declaration&lt;/caption>
-             *  var base = {
-             *      $mixin: {
-             *          num: 'numMix'
-             *      },
-             *      $static: {
-             *          $mixin: {
-             *              str: 'strMix'
-             *          }
-             *      }
-             *  }
-=======
              * };
              * Moa.mixin('numMix', numMix);
              *
@@ -819,7 +731,6 @@
              *         }
              *     }
              * }
->>>>>>> local
              */
             mixin: function (mixType, definition) {
                 if (definition !== null) {
@@ -926,11 +837,7 @@
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-<<<<<<< gh-pages
-		on Sun Apr 06 2014 11:27:55 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
-=======
-		on Mon Apr 07 2014 00:33:31 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
->>>>>>> local
+		on Mon Apr 07 2014 00:41:50 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
