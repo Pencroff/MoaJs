@@ -47,6 +47,13 @@
             }
             return target;
         },
+        fastExtend = function (target, source) {
+            var prop;
+            for (prop in source) {
+                target[prop] = source[prop];
+            }
+            return target;
+        },
         throwWrongParamsErr = function (method, param) {
             var msg = 'Wrong parameters in ' + method;
             if (param) {
@@ -172,10 +179,10 @@
                     configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
                     delete configurationValue.$current;
                     break;
-//                case '$proto':
-//                    configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
-//                    delete configurationValue.$current;
-//                    break;
+                case '$proto':
+                    configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+                    delete configurationValue.$current;
+                    break;
                 case '$prop':
                     configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
                     delete configurationValue.$current;
@@ -186,7 +193,12 @@
                     case 'string':
                         typeObj = map[configurationValue];
                         if (typeObj) {
-                            configurationValue = typeObj.$di.$current;
+                            if (owner === '$proto') {
+                                configurationValue = fastExtend({}, typeObj.$di.$current);
+                                configurationValue.lifestyle = 'singleton';
+                            } else {
+                                configurationValue = typeObj.$di.$current;
+                            }
                         }
                         break;
                     case 'object':
@@ -433,7 +445,9 @@
              * @property {object} [$current] - set default injection behavior for declared type
              * @property {object} [$ctor] - literal declare types that inject to constructor
              * @property {object} [$prop] - literal declare types that inject to instance properties
-             * @property {object} [$proto] - literal declare types that inject to prototype of instance properties
+             * @property {object} [$proto] - literal declare types that inject to prototype of instance properties.
+             * BE CAREFUL! It resolved one time after use 'resolve' method and override exist properties and methods in prototype.
+             * Resolved properties and methods available in prototype of constructor type for all places where constructor uses ('define' method for example).
              * @property {*} - properties that injected as instance properties. All string values try to resolve as declared types
              * @example
              * {
@@ -488,11 +502,19 @@
                         return target;
                     },
                     createItem = function (declaration, obj, fnResolveObjConf, cParams) {
-                        var item, conf;
+                        var item, conf, proto;
                         cParams = cParams || {};
                         conf = declaration.$ctor;
                         if (conf) {
                             cParams = fnResolveListConf(cParams, conf, fnResolveObjConf);
+                        }
+                        conf = declaration.$proto;
+                        if (conf) {
+                            if (!conf.resolved) {
+                                proto = fnResolveListConf({}, conf, fnResolveObjConf);
+                                fastExtend(obj.$ctor.prototype, proto);
+                                conf.resolved = true;
+                            }
                         }
                         item = new obj.$ctor(cParams);
                         conf = declaration.$prop;
