@@ -577,14 +577,6 @@ exports.publish = function ( taffyData, opts, tutorials ) {
 		).concat( files ),
 		indexUrl );
 
-    generate( 'search', 'Search',
-        packages.concat(
-            [
-                {kind : 'search', readme : false, longname : 'Search Page'}
-            ]
-        ).concat( files ),
-        searchUrl );
-
 	// set up the lists that we'll use to generate pages
 	var classes = taffy( members.classes );
 	var modules = taffy( members.modules );

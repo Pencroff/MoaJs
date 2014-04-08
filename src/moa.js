@@ -583,9 +583,6 @@
              * @param {function} definition - implementation of behavior for mixin.
              * If it is null - delete declared mixin
              *
-             * @throws Wrong parameter definition in mixin
-             * @throws Mixin type SOMEMIXIN not found
-             *
              * @example <caption>Declaration mixin</caption>
              * var numMix = function () {
              *      this.add = function () {

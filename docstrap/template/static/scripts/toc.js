@@ -106,10 +106,10 @@ $.fn.toc = function(options) {
     var el = $(this);
     var searchVal = '';
     var searchForm = $("<form/>", {class: "form-search quick-search"})
-      .append($("<input/>", {type: "text", class: "input-medium search-query", placeholder: "Quick Search"}))
+      .append($("<input/>", {type: "text", class: "input-block-level quick-search-query", placeholder: "Quick Search"}))
       .append($("<i/>", {class: "icon icon-search search-icon"}));
-    searchForm.css({'position': 'fixed', 'top': '45px', 'padding-right': '20px'});
-    $(".search-icon", searchForm).css({'marginLeft': '-20px', 'marginTop': '3px'});
+    searchForm.css({'position': 'fixed', 'top': '45px', 'padding-right': '20px', 'width': '29%'});
+    $(".search-icon", searchForm).css({'marginLeft': '-20px', 'marginTop': '5px'});
 
     var ul = $('<ul/>');
     headings.each(function(i, heading) {
@@ -144,7 +144,7 @@ $.fn.toc = function(options) {
     var intentTimer;
     var accumulatedTime = 0;
     //bind quick search
-    el.siblings('.quick-search').children('.search-query').bind('keyup', function(e) {
+    el.siblings('.quick-search').children('.quick-search-query').bind('keyup', function(e) {
       if (accumulatedTime < 1000) {
         window.clearTimeout(intentTimer);
       }
@@ -171,9 +171,9 @@ $.fn.toc = function(options) {
     // Make text clear icon work
     $(".search-icon").click(function(e) {
       if($(this).hasClass('icon-remove-circle')) {
-        $('.search-query').val('').trigger('keyup');
+        $('.quick-search-query').val('').trigger('keyup');
       } else {
-        $('.search-query').focus();
+        $('.quick-search-query').focus();
       }
     });
 
