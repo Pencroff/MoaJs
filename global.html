@@ -191,7 +191,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-223">line 223</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-235">line 235</a>
     </li></ul></dd>
     
 
@@ -356,7 +356,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-239">line 239</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-251">line 251</a>
     </li></ul></dd>
     
 
@@ -488,7 +488,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-656">line 656</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-675">line 675</a>
     </li></ul></dd>
     
 
@@ -635,7 +635,7 @@ If it is null - delete declared object</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-679">line 679</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-698">line 698</a>
     </li></ul></dd>
     
 
@@ -807,7 +807,7 @@ If it is null - delete declared mixin</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-557">line 557</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-579">line 579</a>
     </li></ul></dd>
     
 
@@ -826,28 +826,6 @@ If it is null - delete declared mixin</p></td>
     
     
     
-    <h5>Throws:</h5>
-    <ul>
-            <li>
-
-    <div class="param-desc">
-    
-        Wrong parameter definition in mixin
-    
-    </div>
-
-</li>
-        
-            <li>
-
-    <div class="param-desc">
-    
-        Mixin type SOMEMIXIN not found
-    
-    </div>
-
-</li>
-        </ul>
     
     
     
@@ -1015,7 +993,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-422">line 422</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-434">line 434</a>
     </li></ul></dd>
     
 
@@ -1335,7 +1313,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-237">line 237</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-249">line 249</a>
     </li></ul></dd>
     
 
@@ -1443,7 +1421,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-238">line 238</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-250">line 250</a>
     </li></ul></dd>
     
 
@@ -1666,7 +1644,9 @@ Resolving logic based on $di configuration of type declaration.</p>
 
             
 
-            <td class="description last"><p>literal declare types that inject to prototype of instance properties</p></td>
+            <td class="description last"><p>literal declare types that inject to prototype of instance properties.
+BE CAREFUL! It resolved one time after use 'resolve' method and override exist properties and methods in prototype.
+Resolved properties and methods available in prototype of constructor type for all places where constructor uses ('define' method for example).</p></td>
         </tr>
 
 	
@@ -1724,7 +1704,7 @@ Resolving logic based on $di configuration of type declaration.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-421">line 421</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-433">line 433</a>
     </li></ul></dd>
     
 
@@ -1895,7 +1875,7 @@ Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-420">line 420</a>
+        <a href="moa.js.html">D:/Projects/MoaJs/src/moa.js</a>, <a href="moa.js.html#sunlight-1-line-432">line 432</a>
     </li></ul></dd>
     
 
@@ -1934,7 +1914,7 @@ Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Mon Apr 07 2014 00:46:41 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on Tue Apr 08 2014 23:41:02 GMT+0100 (IST) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
@@ -1979,6 +1959,33 @@ Values: 'transient' or 'singleton'. Default value: 'transient'.</p></td>
 	</script>
 
 	
-
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+var yaParams = {repository: 'MoaJs'/*Здесь параметры визита*/};
+</script>
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter24577586 = new Ya.Metrika({id:24577586,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,params:window.yaParams||{ }});
+        } catch(e) { }
+    });
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/24577586" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </body>
 </html>
