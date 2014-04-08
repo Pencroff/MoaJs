@@ -16,6 +16,10 @@
             target.toLocaleString = source.toLocaleString;
         }
         return target;
+    }, fastExtend = function(target, source) {
+        var prop;
+        for (prop in source) target[prop] = source[prop];
+        return target;
     }, throwWrongParamsErr = function(method, param) {
         var msg = "Wrong parameters in " + method;
         param && (msg = "Wrong parameter " + param + " in " + method);
@@ -110,6 +114,11 @@
                 delete configurationValue.$current;
                 break;
 
+              case "$proto":
+                configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
+                delete configurationValue.$current;
+                break;
+
               case "$prop":
                 configurationValue = resolveDeclaration(type, configurationValue, configurationProperty);
                 delete configurationValue.$current;
@@ -120,7 +129,10 @@
                 switch (configurationValueType) {
                   case "string":
                     typeObj = map[configurationValue];
-                    typeObj && (configurationValue = typeObj.$di.$current);
+                    if (typeObj) if ("$proto" === owner) {
+                        configurationValue = fastExtend({}, typeObj.$di.$current);
+                        configurationValue.lifestyle = "singleton";
+                    } else configurationValue = typeObj.$di.$current;
                     break;
 
                   case "object":
@@ -191,7 +203,7 @@
             }
             return mapObj.$ctor;
         },
-        resolve: function(type, configObj) {
+        resolve: function(type, paramsObj) {
             var item, mapObj = map[type], len = arguments.length, fnResolveListConf = function(target, config, fnResolveObjConf) {
                 var prop, propValue;
                 for (prop in config) {
@@ -200,10 +212,16 @@
                 }
                 return target;
             }, createItem = function(declaration, obj, fnResolveObjConf, cParams) {
-                var item, conf;
+                var item, conf, proto;
                 cParams = cParams || {};
                 conf = declaration.$ctor;
                 conf && (cParams = fnResolveListConf(cParams, conf, fnResolveObjConf));
+                conf = declaration.$proto;
+                if (conf && !conf.resolved) {
+                    proto = fnResolveListConf({}, conf, fnResolveObjConf);
+                    fastExtend(obj.$ctor.prototype, proto);
+                    conf.resolved = !0;
+                }
                 item = new obj.$ctor(cParams);
                 conf = declaration.$prop;
                 conf && (item = fnResolveListConf(item, conf, fnResolveObjConf));
@@ -244,7 +262,7 @@
             };
             1 !== len && 2 !== len && throwWrongParamsErr("resolve");
             throwWrongType(mapObj, type);
-            item = fnResolveObjConf(mapObj.$di, configObj);
+            item = fnResolveObjConf(mapObj.$di, paramsObj);
             return item;
         },
         mixin: function(mixType, definition) {

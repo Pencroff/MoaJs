@@ -80,6 +80,16 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        jsdoc : {
+            dist : {
+                src: ['src/moa.js', 'README.md'],
+                options: {
+                    destination: 'doc',
+                    template : 'docstrap/template',
+                    configure : 'docstrap/template/jsdoc.conf.json'
+                }
+            }
+        },
         benchmark: {
 //            all: {
 //                src: ['benchmarks/*.js'],
@@ -103,6 +113,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
     grunt.loadNpmTasks('grunt-benchmark');
 

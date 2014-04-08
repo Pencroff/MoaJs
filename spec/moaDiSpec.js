@@ -552,6 +552,54 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             }).to.throw('Type typeABC not found');
             done();
         });
+        it('Test $proto injection', function (done) {
+            var item, item2, Ctor, di;
+            Moa.define('typeA', {});
+            Moa.define('bigType', null);
+            Moa.define('bigType', {
+                $di: {
+                    $proto: {
+                        propTypeA: 'typeA',
+                        ctorTypeA: {
+                            type: 'typeA',
+                            instance: 'ctor'
+                        }
+                    }
+                },
+                getItem: function () {
+                    return this.propTypeA;
+                },
+                getCtor: function () {
+                    return this.ctorTypeA;
+                }
+            });
+            di = Moa.getTypeInfo('bigType').$di;
+            expect(di).to.deep.equal({
+                $current: {
+                    type: 'bigType',
+                    instance: 'item',
+                    lifestyle: 'transient'
+                },
+                $proto: {
+                    propTypeA: {
+                        type: 'typeA',
+                        instance: 'item',
+                        lifestyle: 'singleton'
+                    },
+                    ctorTypeA: {
+                        type: 'typeA',
+                        instance: 'ctor'
+                    }
+                }
+            });
+            Ctor = Moa.define('typeA');
+            item = Moa.resolve('bigType');
+            item2 = Moa.resolve('bigType');
+            expect(item.getCtor()).to.equal(Ctor);
+            expect(item.getCtor()).to.equal(item2.getCtor());
+            expect(item.getItem()).to.equal(item2.getItem());
+            done();
+        });
     });
     describe('Test Moa Di for benchmarks', function () {
         it('Test property implementation', function (done) {
