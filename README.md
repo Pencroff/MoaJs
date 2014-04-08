@@ -1,7 +1,9 @@
 ![MoaJs](https://raw.github.com/Pencroff/MoaJs/master/extras/moa-logo-web.png "MoaJs") MoaJs 
 =====
 
-ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration and IoC container out of the box and near 3,8kB minified JavaScript code and 1,6kB gzip. You can see **current** version MoaJs in root and **release** version in `release` folder.
+ExtJs syntax for declaration object inheritance, mixins, static methods / properties / mixins, singleton declaration and IoC container out of the box. Size near 4kB minified JavaScript code and 1,7kB gzip. You can see **current** version MoaJs in root and **release** version in `release` folder.
+
+Research [Documentation](http://pencroff.github.io/MoaJs/)
 
 ## Documentation ##
 
@@ -11,9 +13,9 @@ ExtJs syntax for declaration object inheritance, mixins, static methods / proper
 	- `define` - declare object type / get constructor by type name
 	- `resolve` - get instance by type name with resolved properties, prototype fields and constructor injection
 	- `mixin` - declare mixin type
-	- `getType()` - predefined exemplar method, which return declared type name
-	- `getRegistry()` - return object with arrays of types and mixins
-	- `getTypeInfo()` - return internal information about declared type
+	- `getType` - predefined exemplar method, which return declared type name
+	- `getRegistry` - return object with arrays of types and mixins
+	- `getTypeInfo` - return internal information about declared type
 
 
 ## Items ##
@@ -59,7 +61,8 @@ MoaJs v0.1.3 - in process
 - delete mixins `Moa.mixixn('mix', null)`
 - `getTypeInfo` - internal information about type
 - `clear` - delete all declarations
-- create documentation as comments for JsDoc. You can find on [Documentation](http://pencroff.github.io/MoaJs/)
+- `$proto` in `$di` declaration
+- create documentation for JsDoc. [Result](http://pencroff.github.io/MoaJs/).
 
 MoaJs v0.1.2
 
