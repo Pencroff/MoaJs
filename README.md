@@ -5,6 +5,8 @@ ExtJs syntax for declaration object inheritance, mixins, static methods / proper
 
 Research [Documentation](http://pencroff.github.io/MoaJs/)
 
+[Fork me on GitHub](https://github.com/Pencroff/MoaJs)
+
 ## Documentation ##
 
 - **MoaJs API**
