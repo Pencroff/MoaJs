@@ -1,4 +1,0 @@
-[submodule "doc"]
-	path = doc
-	url = git@github.com:Pencroff/MoaJs.git
-	branch = gh-page
