@@ -57,7 +57,19 @@ Research [Documentation](http://pencroff.github.io/MoaJs/)
 
 ## Changelog ##
 
-MoaJs v0.1.3 - in process
+MoaJs v0.2.0 - in progress
+
+- [Enhancement] Test `Object.keys()` iteration
+- Use IoC independently
+- `Moa.register()` - register type for third part libs
+- `Moa.inject({conf}, function(conf))` - inject as obj / params list
+- Loader (`$require: {'type': 'path'}`)
+- Add `Moa.config()` - config for loader and etc.
+- Publish to npm ropository
+- Add to CDN
+- Make presentation and talk
+
+MoaJs v0.1.3
 
 - IoC implementation: property, prototype and constructor injection
 - delete mixins `Moa.mixixn('mix', null)`
