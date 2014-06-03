@@ -33,24 +33,14 @@
         map = {},
         mixins = {},
         extend = function (target, source) {
-            var prop;
-            if (source) {
-                for (prop in source) {
-                    if (source.hasOwnProperty(prop)) {
-                        target[prop] = source[prop];
-                    }
-                }
-                //Some Object methods are not enumerable on Internet Explorer
-                target.toString = source.toString;
-                target.valueOf = source.valueOf;
-                target.toLocaleString = source.toLocaleString;
-            }
-            return target;
-        },
-        fastExtend = function (target, source) {
-            var prop;
-            for (prop in source) {
+            var keys = Object.keys(source),
+                len = keys.length,
+                i = 0,
+                prop;
+            while (i < len) {
+                prop = keys[i];
                 target[prop] = source[prop];
+                i += 1;
             }
             return target;
         },
@@ -71,15 +61,20 @@
             }
         },
         addMixins = function ($proto, $mixin) {
-            var prop,
+            var keys = Object.keys($mixin),
+                len = keys.length,
+                i = 0,
+                prop,
                 value,
                 MixFn;
-            for (prop in $mixin) {
+            while (i < len) {
+                prop = keys[i];
                 value = $mixin[prop];
                 MixFn = mixins[value];
                 throwWrongType(MixFn, value, true);
                 MixFn.call($proto);
                 $proto[prop] = new MixFn();
+                i += 1;
             }
             return $proto;
         },
@@ -145,12 +140,16 @@
         },
         resolveDeclaration = function (type, diConfiguration, owner) {
             var configurationProperty, configurationValue, configurationValueType,
-                typeObj, propFlag = false;
+                typeObj, propFlag = false,
+                keys, len, i = 0;
             diConfiguration = diConfiguration || {};
             if (!diConfiguration.$current) {
                 diConfiguration.$current = type;
             }
-            for (configurationProperty in diConfiguration) {
+            keys = Object.keys(diConfiguration);
+            len = keys.length;
+            while (i < len) {
+                configurationProperty = keys[i];
                 configurationValue = diConfiguration[configurationProperty];
                 configurationValueType = typeof configurationValue;
                 switch (configurationProperty) {
@@ -194,7 +193,7 @@
                         typeObj = map[configurationValue];
                         if (typeObj) {
                             if (owner === '$proto') {
-                                configurationValue = fastExtend({}, typeObj.$di.$current);
+                                configurationValue = extend({}, typeObj.$di.$current);
                                 configurationValue.lifestyle = 'singleton';
                             } else {
                                 configurationValue = typeObj.$di.$current;
@@ -228,6 +227,7 @@
                     diConfiguration.$prop[configurationProperty] = configurationValue;
                     delete diConfiguration[configurationProperty];
                 }
+                i += 1;
             }
             return diConfiguration;
         },
@@ -490,14 +490,19 @@
                     mapObj = map[type],
                     len = arguments.length,
                     fnResolveListConf = function (target, config, fnResolveObjConf) {
-                        var prop, propValue;
-                        for (prop in config) {
+                        var prop, propValue,
+                            keys = Object.keys(config),
+                            keysLen = keys.length,
+                            i = 0;
+                        while (i < keysLen) {
+                            prop = keys[i];
                             propValue = config[prop];
                             if (typeof propValue === 'object') {
                                 target[prop] = fnResolveObjConf(propValue, fnResolveListConf);
                             } else {
                                 target[prop] = propValue;
                             }
+                            i += 1;
                         }
                         return target;
                     },
@@ -512,7 +517,7 @@
                         if (conf) {
                             if (!conf.resolved) {
                                 proto = fnResolveListConf({}, conf, fnResolveObjConf);
-                                fastExtend(obj.$ctor.prototype, proto);
+                                extend(obj.$ctor.prototype, proto);
                                 conf.resolved = true;
                             }
                         }
@@ -683,16 +688,10 @@
              * }
              */
             getRegistry: function () {
-                var iterate = function (obj) {
-                        var prop, arr = [];
-                        for (prop in obj) {
-                            arr.push(prop);
-                        }
-                        return arr;
-                    };
+                var fn = Object.keys;
                 return {
-                    type: iterate(map),
-                    mixin: iterate(mixins)
+                    type: fn(map),
+                    mixin: fn(mixins)
                 };
             },
             /**

@@ -99,6 +99,10 @@ module.exports = function (grunt) {
             benchMoa: {
                 src: ['benchmarks/benchMoa.js']
             },
+            /*grunt benchmark:benchIteration*/
+            benchIteration: {
+                src: ['benchmarks/benchIteration.js']
+            },
             /*grunt benchmark:benchMixSearch*/
             benchMixSearch: {
                 src: ['items/mixins/benchmarks/benchMixSearch.js']
