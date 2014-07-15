@@ -656,4 +656,15 @@ define(['Moa', 'tool', 'chai'], function (Moa, tool, chai) {
             done();
         });
     });
+    describe('Test DI as independent component', function () {
+        it('should register any external types', function (done) {
+            var obj = { name: 'Name', age: 17 },
+                fn = function () { return true; };
+            Moa.register('ExtraTypeA', obj);
+            Moa.register('ExtraTypeB', fn);
+            expect(Moa.resolve('ExtraTypeA')).to.equal(obj);
+            expect(Moa.resolve('ExtraTypeB')).to.equal(fn);
+            done();
+        });
+    });
 });

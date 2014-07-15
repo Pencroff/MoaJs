@@ -735,6 +735,9 @@
                 delete result.$di;
                 result.$di = JSON.parse(JSON.stringify(mapObj.$di));
                 return result;
+            },
+            register: function (type, definition) {
+                'use strict';
             }
         };
     // Return as AMD module or attach to head object
